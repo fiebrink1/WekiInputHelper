@@ -12,9 +12,9 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class WindowedStdev implements ModifiedInput, UsesOnlyOriginalInputs{
-    WindowedOperation wo;
-    Operation op;
+public class WindowedStdev implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final WindowedOperation wo;
+    private final Operation op;
     
     public WindowedStdev(String originalName, int index, int windowSize) {
         op = new Operation() {

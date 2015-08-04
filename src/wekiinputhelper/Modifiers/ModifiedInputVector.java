@@ -9,8 +9,7 @@ package wekiinputhelper.Modifiers;
  *
  * @author rebecca
  */
-public interface ModifiedInputVector {
+public interface ModifiedInputVector extends ModifiedInput {
     public String[] getNames(); 
-    public int getSize();
     public double[] getValues();
 }

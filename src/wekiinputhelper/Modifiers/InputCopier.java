@@ -11,10 +11,10 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class InputCopier implements ModifiedInput, UsesOnlyOriginalInputs{
-    String name;
-    int index;
-    double value = 0;
+public class InputCopier implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final String name;
+    private final int index;
+    private transient double value = 0;
     
     public InputCopier(String originalName, int index) {
         this.name = originalName;

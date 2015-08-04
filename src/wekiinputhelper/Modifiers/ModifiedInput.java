@@ -10,7 +10,5 @@ package wekiinputhelper.Modifiers;
  * @author rebecca
  */
 public interface ModifiedInput {
-    public String getName(); 
     public int getSize();
-    public double getValue();
 }

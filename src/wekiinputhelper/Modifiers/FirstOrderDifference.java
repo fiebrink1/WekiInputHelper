@@ -11,12 +11,12 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class FirstOrderDifference implements ModifiedInput, UsesOnlyOriginalInputs{
-    String name;
-    int index;
-    double x_n1 = 0;
-    double x_n = 0;
-    double y_n = 0;
+public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final String name;
+    private final int index;
+    private transient double x_n1 = 0;
+    private transient double x_n = 0;
+    private transient double y_n = 0;
     
     public FirstOrderDifference(String originalName, int index) {
         this.name = originalName + "_1stOrderDiff";

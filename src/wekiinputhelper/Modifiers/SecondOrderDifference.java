@@ -11,13 +11,13 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class SecondOrderDifference implements ModifiedInput, UsesOnlyOriginalInputs{
-    String name;
-    int index;
-    double x_n2 = 0;
-    double x_n1 = 0;
-    double x_n = 0;
-    double y_n = 0;
+public class SecondOrderDifference implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final String name;
+    private final int index;
+    private transient double x_n2 = 0;
+    private transient double x_n1 = 0;
+    private transient double x_n = 0;
+    private transient double y_n = 0;
     
     public SecondOrderDifference(String originalName, int index) {
         this.name = originalName + "_2ndOrderDiff";

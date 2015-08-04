@@ -12,12 +12,12 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  * @author rebecca
  */
 public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInputs{
-    String[] names;
-    int index;
-    int bufferSize;
-    double[] history;
-    int startPointer;
-    double[] returnValues;
+    private final String[] names;
+    private final int index;
+    private final int bufferSize;
+    private transient final double[] history;
+    private transient int startPointer;
+    private transient double[] returnValues;
     
     public BufferedInput(String originalName, int index, int bufferSize) {
         names = new String[bufferSize];

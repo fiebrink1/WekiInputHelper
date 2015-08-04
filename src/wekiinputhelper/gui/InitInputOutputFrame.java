@@ -1,0 +1,902 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package wekiinputhelper.gui;
+
+import java.awt.Button;
+import java.awt.CardLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
+import wekiinputhelper.WekiInputHelperRunner;
+import wekiinputhelper.WekiInputHelperRunner.Closeable;
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.WekiInputHelperController;
+import wekiinputhelper.WekiInputHelperFileData;
+import wekiinputhelper.osc.OSCInputGroup;
+import wekiinputhelper.osc.OSCReceiver;
+import wekiinputhelper.util.Util;
+import wekiinputhelper.util.WeakListenerSupport;
+
+/**
+ *
+ * @author rebecca
+ */
+public class InitInputOutputFrame extends javax.swing.JFrame implements Closeable {
+
+    private WekiInputHelper w = null;
+    private PropertyChangeListener oscReceiverListener = null;
+    private final WeakListenerSupport wls = new WeakListenerSupport();
+    private String[] currentInputNames = new String[0];
+    
+    private final WekiInputHelperController.NamesListener inputNamesListener;
+
+    private GuiIONameCustomise inputCustomiser = null;
+    
+    private static final Logger logger = Logger.getLogger(InitInputOutputFrame.class.getName());
+
+    private boolean isCloseable = false;
+
+    /**
+     * Not used: Just for GUI design Creates new form initInputOutputFrame
+     */
+    public InitInputOutputFrame() {
+        initComponents();
+        inputNamesListener = null;
+    }
+
+    public InitInputOutputFrame(WekiInputHelper w) {
+        initComponents();
+        setWekiInputHelper(w);
+        inputNamesListener = new WekiInputHelperController.NamesListener() {
+
+            @Override
+            public void newNamesReceived(String[] names) {
+                receivedInputNamesFromOSC(names);
+            }
+
+        };
+        w.getWekiInputHelperController().addInputNamesListener(inputNamesListener);
+    }
+
+    private void receivedInputNamesFromOSC(String[] names) {
+        receivedNewInputNames(names);
+        fieldNumInputs.setText(Integer.toString(names.length));
+        //What if customisation box already open??
+        if (inputCustomiser != null) {
+            if (names.length == inputCustomiser.getNumNames()) {
+                inputCustomiser.setNames(names);
+            } else {
+                inputCustomiser.dispose();
+                //Make new one
+                customiseInputNames();
+            }
+        }
+    }
+    public void setWekiInputHelper(WekiInputHelper w) {
+        this.w = w;
+        updateGUIForConnectionState(w.getOSCReceiver().getConnectionState());
+        //oscReceiverListener = this::oscReceiverPropertyChanged;
+        oscReceiverListener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                oscReceiverPropertyChanged(evt);
+            }
+        };
+
+        w.getOSCReceiver().addPropertyChangeListener(wls.propertyChange(oscReceiverListener));
+    }
+
+    private void updateGUIForConnectionState(OSCReceiver.ConnectionState cs) {
+        if (cs == OSCReceiver.ConnectionState.CONNECTED) {
+            labelOscStatus.setText("Listening on port " + w.getOSCReceiver().getReceivePort());
+            buttonOscListen.setText("Stop listening");
+            //  buttonNext.setEnabled(true);
+        } else if (cs == OSCReceiver.ConnectionState.FAIL) {
+            labelOscStatus.setText("Failed to start listener");
+            buttonOscListen.setText("Start listening");
+            //  buttonNext.setEnabled(false);
+        } else if (cs == OSCReceiver.ConnectionState.NOT_CONNECTED) {
+            labelOscStatus.setText("Not listening");
+            buttonOscListen.setText("Start listening");
+            //  buttonNext.setEnabled(false);
+        } else if (cs == OSCReceiver.ConnectionState.CONNECTING) {
+            labelOscStatus.setText("Connecting...");
+            buttonOscListen.setText("Stop listening");
+            //  buttonNext.setEnabled(false);
+        }
+    }
+
+    private void oscReceiverPropertyChanged(PropertyChangeEvent evt) {
+        if (evt.getPropertyName() == OSCReceiver.PROP_CONNECTIONSTATE) {
+            updateGUIForConnectionState((OSCReceiver.ConnectionState) evt.getNewValue());
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        popupMenuInputOptions = new javax.swing.JPopupMenu();
+        menuCustomiseInputNames = new javax.swing.JMenuItem();
+        menuLoadFromFile = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        fieldOscPort = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        buttonOscListen = new javax.swing.JButton();
+        labelOscStatus = new javax.swing.JLabel();
+        panelInputs = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        fieldNumInputs = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        fieldInputOSCMessage = new javax.swing.JTextField();
+        buttonInputOptions = new javax.swing.JButton();
+        panelOutputs = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        fieldOutputOSCMessage = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        fieldHostName = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        fieldSendPort = new javax.swing.JTextField();
+        buttonNext = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        menuItemNewProject = new javax.swing.JMenuItem();
+        menuItemOpenProject = new javax.swing.JMenuItem();
+
+        menuCustomiseInputNames.setText("Customise names");
+        menuCustomiseInputNames.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCustomiseInputNamesActionPerformed(evt);
+            }
+        });
+        popupMenuInputOptions.add(menuCustomiseInputNames);
+
+        menuLoadFromFile.setText("Load from file");
+        menuLoadFromFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLoadFromFileActionPerformed(evt);
+            }
+        });
+        popupMenuInputOptions.add(menuLoadFromFile);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Create new project");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Receiving OSC"));
+
+        jLabel1.setText("Input Helper listening for inputs and control on port:");
+
+        fieldOscPort.setText("6448");
+        fieldOscPort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldOscPortActionPerformed(evt);
+            }
+        });
+        fieldOscPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldOscPortKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setText("Status:");
+
+        buttonOscListen.setText("Start listening");
+        buttonOscListen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonOscListenActionPerformed(evt);
+            }
+        });
+
+        labelOscStatus.setText("Not connected");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelOscStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fieldOscPort, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(buttonOscListen)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(labelOscStatus))
+                .addGap(0, 0, 0)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(fieldOscPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(buttonOscListen)
+                .addContainerGap())
+        );
+
+        panelInputs.setBackground(new java.awt.Color(255, 255, 255));
+        panelInputs.setBorder(javax.swing.BorderFactory.createTitledBorder("Inputs"));
+
+        jLabel3.setText("# inputs:");
+
+        fieldNumInputs.setText("5");
+        fieldNumInputs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldNumInputsKeyTyped(evt);
+            }
+        });
+
+        jLabel4.setText("OSC message:");
+
+        fieldInputOSCMessage.setText("/wek/inputs");
+        fieldInputOSCMessage.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                fieldInputOSCMessageFocusLost(evt);
+            }
+        });
+        fieldInputOSCMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldInputOSCMessageActionPerformed(evt);
+            }
+        });
+        fieldInputOSCMessage.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldInputOSCMessageKeyTyped(evt);
+            }
+        });
+
+        buttonInputOptions.setText("Options");
+        buttonInputOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonInputOptionsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelInputsLayout = new javax.swing.GroupLayout(panelInputs);
+        panelInputs.setLayout(panelInputsLayout);
+        panelInputsLayout.setHorizontalGroup(
+            panelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInputsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldInputOSCMessage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldNumInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonInputOptions))
+        );
+        panelInputsLayout.setVerticalGroup(
+            panelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInputsLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(panelInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(fieldInputOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldNumInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(buttonInputOptions)))
+        );
+
+        panelOutputs.setBackground(new java.awt.Color(255, 255, 255));
+        panelOutputs.setBorder(javax.swing.BorderFactory.createTitledBorder("Modified Inputs (sent out from here to Wekinator)"));
+
+        jLabel6.setText("OSC message:");
+
+        fieldOutputOSCMessage.setText("/wek/newInputs");
+        fieldOutputOSCMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldOutputOSCMessageActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Host (IP address or name):");
+
+        fieldHostName.setText("localhost");
+
+        jLabel14.setText("Port:");
+
+        fieldSendPort.setText("6449");
+        fieldSendPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldSendPortKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelOutputsLayout = new javax.swing.GroupLayout(panelOutputs);
+        panelOutputs.setLayout(panelOutputsLayout);
+        panelOutputsLayout.setHorizontalGroup(
+            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelOutputsLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fieldOutputOSCMessage))
+                    .addGroup(panelOutputsLayout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(0, 0, 0)
+                        .addComponent(fieldHostName, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addGap(0, 0, 0)
+                        .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelOutputsLayout.setVerticalGroup(
+            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputsLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(fieldOutputOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(fieldHostName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addContainerGap())
+        );
+
+        buttonNext.setText("Next >");
+        buttonNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonNextActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelOutputs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(buttonNext)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelOutputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(buttonNext)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jMenu1.setText("File");
+
+        menuItemNewProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.META_MASK));
+        menuItemNewProject.setText("New project");
+        menuItemNewProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemNewProjectActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuItemNewProject);
+
+        menuItemOpenProject.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.META_MASK));
+        menuItemOpenProject.setText("Open project...");
+        menuItemOpenProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemOpenProjectActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuItemOpenProject);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 304, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 2, Short.MAX_VALUE)))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void fieldOscPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOscPortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldOscPortActionPerformed
+
+    private void fieldOscPortKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldOscPortKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_fieldOscPortKeyTyped
+
+    private void buttonOscListenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOscListenActionPerformed
+        if (w.getOSCReceiver().getConnectionState()
+                == OSCReceiver.ConnectionState.CONNECTED) {
+            w.getOSCReceiver().stopListening();
+        } else {
+            int port = 0;
+            try {
+                port = Integer.parseInt(fieldOscPort.getText());
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Port must be a valid integer greater than 0");
+                return;
+            }
+            if (port <= 0) {
+                Util.showPrettyErrorPane(this, "Port must be a valid integer greater than 0");
+                return;
+            }
+
+            w.getOSCReceiver().setReceivePort(port);
+            w.getOSCReceiver().startListening();
+        }
+    }//GEN-LAST:event_buttonOscListenActionPerformed
+
+    private void fieldNumInputsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumInputsKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_fieldNumInputsKeyTyped
+
+    private void fieldInputOSCMessageFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldInputOSCMessageFocusLost
+        updateOSCListener();
+    }//GEN-LAST:event_fieldInputOSCMessageFocusLost
+
+    private void fieldInputOSCMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldInputOSCMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldInputOSCMessageActionPerformed
+
+    private void fieldInputOSCMessageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldInputOSCMessageKeyTyped
+
+    }//GEN-LAST:event_fieldInputOSCMessageKeyTyped
+
+    private void initFormForInputGroup(OSCInputGroup group) {
+        fieldInputOSCMessage.setText(group.getOscMessage());
+        fieldNumInputs.setText(Integer.toString(group.getNumInputs()));
+        currentInputNames = new String[group.getNumInputs()];
+        System.arraycopy(group.getInputNames(), 0, currentInputNames, 0, currentInputNames.length);
+
+    }
+
+    private void loadInputsFromFile() {
+        String homeDir = System.getProperty("user.home");
+        File f = Util.findLoadFile("xml", "Input configuration file", homeDir, this);
+        if (f == null) {
+            return;
+        }
+        try {
+            OSCInputGroup inputGroup = OSCInputGroup.readFromFile(f.getAbsolutePath());
+            initFormForInputGroup(inputGroup);
+        } catch (Exception ex) {
+            Util.showPrettyErrorPane(this, "Could not load inputs from file " + f.getAbsolutePath() + ". Error: " + ex.getMessage());
+            Logger.getLogger(InitInputOutputFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void customiseInputNames() {
+        if (!checkInputNumberValid()) {
+            return;
+        }
+        int numNames = Integer.parseInt(fieldNumInputs.getText());
+
+        GuiIONameCustomise.NamesListReceiver r = new GuiIONameCustomise.NamesListReceiver() {
+            @Override
+            public void setNames(String[] names) {
+                receivedNewInputNames(names);
+                inputCustomiser = null;
+            }
+
+            @Override
+            public void cancel() {
+                inputCustomiser = null;
+            }
+        };
+
+        String baseName = setBaseNameFromOscField(fieldInputOSCMessage, "Input");
+        inputCustomiser = new GuiIONameCustomise(
+                numNames,
+                baseName,
+                currentInputNames,
+                r,
+                GuiIONameCustomise.IOType.INPUT);
+        inputCustomiser.setAlwaysOnTop(true);
+        inputCustomiser.setVisible(true);
+        /*Util.callOnClosed(inputCustomiser, new Util.CallableOnClosed() {
+            @Override
+            public void callMe() {
+                inputCustomiser = null;
+            }
+        }); */
+    }
+
+    private void buttonInputOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonInputOptionsActionPerformed
+        //String = fieldNumInputs.ge
+        //customiseInputNames();
+        popupMenuInputOptions.show(panelInputs, buttonInputOptions.getX(), buttonInputOptions.getY());
+    }//GEN-LAST:event_buttonInputOptionsActionPerformed
+
+
+    private void fieldOutputOSCMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputOSCMessageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldOutputOSCMessageActionPerformed
+
+    private void fieldSendPortKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldSendPortKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_fieldSendPortKeyTyped
+
+    private OSCInputGroup getInputGroupFromForm() {
+        String name = "Inputs";
+        String oscMessage = fieldInputOSCMessage.getText().trim();
+        int numInputs = Integer.parseInt(fieldNumInputs.getText());
+        setCurrentInputNames(numInputs);
+        OSCInputGroup ig = new OSCInputGroup(name, oscMessage, numInputs, currentInputNames);
+        return ig;
+    }
+
+    private void setCurrentInputNames(int numInputs) {
+        if (currentInputNames.length != numInputs) {
+            if (currentInputNames.length > numInputs) {
+                String[] newNames = new String[numInputs];
+                System.arraycopy(currentInputNames, 0, newNames, 0, numInputs);
+                currentInputNames = newNames;
+            } else { //We need to add some new names
+                String[] newNames = new String[numInputs];
+                System.arraycopy(currentInputNames, 0, newNames, 0, currentInputNames.length);
+                String baseName = setBaseNameFromOscField(fieldInputOSCMessage, "Input");
+                for (int i = currentInputNames.length; i < numInputs; i++) {
+                    newNames[i] = baseName + "-" + (i + 1);
+                }
+                currentInputNames = newNames;
+            }
+        }
+    }
+    
+    private String getHostnameFromForm() {
+        return fieldHostName.getText().trim();
+    }
+
+    private int getSendPortFromForm() {
+        return Integer.parseInt(fieldSendPort.getText());
+    }
+
+    private void configureOSCSenderFromForm() throws UnknownHostException, SocketException {
+        String hostName = getHostnameFromForm();
+        int port = getSendPortFromForm();
+        w.getOSCSender().setHostnameAndPort(InetAddress.getByName(hostName), port);
+    }
+
+    private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
+        //TODO: have to do more if configuringOSC on next screen...
+        if (checkOSCReady() && checkInputReady() && checkOutputReady() && checkNamesUnique()) {
+            //System.out.println("READY TO GO");
+            try {
+                configureOSCSenderFromForm();
+
+                OSCInputGroup inputGroup = getInputGroupFromForm();                
+                
+                w.getInputManager().setOSCInputGroup(inputGroup);
+                w.getMainHelperGUI().initializeInputs();
+                w.getMainHelperGUI().setVisible(true);
+                WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
+                removeListeners();
+                this.dispose();
+            } catch (UnknownHostException ex) {
+                Util.showPrettyErrorPane(this, "Host name " + fieldHostName.getText() + " is invalid; please try a different host.");
+            } catch (SocketException ex) {
+                Util.showPrettyErrorPane(this, "Error setting up OSC sender: " + ex.getMessage());
+            }
+
+        } else {
+            logger.log(Level.INFO, "Error encountered in setting up inputs/outputs");
+        }
+    }//GEN-LAST:event_buttonNextActionPerformed
+
+    private void menuCustomiseInputNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCustomiseInputNamesActionPerformed
+        customiseInputNames();
+    }//GEN-LAST:event_menuCustomiseInputNamesActionPerformed
+
+    private void menuLoadFromFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadFromFileActionPerformed
+        loadInputsFromFile();
+    }//GEN-LAST:event_menuLoadFromFileActionPerformed
+
+    private void menuItemNewProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNewProjectActionPerformed
+        WekiInputHelperRunner.getInstance().runNewProject();
+    }//GEN-LAST:event_menuItemNewProjectActionPerformed
+
+    private void menuItemOpenProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenProjectActionPerformed
+        String homeDir = System.getProperty("user.home");
+        File f = Util.findLoadFile(WekiInputHelperFileData.FILENAME_EXTENSION, "Wekinator Input Helper file", homeDir, this);
+        if (f != null) {
+            try {
+                //TODO: Check this isn't same wekinator as mine! (don't load from my same place, or from something already open...)
+                WekiInputHelperRunner.getInstance().runFromFile(f.getAbsolutePath());
+                w.close();
+                removeListeners();
+                this.dispose();
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_menuItemOpenProjectActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // if (isCloseable) {
+        if (w.getOSCReceiver().getConnectionState() == OSCReceiver.ConnectionState.CONNECTED) {
+            w.getOSCReceiver().stopListening();
+        }
+        w.close();
+        removeListeners();
+        this.dispose();
+        //} else {
+        //do nothing
+        //}
+
+    }//GEN-LAST:event_formWindowClosing
+
+    private void removeListeners() {
+        w.getWekiInputHelperController().removeInputNamesListener(inputNamesListener);
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(InitInputOutputFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(InitInputOutputFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(InitInputOutputFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(InitInputOutputFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                WekiInputHelper w;
+                try {
+                    w = WekiInputHelper.TestingWekiInputHelper();
+                    InitInputOutputFrame p = new InitInputOutputFrame(w);
+                    p.setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(InitInputOutputFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(InitInputOutputFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            }
+
+        });
+    }
+
+    private boolean checkOutputHostValid() {
+        boolean isNotBlank = Util.checkNotBlank(fieldHostName, "host name", this);
+        if (!isNotBlank) {
+            return false;
+        }
+
+        String hostname = fieldHostName.getText().trim();
+        try {
+            InetAddress address = InetAddress.getByName(hostname);
+        } catch (UnknownHostException ex) {
+            Util.showPrettyErrorPane(this, "Invalid OSC output hostname");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkOutputPortValid() {
+        return Util.checkIsPositiveNumber(fieldSendPort, "OSC output port", this);
+    }
+
+    private boolean checkOutputOSCValid() {
+        if (!Util.checkNotBlank(fieldOutputOSCMessage, "OSC output message", this)) {
+            return false;
+        }
+        return Util.checkNoSpace(fieldOutputOSCMessage, "OSC output message", this);
+    }
+
+    private boolean checkInputNumberValid() {
+        return Util.checkIsPositiveNumber(fieldNumInputs, "Number of inputs", this);
+    }
+
+    private String setBaseNameFromOscField(JTextField f, String defaultName) {
+        String currentInputOSC = f.getText().trim();
+        String baseName = defaultName;
+        if (currentInputOSC.length() > 0) {
+            if (!currentInputOSC.contains("/")) {
+                baseName = currentInputOSC;
+            } else {
+                String[] s = currentInputOSC.split("/");
+                if (s.length > 0 && s[s.length - 1].length() > 0) {
+                    baseName = s[s.length - 1];
+                }
+            }
+        }
+        return baseName;
+    }
+
+    private void receivedNewInputNames(String[] names) {
+        currentInputNames = new String[names.length];
+        System.arraycopy(names, 0, currentInputNames, 0, names.length);
+    }
+
+    private boolean checkOSCReady() {
+        boolean ready = (w != null && w.getOSCReceiver().getConnectionState() == OSCReceiver.ConnectionState.CONNECTED);
+        if (!ready) {
+            Util.showPrettyErrorPane(this, "Please start OSC listener above in order to proceed");
+        }
+        return ready;
+    }
+
+    private boolean checkInputReady() {
+        return checkInputNumberValid() && checkOscInputValid();
+    }
+
+    private boolean checkOscInputValid() {
+        boolean notBlank = Util.checkNotBlank(fieldInputOSCMessage, "Input OSC message", this);
+        if (notBlank) {
+            return Util.checkNoSpace(fieldInputOSCMessage, "Input OSC message", this);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkOutputReady() {
+        boolean ok = checkOutputHostValid() && checkOutputPortValid() && checkOutputOSCValid();
+        return ok;
+    }
+    
+    /* Requires input and output fields are properly formatted as ints */
+    private boolean checkNamesUnique() {
+        int numInputs = Integer.parseInt(fieldNumInputs.getText());
+        setCurrentInputNames(numInputs);
+        boolean unique = Util.checkAllUnique(currentInputNames);
+        if (! unique) {
+            Util.showPrettyErrorPane(this, "Input names must all be unique");
+        }
+        return unique;
+    }
+
+    public boolean isCloseable() {
+        return isCloseable;
+    }
+
+    public void setCloseable(boolean isCloseable) {
+        if (isCloseable) {
+            // this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        } else {
+            //this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        }
+        this.isCloseable = isCloseable;
+    }
+
+    private void updateOSCListener() {
+        logger.log(Level.WARNING, "updateOSCListener is not implemented");
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonInputOptions;
+    private javax.swing.JButton buttonNext;
+    private javax.swing.JButton buttonOscListen;
+    private javax.swing.JTextField fieldHostName;
+    private javax.swing.JTextField fieldInputOSCMessage;
+    private javax.swing.JTextField fieldNumInputs;
+    private javax.swing.JTextField fieldOscPort;
+    private javax.swing.JTextField fieldOutputOSCMessage;
+    private javax.swing.JTextField fieldSendPort;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel labelOscStatus;
+    private javax.swing.JMenuItem menuCustomiseInputNames;
+    private javax.swing.JMenuItem menuItemNewProject;
+    private javax.swing.JMenuItem menuItemOpenProject;
+    private javax.swing.JMenuItem menuLoadFromFile;
+    private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelOutputs;
+    private javax.swing.JPopupMenu popupMenuInputOptions;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    public WekiInputHelper getWekiInputHelper() {
+        return w;
+    }
+
+}

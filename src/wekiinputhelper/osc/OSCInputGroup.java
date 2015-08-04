@@ -18,9 +18,8 @@ import wekiinputhelper.util.Util;
 public class OSCInputGroup {
     private final String oscMessage;
     private final int numInputs;
-    private  String[] inputNames;
-   // public final List<NameChangeListener> nameChangeListeners = new LinkedList<>();
-
+    private final String groupName;
+    private final String[] inputNames;
 
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -45,11 +44,12 @@ public class OSCInputGroup {
     public OSCInputGroup(OSCInputGroup groupFromFile) {
         this.oscMessage = groupFromFile.oscMessage;
         this.numInputs = groupFromFile.numInputs;
+        this.groupName = groupFromFile.groupName;
         this.inputNames = new String[groupFromFile.inputNames.length];
         System.arraycopy(groupFromFile.inputNames, 0, this.inputNames, 0, groupFromFile.inputNames.length);
     }
     
-    public OSCInputGroup(String oscMessage, int numInputs, String[] inputNames) {
+    public OSCInputGroup(String groupName, String oscMessage, int numInputs, String[] inputNames) {
         if (inputNames == null || inputNames.length != numInputs) {
             throw new IllegalArgumentException("inputNames[] must have size equal to numInputs");
         } 
@@ -58,6 +58,7 @@ public class OSCInputGroup {
         }
         this.oscMessage = oscMessage;
         this.numInputs = numInputs;
+        this.groupName = groupName;
         
         this.inputNames = new String[numInputs];
         System.arraycopy(inputNames, 0, this.inputNames, 0, numInputs); 
@@ -71,10 +72,14 @@ public class OSCInputGroup {
         return numInputs;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
     public String[] getInputNames() {
         return inputNames;
     }
-
+    
    public void writeToFile(String filename) throws IOException {
       Util.writeToXMLFile(this, "OSCInputGroup", OSCInputGroup.class, filename);
     }
@@ -83,7 +88,7 @@ public class OSCInputGroup {
       OSCInputGroup g = (OSCInputGroup) Util.readFromXMLFile("OSCInputGroup", OSCInputGroup.class, filename);
       return g;
     } 
-    
+
     @Override
     public String toString() {
          XStream xstream = new XStream();
@@ -94,7 +99,7 @@ public class OSCInputGroup {
     
     public static void main(String[] args) {
         String inputNames[] = {"123", "456"};
-        OSCInputGroup g = new OSCInputGroup("/hi/123", 2, inputNames);
+        OSCInputGroup g = new OSCInputGroup("Inputs", "/hi/123", 2, inputNames);
        try {
             g.writeToFile("/Users/rebecca/test1.xml");
             OSCInputGroup g2 = OSCInputGroup.readFromFile("/Users/rebecca/test1.xml");

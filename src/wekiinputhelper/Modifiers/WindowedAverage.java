@@ -12,9 +12,9 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class WindowedAverage implements ModifiedInput, UsesOnlyOriginalInputs{
-    WindowedOperation wo;
-    Operation op;
+public class WindowedAverage implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final WindowedOperation wo;
+    private final Operation op;
     
     public WindowedAverage(String originalName, int index, int windowSize) {
         op = new Operation() {

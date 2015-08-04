@@ -3,14 +3,16 @@
  */
 package wekiinputhelper.osc;
 
-import wekiinputhelper.Modifiers.ModifiedInput;
+import wekiinputhelper.Modifiers.ModifiedInputSingle;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import wekiinputhelper.Modifiers.ModifiedInput;
+import wekiinputhelper.Modifiers.ModifiedInputVector;
+import wekiinputhelper.UsesInputsAndOutputs;
+import wekiinputhelper.UsesOnlyOriginalInputs;
 import wekiinputhelper.util.Util;
 
 /**
@@ -19,9 +21,12 @@ import wekiinputhelper.util.Util;
  */
 public class OSCModifiedInputGroup {
     private final List<ModifiedInput> outputs; //Includes at least one for every original input
-    
+    private final int numOutputTypes;
+    private final int dimensionality;
+    private final boolean hasDependencies;
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-
+    private transient double[] currentValues;
+    
     /**
      * Add PropertyChangeListener.
      *
@@ -30,27 +35,83 @@ public class OSCModifiedInputGroup {
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
+    
+    public double[] getCurrentOutputs() {
+         return currentValues;
+    }
+    
+    //Doesn't do computation unless has dependencies that require it
+    public void updateInputValues(double[] newInputs) {
+        if (! hasDependencies) {
+            for (ModifiedInput output : outputs) {
+                ((UsesOnlyOriginalInputs)output).updateForInputs(newInputs);
+            }
+        } else {
+            computeValuesForNewInputs(newInputs);
+        }
+    }
+    
+    public void computeValuesForNewInputs(double[] newInputs) {
+         //Compute output values that
+        int currentIndex = 0;
+        
+        //First do computations with no dependencies other than current inputs
+        for (ModifiedInput output : outputs) {
+            if (output instanceof UsesOnlyOriginalInputs) {
+                ((UsesOnlyOriginalInputs)output).updateForInputs(newInputs);
+                if (output instanceof ModifiedInputSingle) {
+                    currentValues[currentIndex] = ((ModifiedInputSingle)output).getValue();
+                } else {
+                    System.arraycopy(((ModifiedInputVector)output).getValues(), 0, currentValues, currentIndex, output.getSize());
+                }
+            } 
+            currentIndex += output.getSize();
+        }
+        
+        //Do the rest of the computations now
+        for (ModifiedInput output : outputs) {
+            currentIndex = 0;
+            if (output instanceof UsesInputsAndOutputs) {
+                ((UsesOnlyOriginalInputs)output).updateForInputs(newInputs);
+                if (output instanceof ModifiedInputSingle) {
+                    currentValues[currentIndex] = ((ModifiedInputSingle)output).getValue();
+                } else {
+                    System.arraycopy(((ModifiedInputVector)output).getValues(), 0, currentValues, currentIndex, output.getSize());
+                }
+            } 
+            currentIndex += output.getSize();
+        }
+    }
 
-    public int getNumOutputs() {
-        return outputs.size();
+    public double[] computeAndGetValuesForNewInputs(double[] newInputs) {
+        computeValuesForNewInputs(newInputs);
+        return currentValues;
+    }
+    
+    public int getOutputDimensionality() {
+        return dimensionality;
+    }
+    
+    public int getNumOutputTypes() {
+        return numOutputTypes;
     }
     
     public String[] getOutputNames() {
-        String[] s = new String[outputs.size()];
-        for (int i = 0; i < outputs.size(); i++) {
-            s[i] = outputs.get(i).getName();
+        int currentIndex = 0;
+        String[] s = new String[getOutputDimensionality()];
+        for (ModifiedInput o : outputs) {
+            if (o instanceof ModifiedInputSingle) {
+                s[currentIndex] = ((ModifiedInputSingle)o).getName();
+                currentIndex++;
+            } else {
+                for (int i = 0 ; i < o.getSize(); i++) {
+                    s[currentIndex] = ((ModifiedInputVector)o).getNames()[i];
+                    currentIndex++;
+                }
+            }
         }
         return s;
-    }
-    
-    //Danger: values can be modified by caller
-    public double[] getValues() {
-        double[] d = new double[outputs.size()];
-        for (int i = 0; i < outputs.size(); i++) {
-            d[i] = outputs.get(i).getValue();
-        }
-        return d;
-    }   
+    }  
     
     /**
      * Remove PropertyChangeListener.
@@ -67,10 +128,26 @@ public class OSCModifiedInputGroup {
             throw new IllegalArgumentException("outputs must be a non-null list with at least one element");
         }
         this.outputs = new LinkedList<>(outputs);
+        this.numOutputTypes = outputs.size();
+        int s = 0;
+        boolean d = false;
+        for (ModifiedInput output : outputs) {
+            s += output.getSize();
+            if (output instanceof UsesInputsAndOutputs) {
+                d = true;
+            } 
+        }
+        hasDependencies = d;
+        dimensionality = s;
+        
+        
     }
     
     public OSCModifiedInputGroup(OSCModifiedInputGroup groupFromFile) {
         this.outputs = new LinkedList<>(groupFromFile.getOutputs());
+        this.numOutputTypes = groupFromFile.numOutputTypes;
+        this.dimensionality = groupFromFile.dimensionality;
+        this.hasDependencies = groupFromFile.hasDependencies;
     }
     
     public int getOutputNumber(OSCModifiedInputGroup o) {

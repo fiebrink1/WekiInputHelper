@@ -11,13 +11,13 @@ import wekiinputhelper.UsesOnlyOriginalInputs;
  *
  * @author rebecca
  */
-public class WindowedOperation implements ModifiedInput, UsesOnlyOriginalInputs{
-    String name;
-    int index;
-    int windowSize;
-    double[] history;
-    int startPointer;
-    Operation op;
+public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalInputs{
+    private final String name;
+    private final int index;
+    private final int windowSize;
+    private final transient double[] history;
+    private transient int startPointer;
+    private final Operation op;
     
     public WindowedOperation(String originalName, Operation op, int index, int windowSize) {
         name = originalName + "_" + op.shortName() + Integer.toString(windowSize);        
