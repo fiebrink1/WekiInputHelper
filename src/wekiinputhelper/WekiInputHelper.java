@@ -341,8 +341,10 @@ public class WekiInputHelper {
 
     public void saveAs() throws IOException {
         File f = Util.findSaveFile(WekiInputHelperFileData.FILENAME_EXTENSION, "Project1", "Wekinator Input Helper save file", mainGUI);
-        setProjectName(f.getName());
-        saveAs(projectName, f);
+        if (f != null) {
+            setProjectName(f.getName());
+            saveAs(projectName, f);
+        }
     }
 
 }

@@ -328,6 +328,10 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     }//GEN-LAST:event_buttonSendExampleActionPerformed
 
     private boolean validateForm() {
+        if (outputPanels.size() == 0 && !checkIncludeOriginals.isSelected()) {
+            Util.showPrettyErrorPane(this, "You must choose at least one existing or new input value to send out");
+            return false;
+        }
         for (int i = 0; i < outputPanels.size(); i++) {
             ModifierConfigRow r = outputPanels.get(i);
             boolean b = r.validateForm();
@@ -335,6 +339,10 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
                 Util.showPrettyErrorPane(r, "Input modifier row " + (i + 1) + " is not configured");
                 return false;
             }
+        }
+        String[] names = getAllOutputNames();
+        if (!Util.checkAllUniqueWithErrorPane(names, "name")) {
+            return false;
         }
         return true;
     }

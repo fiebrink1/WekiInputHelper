@@ -642,7 +642,7 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
                 OSCInputGroup inputGroup = getInputGroupFromForm();                
                 
                 w.getInputManager().setOSCInputGroup(inputGroup);
-                w.getMainHelperGUI().initializeForInputs();;
+                w.getMainHelperGUI().initializeForInputs();
                 w.getMainHelperGUI().setVisible(true);
                 WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
                 removeListeners();

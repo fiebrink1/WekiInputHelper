@@ -181,6 +181,18 @@ public class Util {
         }
         return true;
     }
+    
+    public static boolean checkAllUniqueWithErrorPane(String[] strings, String fieldName) {
+        HashSet<String> set = new HashSet<>();
+        for (int i = 0; i < strings.length; i++) {
+            if (set.contains(strings[i])) {
+                Util.showPrettyErrorPane(null, "Each " + fieldName + " must be unique; duplicate detected at " + strings[i]);
+                return false;
+            }
+            set.add(strings[i]);
+        }
+        return true;
+    }
 
 //For testing:
     public static void main(String[] args) {

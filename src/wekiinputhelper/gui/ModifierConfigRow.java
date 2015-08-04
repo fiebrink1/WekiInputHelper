@@ -11,6 +11,12 @@ import java.beans.PropertyChangeListener;
 import wekiinputhelper.Modifiers.AverageWindowOperation;
 import wekiinputhelper.Modifiers.BufferedInputEditor;
 import wekiinputhelper.Modifiers.FirstOrderDifferenceEditor;
+import wekiinputhelper.Modifiers.MinWindowOperation;
+import wekiinputhelper.Modifiers.Min1stWindowOperation;
+import wekiinputhelper.Modifiers.Min2ndWindowOperation;
+import wekiinputhelper.Modifiers.Max1stWindowOperation;
+import wekiinputhelper.Modifiers.Max2ndWindowOperation;
+import wekiinputhelper.Modifiers.MaxWindowOperation;
 import wekiinputhelper.Modifiers.ModifiedInput;
 import wekiinputhelper.Modifiers.SecondOrderDifferenceEditor;
 import wekiinputhelper.Modifiers.StdDevWindowOperation;
@@ -107,7 +113,7 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(comboModifierType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(panelInputEditor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -129,7 +135,18 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
         } else if (i == 4) {
             p = new WindowedOperationEditor(w, new StdDevWindowOperation());
-            System.out.println("TODO FIX THIS");
+        } else if (i == 5) {
+            p = new WindowedOperationEditor(w, new MinWindowOperation());
+        } else if (i == 6) {
+            p = new WindowedOperationEditor(w, new MaxWindowOperation());
+        } else if (i == 7) {
+            p = new WindowedOperationEditor(w, new Min1stWindowOperation());
+        } else if (i == 8) {
+            p = new WindowedOperationEditor(w, new Max1stWindowOperation());
+        } else if (i == 9) {
+            p = new WindowedOperationEditor(w, new Min2ndWindowOperation());
+        } else if (i == 10) {
+            p = new WindowedOperationEditor(w, new Max2ndWindowOperation());
         } else {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
                         System.out.println("TODO FIX THIS");
