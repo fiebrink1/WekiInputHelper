@@ -39,6 +39,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     public MainHelperGUI(WekiInputHelper w) {
         initComponents();
         this.w = w;
+        addInputsPanel1.setWekiInputHelper(w);
         setGUIForWekiInputHelper();
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -88,6 +89,8 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        tabbedPane = new javax.swing.JTabbedPane();
+        addInputsPanel1 = new wekiinputhelper.gui.AddInputsPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -97,12 +100,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        menuPerformanceCheck = new javax.swing.JCheckBoxMenuItem();
         menuConsole = new javax.swing.JMenuItem();
-        menuActions = new javax.swing.JMenu();
-        checkEnableOSCControl = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("New project");
@@ -115,15 +113,22 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        tabbedPane.setBackground(new java.awt.Color(255, 255, 255));
+        tabbedPane.addTab("Configure Inputs", addInputsPanel1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 161, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabbedPane))
         );
 
         menuFile.setMnemonic('F');
@@ -186,30 +191,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         });
         jMenu2.add(jMenuItem1);
 
-        jMenuItem2.setText("Outputs");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem2);
-
-        jMenuItem7.setText("Input/output connection editor");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem7);
-
-        menuPerformanceCheck.setText("Performance mode view");
-        menuPerformanceCheck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuPerformanceCheckActionPerformed(evt);
-            }
-        });
-        jMenu2.add(menuPerformanceCheck);
-
         menuConsole.setText("Console");
         menuConsole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,40 +201,46 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
 
         jMenuBar1.add(jMenu2);
 
-        menuActions.setText("Actions");
-
-        checkEnableOSCControl.setSelected(true);
-        checkEnableOSCControl.setText("Enable OSC control of GUI");
-        checkEnableOSCControl.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkEnableOSCControlActionPerformed(evt);
-            }
-        });
-        menuActions.add(checkEnableOSCControl);
-
-        jMenuBar1.add(menuActions);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveAsActionPerformed
-        System.out.println("TODO"); //XXX
+        try {
+            if (tabbedPane.getSelectedIndex() == 0) {
+                boolean canSave = addInputsPanel1.prepareToSave();
+                if (! canSave) {
+                    return;
+                }
+            }
+            w.saveAs();
+        } catch (IOException ex) {
+            Util.showPrettyErrorPane(this, "Could not save file: " + ex.getMessage());
+            Logger.getLogger(MainHelperGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_menuItemSaveAsActionPerformed
 
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
+        if (tabbedPane.getSelectedIndex() == 0) {
+                boolean canSave = addInputsPanel1.prepareToSave();
+                if (! canSave) {
+                    return;
+                }
+        }
         w.save();
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
@@ -280,19 +267,12 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         showInputMonitorWindow();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        showOutputTable();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
 
         WekiInputHelperRunner.getInstance().runNewProject();
         //TODO: this or main?
 
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -301,13 +281,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowClosed
-
-    private void menuPerformanceCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPerformanceCheckActionPerformed
-
-    }//GEN-LAST:event_menuPerformanceCheckActionPerformed
-
-    private void checkEnableOSCControlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEnableOSCControlActionPerformed
-    }//GEN-LAST:event_checkEnableOSCControlActionPerformed
 
     private void menuConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsoleActionPerformed
         w.showConsole();
@@ -333,6 +306,10 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         } else {
             outputMonitor.toFront();
         }
+    }
+    
+    public void initializeForInputs() {
+        addInputsPanel1.initializeForInputs();
     }
 
     public void showOSCReceiverWindow() {
@@ -413,31 +390,23 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBoxMenuItem checkEnableOSCControl;
+    private wekiinputhelper.gui.AddInputsPanel addInputsPanel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JMenu menuActions;
     private javax.swing.JMenuItem menuConsole;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JMenuItem menuItemSaveAs;
-    private javax.swing.JCheckBoxMenuItem menuPerformanceCheck;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 
     void displayEditOutput(String name) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-    public void initializeInputs() {
-        //TODO XXX
     }
 
     @Override

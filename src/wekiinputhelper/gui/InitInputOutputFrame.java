@@ -141,6 +141,13 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         popupMenuInputOptions = new javax.swing.JPopupMenu();
         menuCustomiseInputNames = new javax.swing.JMenuItem();
         menuLoadFromFile = new javax.swing.JMenuItem();
+        panelOutputs = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        fieldOutputOSCMessage = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        fieldHostName = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        fieldSendPort = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -154,13 +161,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         jLabel4 = new javax.swing.JLabel();
         fieldInputOSCMessage = new javax.swing.JTextField();
         buttonInputOptions = new javax.swing.JButton();
-        panelOutputs = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        fieldOutputOSCMessage = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        fieldHostName = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        fieldSendPort = new javax.swing.JTextField();
         buttonNext = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -182,6 +182,68 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             }
         });
         popupMenuInputOptions.add(menuLoadFromFile);
+
+        panelOutputs.setBackground(new java.awt.Color(255, 255, 255));
+        panelOutputs.setBorder(javax.swing.BorderFactory.createTitledBorder("Modified Inputs (sent out from here to Wekinator)"));
+
+        jLabel6.setText("OSC message:");
+
+        fieldOutputOSCMessage.setText("/wek/newInputs");
+        fieldOutputOSCMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldOutputOSCMessageActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Host (IP address or name):");
+
+        fieldHostName.setText("localhost");
+
+        jLabel14.setText("Port:");
+
+        fieldSendPort.setText("6449");
+        fieldSendPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldSendPortKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelOutputsLayout = new javax.swing.GroupLayout(panelOutputs);
+        panelOutputs.setLayout(panelOutputsLayout);
+        panelOutputsLayout.setHorizontalGroup(
+            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelOutputsLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fieldOutputOSCMessage))
+                    .addGroup(panelOutputsLayout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(0, 0, 0)
+                        .addComponent(fieldHostName, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addGap(0, 0, 0)
+                        .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelOutputsLayout.setVerticalGroup(
+            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOutputsLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(fieldOutputOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(fieldHostName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Create new project");
@@ -324,68 +386,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
                     .addComponent(buttonInputOptions)))
         );
 
-        panelOutputs.setBackground(new java.awt.Color(255, 255, 255));
-        panelOutputs.setBorder(javax.swing.BorderFactory.createTitledBorder("Modified Inputs (sent out from here to Wekinator)"));
-
-        jLabel6.setText("OSC message:");
-
-        fieldOutputOSCMessage.setText("/wek/newInputs");
-        fieldOutputOSCMessage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldOutputOSCMessageActionPerformed(evt);
-            }
-        });
-
-        jLabel13.setText("Host (IP address or name):");
-
-        fieldHostName.setText("localhost");
-
-        jLabel14.setText("Port:");
-
-        fieldSendPort.setText("6449");
-        fieldSendPort.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                fieldSendPortKeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelOutputsLayout = new javax.swing.GroupLayout(panelOutputs);
-        panelOutputs.setLayout(panelOutputsLayout);
-        panelOutputsLayout.setHorizontalGroup(
-            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelOutputsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelOutputsLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fieldOutputOSCMessage))
-                    .addGroup(panelOutputsLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(0, 0, 0)
-                        .addComponent(fieldHostName, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel14)
-                        .addGap(0, 0, 0)
-                        .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        panelOutputsLayout.setVerticalGroup(
-            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelOutputsLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(fieldOutputOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(fieldHostName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addContainerGap())
-        );
-
         buttonNext.setText("Next >");
         buttonNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -400,7 +400,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelOutputs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -411,15 +410,12 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelOutputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(buttonNext)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(buttonNext))
         );
 
         jMenu1.setText("File");
@@ -456,11 +452,11 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 304, Short.MAX_VALUE)
+            .addGap(0, 210, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 2, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -638,7 +634,7 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
 
     private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
         //TODO: have to do more if configuringOSC on next screen...
-        if (checkOSCReady() && checkInputReady() && checkOutputReady() && checkNamesUnique()) {
+        if (checkOSCReady() && checkInputReady() && checkNamesUnique()) {
             //System.out.println("READY TO GO");
             try {
                 configureOSCSenderFromForm();
@@ -646,7 +642,7 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
                 OSCInputGroup inputGroup = getInputGroupFromForm();                
                 
                 w.getInputManager().setOSCInputGroup(inputGroup);
-                w.getMainHelperGUI().initializeInputs();
+                w.getMainHelperGUI().initializeForInputs();;
                 w.getMainHelperGUI().setVisible(true);
                 WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
                 removeListeners();

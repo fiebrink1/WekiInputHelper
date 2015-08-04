@@ -19,8 +19,12 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
     private transient int startPointer;
     private final Operation op;
     
+    public static String makeName(String originalName, String shortName, int windowSize) {
+        return originalName + "_" + shortName + Integer.toString(windowSize);
+    }
+    
     public WindowedOperation(String originalName, Operation op, int index, int windowSize) {
-        name = originalName + "_" + op.shortName() + Integer.toString(windowSize);        
+        name =  makeName(originalName, op.shortName(), windowSize);       
         this.index = index;
         this.windowSize = windowSize;
         this.op = op;

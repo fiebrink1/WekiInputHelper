@@ -54,7 +54,6 @@ public class WekiInputHelperSaver {
         w.setProjectLocation(projectFile);
         w.setHasSaveLocation(true);
         wfd.applySettings(w);
-        w.getMainHelperGUI().initializeInputs();
         w.getStatusUpdateCenter().update(null, "Successfully loaded Wekinator Input Helper project from file.");
         return w;
     }

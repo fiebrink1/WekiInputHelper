@@ -80,6 +80,18 @@ public class OSCSender {
         s.send(msg);
     }
 
+     public static void sendNamesMessage(InetAddress hostname, int port, String[] names) throws SocketException, IOException {
+        String message = OSCControlReceiver.setInputNamesMessage;
+        OSCPortOut s = new OSCPortOut(hostname, port);
+        /*Object[] o = new Object[names.length];
+        for (int i = 0; i < o.length; i++) {
+            o[i] = new
+        } */
+        OSCMessage msg = new OSCMessage(message, names);
+        s.send(msg);
+    }
+
+    
     public void sendOutputValuesMessage(double[] data) throws IOException {
         if (isValidState) {
             Object[] o = new Object[data.length];

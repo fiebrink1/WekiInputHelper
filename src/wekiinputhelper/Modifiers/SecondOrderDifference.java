@@ -19,8 +19,12 @@ public class SecondOrderDifference implements ModifiedInputSingle, UsesOnlyOrigi
     private transient double x_n = 0;
     private transient double y_n = 0;
     
+    public static String makeName(String originalName) {
+        return originalName + "_2ndOrderDiff";
+    }
+    
     public SecondOrderDifference(String originalName, int index) {
-        this.name = originalName + "_2ndOrderDiff";
+        this.name = makeName(originalName);
         this.index = index;
     }
     

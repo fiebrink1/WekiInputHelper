@@ -19,7 +19,7 @@ public class OSCControlReceiver {
 
     private final WekiInputHelper w;
     private final PropertyChangeListener oscReceiverListener;
-    private final String setInputNamesMessage = "/wekinator/control/setInputNames";
+    public static final String setInputNamesMessage = "/wekinator/control/setInputNames";
     
     public OSCControlReceiver(WekiInputHelper w) {
         this.w = w;

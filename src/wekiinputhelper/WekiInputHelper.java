@@ -178,11 +178,12 @@ public class WekiInputHelper {
         oscReceiver = new OSCReceiver();
         oscSender = new OSCSender();
         oscSender.setDefaultHostAndPort();
-        mainGUI = new MainHelperGUI(this);
         
         inputManager = new InputManager(this);
         outputManager = new OutputManager(this);
         runningManager = new RunningManager(this);
+                mainGUI = new MainHelperGUI(this);
+
         
         wekiInputHelperController = new WekiInputHelperController(this);
         oscMonitor = new OSCMonitor(oscReceiver, inputManager, oscSender);
@@ -336,6 +337,12 @@ public class WekiInputHelper {
                 myConsole = null;
             }
         });
+    }
+
+    public void saveAs() throws IOException {
+        File f = Util.findSaveFile(WekiInputHelperFileData.FILENAME_EXTENSION, "Project1", "Wekinator Input Helper save file", mainGUI);
+        setProjectName(f.getName());
+        saveAs(projectName, f);
     }
 
 }

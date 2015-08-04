@@ -18,8 +18,12 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     private transient double x_n = 0;
     private transient double y_n = 0;
     
+    public static String makeName(String originalName) {
+        return originalName + "_1stOrderDiff";
+    }
+    
     public FirstOrderDifference(String originalName, int index) {
-        this.name = originalName + "_1stOrderDiff";
+        this.name = makeName(originalName);
         this.index = index;
     }
     
