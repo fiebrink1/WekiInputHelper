@@ -187,12 +187,16 @@ public class WekiInputHelper {
         inputManager = new InputManager(this);
         outputManager = new OutputManager(this);
         runningManager = new RunningManager(this);
-                mainGUI = new MainHelperGUI(this);
+                
 
         
         wekiInputHelperController = new WekiInputHelperController(this);
         oscMonitor = new OSCMonitor(oscReceiver, inputManager, oscSender);
         controlReceiver = new OSCControlReceiver(this);
+        
+        mainGUI = new MainHelperGUI(this);
+        
+        oscSender.attachToOutput(outputManager);
     }
     
     public final void registerForMacOSXEvents() {

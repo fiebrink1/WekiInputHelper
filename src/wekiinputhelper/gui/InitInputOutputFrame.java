@@ -43,11 +43,11 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
     private PropertyChangeListener oscReceiverListener = null;
     private final WeakListenerSupport wls = new WeakListenerSupport();
     private String[] currentInputNames = new String[0];
-    
+
     private final WekiInputHelperController.NamesListener inputNamesListener;
 
     private GuiIONameCustomise inputCustomiser = null;
-    
+
     private static final Logger logger = Logger.getLogger(InitInputOutputFrame.class.getName());
 
     private boolean isCloseable = false;
@@ -69,7 +69,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             public void newNamesReceived(String[] names) {
                 receivedInputNamesFromOSC(names);
             }
-
         };
         w.getWekiInputHelperController().addInputNamesListener(inputNamesListener);
     }
@@ -88,6 +87,7 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             }
         }
     }
+
     public void setWekiInputHelper(WekiInputHelper w) {
         this.w = w;
         updateGUIForConnectionState(w.getOSCReceiver().getConnectionState());
@@ -141,13 +141,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         popupMenuInputOptions = new javax.swing.JPopupMenu();
         menuCustomiseInputNames = new javax.swing.JMenuItem();
         menuLoadFromFile = new javax.swing.JMenuItem();
-        panelOutputs = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        fieldOutputOSCMessage = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        fieldHostName = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        fieldSendPort = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -182,68 +175,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             }
         });
         popupMenuInputOptions.add(menuLoadFromFile);
-
-        panelOutputs.setBackground(new java.awt.Color(255, 255, 255));
-        panelOutputs.setBorder(javax.swing.BorderFactory.createTitledBorder("Modified Inputs (sent out from here to Wekinator)"));
-
-        jLabel6.setText("OSC message:");
-
-        fieldOutputOSCMessage.setText("/wek/newInputs");
-        fieldOutputOSCMessage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldOutputOSCMessageActionPerformed(evt);
-            }
-        });
-
-        jLabel13.setText("Host (IP address or name):");
-
-        fieldHostName.setText("localhost");
-
-        jLabel14.setText("Port:");
-
-        fieldSendPort.setText("6449");
-        fieldSendPort.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                fieldSendPortKeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelOutputsLayout = new javax.swing.GroupLayout(panelOutputs);
-        panelOutputs.setLayout(panelOutputsLayout);
-        panelOutputsLayout.setHorizontalGroup(
-            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelOutputsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelOutputsLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fieldOutputOSCMessage))
-                    .addGroup(panelOutputsLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(0, 0, 0)
-                        .addComponent(fieldHostName, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel14)
-                        .addGap(0, 0, 0)
-                        .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        panelOutputsLayout.setVerticalGroup(
-            panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelOutputsLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(fieldOutputOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addGroup(panelOutputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(fieldHostName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fieldSendPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addContainerGap())
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Create new project");
@@ -566,11 +497,11 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         inputCustomiser.setAlwaysOnTop(true);
         inputCustomiser.setVisible(true);
         /*Util.callOnClosed(inputCustomiser, new Util.CallableOnClosed() {
-            @Override
-            public void callMe() {
-                inputCustomiser = null;
-            }
-        }); */
+         @Override
+         public void callMe() {
+         inputCustomiser = null;
+         }
+         }); */
     }
 
     private void buttonInputOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonInputOptionsActionPerformed
@@ -578,18 +509,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         //customiseInputNames();
         popupMenuInputOptions.show(panelInputs, buttonInputOptions.getX(), buttonInputOptions.getY());
     }//GEN-LAST:event_buttonInputOptionsActionPerformed
-
-
-    private void fieldOutputOSCMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputOSCMessageActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldOutputOSCMessageActionPerformed
-
-    private void fieldSendPortKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldSendPortKeyTyped
-        char enter = evt.getKeyChar();
-        if (!(Character.isDigit(enter))) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_fieldSendPortKeyTyped
 
     private OSCInputGroup getInputGroupFromForm() {
         String name = "Inputs";
@@ -617,41 +536,22 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
             }
         }
     }
-    
-    private String getHostnameFromForm() {
-        return fieldHostName.getText().trim();
-    }
 
-    private int getSendPortFromForm() {
-        return Integer.parseInt(fieldSendPort.getText());
-    }
-
-    private void configureOSCSenderFromForm() throws UnknownHostException, SocketException {
-        String hostName = getHostnameFromForm();
-        int port = getSendPortFromForm();
-        w.getOSCSender().setHostnameAndPort(InetAddress.getByName(hostName), port);
-    }
-
+  
     private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
         //TODO: have to do more if configuringOSC on next screen...
         if (checkOSCReady() && checkInputReady() && checkNamesUnique()) {
             //System.out.println("READY TO GO");
-            try {
-                configureOSCSenderFromForm();
 
-                OSCInputGroup inputGroup = getInputGroupFromForm();                
-                
-                w.getInputManager().setOSCInputGroup(inputGroup);
-                w.getMainHelperGUI().initializeForInputs();
-                w.getMainHelperGUI().setVisible(true);
-                WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
-                removeListeners();
-                this.dispose();
-            } catch (UnknownHostException ex) {
-                Util.showPrettyErrorPane(this, "Host name " + fieldHostName.getText() + " is invalid; please try a different host.");
-            } catch (SocketException ex) {
-                Util.showPrettyErrorPane(this, "Error setting up OSC sender: " + ex.getMessage());
-            }
+                //configureOSCSenderFromForm();
+            OSCInputGroup inputGroup = getInputGroupFromForm();
+
+            w.getInputManager().setOSCInputGroup(inputGroup);
+            w.getMainHelperGUI().initializeForInputs();
+            w.getMainHelperGUI().setVisible(true);
+            WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
+            removeListeners();
+            this.dispose();
 
         } else {
             logger.log(Level.INFO, "Error encountered in setting up inputs/outputs");
@@ -746,38 +646,12 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
                     Logger.getLogger(InitInputOutputFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SecurityException ex) {
                     Logger.getLogger(InitInputOutputFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
             }
 
         });
     }
 
-    private boolean checkOutputHostValid() {
-        boolean isNotBlank = Util.checkNotBlank(fieldHostName, "host name", this);
-        if (!isNotBlank) {
-            return false;
-        }
-
-        String hostname = fieldHostName.getText().trim();
-        try {
-            InetAddress address = InetAddress.getByName(hostname);
-        } catch (UnknownHostException ex) {
-            Util.showPrettyErrorPane(this, "Invalid OSC output hostname");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkOutputPortValid() {
-        return Util.checkIsPositiveNumber(fieldSendPort, "OSC output port", this);
-    }
-
-    private boolean checkOutputOSCValid() {
-        if (!Util.checkNotBlank(fieldOutputOSCMessage, "OSC output message", this)) {
-            return false;
-        }
-        return Util.checkNoSpace(fieldOutputOSCMessage, "OSC output message", this);
-    }
 
     private boolean checkInputNumberValid() {
         return Util.checkIsPositiveNumber(fieldNumInputs, "Number of inputs", this);
@@ -825,17 +699,12 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         }
     }
 
-    private boolean checkOutputReady() {
-        boolean ok = checkOutputHostValid() && checkOutputPortValid() && checkOutputOSCValid();
-        return ok;
-    }
-    
     /* Requires input and output fields are properly formatted as ints */
     private boolean checkNamesUnique() {
         int numInputs = Integer.parseInt(fieldNumInputs.getText());
         setCurrentInputNames(numInputs);
         boolean unique = Util.checkAllUnique(currentInputNames);
-        if (! unique) {
+        if (!unique) {
             Util.showPrettyErrorPane(this, "Input names must all be unique");
         }
         return unique;
@@ -863,19 +732,13 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
     private javax.swing.JButton buttonInputOptions;
     private javax.swing.JButton buttonNext;
     private javax.swing.JButton buttonOscListen;
-    private javax.swing.JTextField fieldHostName;
     private javax.swing.JTextField fieldInputOSCMessage;
     private javax.swing.JTextField fieldNumInputs;
     private javax.swing.JTextField fieldOscPort;
-    private javax.swing.JTextField fieldOutputOSCMessage;
-    private javax.swing.JTextField fieldSendPort;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -886,7 +749,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
     private javax.swing.JMenuItem menuItemOpenProject;
     private javax.swing.JMenuItem menuLoadFromFile;
     private javax.swing.JPanel panelInputs;
-    private javax.swing.JPanel panelOutputs;
     private javax.swing.JPopupMenu popupMenuInputOptions;
     // End of variables declaration//GEN-END:variables
 

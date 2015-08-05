@@ -17,8 +17,8 @@ public class TriggerOnReceive extends InputTriggerer {
     }
     
     @Override
-    public void updateAllValues(double[] vals) {
-        if (c.shouldTrigger(vals)) {
+    public void updateAllValues(double[] inputs, double[] outputs) {
+        if (c.shouldTrigger(inputs, outputs)) {
             this.triggerSend();
         }
     }

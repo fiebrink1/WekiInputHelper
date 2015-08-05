@@ -15,7 +15,7 @@ import java.util.List;
  * @author rebecca
  */
 public abstract class InputTriggerer {
-    public abstract void updateAllValues(double[] vals);
+    public abstract void updateAllValues(double[] inputs, double[] outputs);
     protected Criterion c;
     
     public Criterion getCriterion() {

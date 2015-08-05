@@ -16,26 +16,28 @@ import wekiinputhelper.util.WeakListenerSupport;
  *
  * @author rebecca
  */
-public class RunningManager {    
+public class RunningManager {
+
+    public void setIncludeOriginals(boolean includeOriginals) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public static enum RunningState {
 
         RUNNING, NOT_RUNNING
     };
 
     private boolean ableToRun = false;
-    
+
     private final WekiInputHelper w;
     private final WeakListenerSupport wls = new WeakListenerSupport();
-  
+
     private RunningState runningState = RunningState.NOT_RUNNING;
     public static final String PROP_RUNNINGSTATE = "runningState";
 
     private static final Logger logger = Logger.getLogger(RunningManager.class.getName());
 
-    
     public static final String PROP_ABLE_TO_RUN = "ableToRun";
-    
-
 
     /**
      * Get the value of runningState
@@ -56,7 +58,6 @@ public class RunningManager {
         this.runningState = runningState;
         propertyChangeSupport.firePropertyChange(PROP_RUNNINGSTATE, oldRunningState, runningState);
     }
-
 
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -80,7 +81,18 @@ public class RunningManager {
 
     public RunningManager(WekiInputHelper w) {
         this.w = w;
-        // w.getOSCReceiver().addPropertyChangeListener(this::oscReceiverPropertyChanged);
+
+        w.getInputManager().addInputValueListener(new InputManager.InputListener() {
+
+            @Override
+            public void update(double[] vals) {
+                newInputsReceived(vals);
+            }
+
+            @Override
+            public void notifyInputError() {
+            }
+        });
 
         w.getOSCReceiver().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -88,7 +100,7 @@ public class RunningManager {
                 oscReceiverPropertyChanged(evt);
             }
         });
-        
+
     }
 
     private void oscReceiverPropertyChanged(PropertyChangeEvent evt) {
@@ -106,19 +118,28 @@ public class RunningManager {
         setAbleToRun(true);
     }
 
-    private double[] computeValues(double[] inputs) {
-        //TODO: Compute XXX
-        return new double[0];
-    }
-
-
-    public void updateInputs(double[] inputs) {
+    /*private double[] computeValues(double[] inputs) {
+     //TODO: Compute XXX
+     return new double[0];
+     } */
+    public void newInputsReceived(double[] inputs) {
         if (runningState == RunningState.RUNNING) {
-            double[] d = computeValues(inputs);
-            w.getOutputManager().setNewComputedValues(d);
+            double[] d = w.getOutputManager().getOutputGroup().computeAndGetValuesForNewInputs(inputs);
+            w.getInputTriggerer().updateAllValues(inputs, d);
         }
     }
 
+    public void start() {
+        if (getRunningState() == RunningState.RUNNING) {
+            setRunningState(RunningState.NOT_RUNNING);
+        }
+    }
+
+    public void stop() {
+        if (getRunningState() == RunningState.NOT_RUNNING) {
+            setRunningState(RunningState.RUNNING);
+        }
+    }
 
     /**
      * Get the value of ableToRun

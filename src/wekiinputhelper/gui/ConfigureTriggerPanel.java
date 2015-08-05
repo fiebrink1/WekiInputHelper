@@ -6,11 +6,16 @@
 package wekiinputhelper.gui;
 
 import java.awt.CardLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import wekiinputhelper.Criterion;
+import wekiinputhelper.Criterion.AppliesTo;
 import wekiinputhelper.Criterion.CriterionType;
 import wekiinputhelper.Criterion.HowLong;
 import wekiinputhelper.InputTriggerer;
+import wekiinputhelper.OutputManager;
 import wekiinputhelper.TriggerOnNth;
 import wekiinputhelper.TriggerOnReceive;
 import wekiinputhelper.TriggerOnTimes;
@@ -41,7 +46,36 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
 
     public void setWekiInputHelper(WekiInputHelper w) {
         this.w = w;
+        updateComboInput();
         updateFormForCurrentTrigger();
+        w.getOutputManager().addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(OutputManager.PROP_OUTPUTGROUP)) {
+                    outputGroupChanged();
+                }
+            }
+        });
+    }
+    
+    private void outputGroupChanged() {
+        updateComboInput();
+    }
+    
+    private void updateComboInput() {
+        String[] inputNames = w.getInputManager().getInputNames();
+        String[] outputNames;
+        if (w.getOutputManager().hasValidOutputGroup()) {
+             outputNames = w.getOutputManager().getOutputNames();
+        } else {
+            outputNames = new String[0];
+        }
+        String[] allNames = new String[inputNames.length + outputNames.length];
+        System.arraycopy(inputNames, 0, allNames, 0, inputNames.length);
+        System.arraycopy(outputNames, 0, allNames, inputNames.length, outputNames.length);
+        DefaultComboBoxModel model = new DefaultComboBoxModel(allNames);
+        comboInput.setModel(model);
     }
 
     private void updateFormForCurrentTrigger() {
@@ -64,6 +98,12 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             checkConstraint.setSelected(true);
             updateCriterion();
             int i = c.getInputIndex();
+            if (c.getAppliesTo() == AppliesTo.INPUT) {
+                comboInput.setSelectedIndex(i);
+            } else {
+                comboInput.setSelectedIndex(w.getInputManager().getNumInputs() +i);
+            }
+            
             comboInput.setSelectedIndex(i);
             int typeIndex = Criterion.getIndexForDescriptor(c.getType());
             comboCriterion.setSelectedIndex(typeIndex);
@@ -456,6 +496,11 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         if (checkConstraint.isSelected()) {
             int inputIndex = comboInput.getSelectedIndex();
             int typeIndex = comboCriterion.getSelectedIndex();
+            boolean isInput = inputIndex < w.getInputManager().getNumInputs();
+            if (! isInput) {
+                inputIndex = inputIndex - w.getInputManager().getNumInputs();
+            }
+            
             double val = 0.;
             Criterion.CriterionType type = Criterion.typesForDescriptors[typeIndex];
             if (type != CriterionType.CHANGE) {
@@ -470,8 +515,10 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             if (buttonGroupTriggerStop.isSelected(radioSendOnce.getModel())) {
                 howLong = HowLong.ONCE;
             }
-
-            c = new Criterion(type, howLong, inputIndex, val);
+            
+            Criterion.AppliesTo appliesTo = isInput ? AppliesTo.INPUT : AppliesTo.OUTPUT;
+            
+            c = new Criterion(type, howLong, inputIndex, appliesTo, val);
         } else {
             c = new Criterion();
         }

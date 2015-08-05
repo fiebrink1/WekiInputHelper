@@ -26,6 +26,7 @@ public class OSCModifiedInputGroup {
     private final boolean hasDependencies;
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     private transient double[] currentValues;
+    private transient double[] lastInputs;
     
     /**
      * Add PropertyChangeListener.
@@ -85,7 +86,12 @@ public class OSCModifiedInputGroup {
 
     public double[] computeAndGetValuesForNewInputs(double[] newInputs) {
         computeValuesForNewInputs(newInputs);
+        lastInputs = newInputs;
         return currentValues;
+    }
+    
+    public double[] getLastInputs() {
+        return lastInputs;
     }
     
     public int getOutputDimensionality() {
@@ -124,9 +130,10 @@ public class OSCModifiedInputGroup {
 
     public OSCModifiedInputGroup(List<ModifiedInput> outputs) 
     {
-        if (outputs == null || outputs.isEmpty()) {
+        /*if (outputs == null || outputs.isEmpty()) {
             throw new IllegalArgumentException("outputs must be a non-null list with at least one element");
-        }
+        } */
+        
         this.outputs = new LinkedList<>(outputs);
         this.numOutputTypes = outputs.size();
         int s = 0;
@@ -139,7 +146,7 @@ public class OSCModifiedInputGroup {
         }
         hasDependencies = d;
         dimensionality = s;
-        
+        currentValues = new double[s];
         
     }
     

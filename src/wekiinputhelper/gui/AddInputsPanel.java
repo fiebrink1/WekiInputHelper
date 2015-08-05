@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -611,7 +612,23 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             return false;
         }
         configureOutputManagerFromForm();
+        configureOscSenderFromForm();
         return true;
+    }
+    
+    private void configureOscSenderFromForm() {
+        int port = Integer.parseInt(textPort.getText().trim());
+        String message = textOSCMessage.getText().trim();
+        String host = textHost.getText().trim();
+        
+        try {
+            w.getOSCSender().setHostnameAndPort(InetAddress.getByName(host), port);
+        } catch (UnknownHostException ex) {
+            Util.showPrettyErrorPane(this, "Unknown host: " + host);
+        } catch (SocketException ex) {
+            Util.showPrettyErrorPane(this, "Could not send to " + host + " at port " + port);
+        }
+        w.getOSCSender().setOscMessage(message);        
     }
     
     public boolean prepareToAdvance() {
@@ -623,17 +640,21 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             return;
         }
         List<ModifiedInput> newInputs = new LinkedList<ModifiedInput>();
-        if (checkIncludeOriginals.isSelected()) {
+        boolean includeOriginals = checkIncludeOriginals.isSelected();
+        
+        /*if (checkIncludeOriginals.isSelected()) {
             for (int i = 0; i < w.getInputManager().getNumInputs(); i++) {
                 ModifiedInput m = new InputCopier(w.getInputManager().getInputNames()[i], i);
                 newInputs.add(m);
             }
-        }
+        } */
+        
         for (ModifierConfigRow p: outputPanels) {
             ModifiedInput m = p.getModifiedInput();
             newInputs.add(m); 
         }
         OSCModifiedInputGroup g = new OSCModifiedInputGroup(newInputs);
+        w.getOSCSender().setSendInputs(includeOriginals);
         w.getOutputManager().setOutputGroup(g);
     }
 

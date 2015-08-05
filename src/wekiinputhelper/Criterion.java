@@ -49,17 +49,28 @@ public class Criterion {
         CriterionType.CHANGE
     };
 
+    public static enum AppliesTo {INPUT, OUTPUT};
+    
+    private final AppliesTo appliesTo;
+    
     public Criterion() {
         this.type = CriterionType.NONE;
+        this.appliesTo = AppliesTo.INPUT;
         this.index = 0;
         this.howLong = HowLong.ONCE;
         this.val = 0;
         this.isCurrentlySatisfied = true;
     }
+
+    public AppliesTo getAppliesTo() {
+        return appliesTo;
+    }
     
-    public Criterion(CriterionType type, HowLong howLong, int index, double val) {
+    
+    public Criterion(CriterionType type, HowLong howLong, int index, AppliesTo appliesTo, double val) {
         this.type = type;
         this.index = index;
+        this.appliesTo = appliesTo;
         if (type == NONE || type == CHANGE) {
             this.howLong = REPEAT;
         } else {
@@ -71,17 +82,17 @@ public class Criterion {
         this.val = val;
     }
 
-    public boolean shouldTrigger(double[] inputs) {
+    public boolean shouldTrigger(double[] inputs, double[] outputs) {
         boolean t;
         if (type == NONE) {
             return true;
         }
 
         if (howLong == REPEAT) {
-            t = isCurrentlySatisfied(inputs);
+            t = isCurrentlySatisfied(inputs, outputs);
         } else { //Just trigger first time
             boolean wasPreviouslySatisfied = isCurrentlySatisfied;
-            isCurrentlySatisfied = isCurrentlySatisfied(inputs);
+            isCurrentlySatisfied = isCurrentlySatisfied(inputs, outputs);
             t = (!wasPreviouslySatisfied && isCurrentlySatisfied);
         }
         if (type == CHANGE) {
@@ -107,19 +118,26 @@ public class Criterion {
     }
 
     //Assess independent of stop condition
-    private boolean isCurrentlySatisfied(double[] inputs) {
+    private boolean isCurrentlySatisfied(double[] inputs, double[] outputs) {
+        double[] vals;
+        if (appliesTo == AppliesTo.INPUT) {
+            vals = inputs;
+        } else {
+            vals = outputs;
+        }
+        
         if (type == LESS_THAN) {
-            return (inputs[index] < val);
+            return (vals[index] < val);
         } else if (type == GREATER_THAN) {
-            return (inputs[index] > val);
+            return (vals[index] > val);
         } else if (type == LESS_OR_EQUAL) {
-            return (inputs[index] <= val);
+            return (vals[index] <= val);
         } else if (type == GREATER_OR_EQUAL) {
-            return (inputs[index] >= val);
+            return (vals[index] >= val);
         } else if (type == EQUAL) {
-            return (inputs[index] == val);
+            return (vals[index] == val);
         } else if (type == CHANGE) {
-            return inputs[index] != lastValue;
+            return vals[index] != lastValue;
         } else {
             logger.log(Level.WARNING, "No condition found");
             return true;

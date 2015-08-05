@@ -44,6 +44,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         this.w = w;
         addInputsPanel1.setWekiInputHelper(w);
         configureTriggerPanel1.setWekiInputHelper(w);
+        sendAndMonitorPanel1.setWekiInputHelper(w);
         setGUIForWekiInputHelper();
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -97,6 +98,8 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         } else if (which == 1) {
             System.out.println("Preparing to leave trigger");
             return configureTriggerPanel1.prepareToAdvance();
+        } else if (which == 2) {
+            return sendAndMonitorPanel1.prepareToAdvance();
         }
         return true;
     }

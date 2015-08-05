@@ -24,10 +24,10 @@ public class TriggerOnNth extends InputTriggerer {
     }
     
     @Override
-    public void updateAllValues(double[] vals) {
+    public void updateAllValues(double[] inputs, double[] outputs) {
         currentCount++;
         if (currentCount == n) {
-            if (c.shouldTrigger(vals)) {
+            if (c.shouldTrigger(inputs, outputs)) {
                 this.triggerSend();  
             }
             currentCount = 0;

@@ -21,6 +21,7 @@ public class TriggerOnTimes extends InputTriggerer {
    // private final Criterion c;
     private transient boolean isRunning = false;
     private transient double[] lastInputs;
+    private transient double[] lastOutputs;
 
     private final transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private transient ScheduledFuture scheduledFuture;
@@ -35,8 +36,9 @@ public class TriggerOnTimes extends InputTriggerer {
     }
     
     @Override
-    public void updateAllValues(double[] vals) {
-        lastInputs = vals;
+    public void updateAllValues(double[] inputs, double[] outputs) {
+        lastInputs = inputs;
+        lastOutputs = outputs;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class TriggerOnTimes extends InputTriggerer {
         scheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                if (c.shouldTrigger(lastInputs)) {
+                if (c.shouldTrigger(lastInputs, lastOutputs)) {
                     triggerSend();
                 }
             }

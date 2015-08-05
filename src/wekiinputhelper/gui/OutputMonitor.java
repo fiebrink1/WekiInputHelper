@@ -27,14 +27,14 @@ public class OutputMonitor extends javax.swing.JFrame {
 
     private final WekiInputHelper w;
     private final WeakListenerSupport wls = new WeakListenerSupport();
-        private final OutputManager.OutputValueListener listener = new OutputManager.OutputValueListener() {
+    private final OutputManager.OutputValueListener listener = new OutputManager.OutputValueListener() {
+
         @Override
-        public void update(double[] vals) {
-               updateValues(vals);
+        public void update(double[] inputs, double[] vals) {
+            updateValues(vals);
         }
     };
 
-    
     private final List<NameValueRow> rows = new ArrayList<>();
     private final ImageIcon onIcon = new ImageIcon(getClass().getResource("/wekiinputhelper/icons/greenlight2.png")); // NOI18N
     private final ImageIcon offIcon = new ImageIcon(getClass().getResource("/wekiinputhelper/icons/greylight2.png")); // NOI18N
