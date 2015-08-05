@@ -611,8 +611,9 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         if (!validateForm()) {
             return false;
         }
-        configureOutputManagerFromForm();
         configureOscSenderFromForm();
+
+        configureOutputManagerFromForm();
         return true;
     }
     

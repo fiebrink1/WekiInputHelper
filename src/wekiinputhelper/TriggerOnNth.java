@@ -41,7 +41,6 @@ public class TriggerOnNth extends InputTriggerer {
     }
     
     private Object readResolve() {
-        System.out.println("HIIII");
         listenerList = new LinkedList<>();
         return this;
     }

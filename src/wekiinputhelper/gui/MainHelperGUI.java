@@ -144,7 +144,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         menuItemSaveAs = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         menuConsole = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -242,14 +241,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         });
         jMenu2.add(jMenuItem5);
 
-        jMenuItem1.setText("Inputs");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem1);
-
         menuConsole.setText("Console");
         menuConsole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -324,10 +315,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         showOSCReceiverWindow();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        showInputMonitorWindow();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
 
@@ -468,7 +455,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private wekiinputhelper.gui.ConfigureTriggerPanel configureTriggerPanel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;

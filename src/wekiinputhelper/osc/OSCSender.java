@@ -115,6 +115,8 @@ public class OSCSender {
     public void setOscMessage(String oscMessage) {
         this.oscMessage = oscMessage;
     }
+    
+    
 
     //Does not establish long-term sender
     //Use for connection testing
@@ -166,8 +168,9 @@ public class OSCSender {
             Object[] o = new Object[inputs.length + data.length];
             try {
                 int index = 0;
+
                 for (int i = 0; i < inputs.length; i++){
-                    o[index] = inputs[i];
+                    o[index] = (float)inputs[i];
                     index++;
                 }
                 
