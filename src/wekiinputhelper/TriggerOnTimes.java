@@ -26,9 +26,10 @@ public class TriggerOnTimes extends InputTriggerer {
     private final transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private transient ScheduledFuture scheduledFuture;
     
-    public TriggerOnTimes(int ms, Criterion c) {
+    public TriggerOnTimes(WekiInputHelper w, int ms, Criterion c) {
         this.numMs = ms;
         this.c = c;
+        attachRunningListener(w);
     }
     
     public int getTime() {

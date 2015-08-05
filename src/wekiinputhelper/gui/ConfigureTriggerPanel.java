@@ -528,10 +528,10 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         } else if (buttonGroupSendWhen.isSelected(radioConstantRateMS.getModel())) {
             try {
                 int rate = Integer.parseInt(textRateMS.getText());
-                return new TriggerOnTimes(rate, c);
+                return new TriggerOnTimes(w, rate, c);
             } catch (NumberFormatException ex) {
                 Util.showPrettyErrorPane(this, "Invalid rate selected; using 10ms instead");
-                return new TriggerOnTimes(10, c);
+                return new TriggerOnTimes(w, 10, c);
             }
         } else {
             //send every nth message

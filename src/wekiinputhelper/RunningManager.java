@@ -129,13 +129,13 @@ public class RunningManager {
         }
     }
 
-    public void start() {
+    public void stop() {
         if (getRunningState() == RunningState.RUNNING) {
             setRunningState(RunningState.NOT_RUNNING);
         }
     }
 
-    public void stop() {
+    public void start() {
         if (getRunningState() == RunningState.NOT_RUNNING) {
             setRunningState(RunningState.RUNNING);
         }

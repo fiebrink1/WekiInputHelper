@@ -354,7 +354,9 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
         JTabbedPane sourceTabbedPane = (JTabbedPane) evt.getSource();
         int index = sourceTabbedPane.getSelectedIndex();
-        System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+        if (index == 2) {
+            w.getRunningManager().start();
+        }
       
     }//GEN-LAST:event_tabbedPaneStateChanged
 
