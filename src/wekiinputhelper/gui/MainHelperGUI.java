@@ -10,11 +10,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import wekiinputhelper.WekiInputHelperRunner.Closeable;
 import wekiinputhelper.util.Util;
 import wekiinputhelper.WekiInputHelperRunner;
@@ -40,6 +43,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         initComponents();
         this.w = w;
         addInputsPanel1.setWekiInputHelper(w);
+        configureTriggerPanel1.setWekiInputHelper(w);
         setGUIForWekiInputHelper();
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -53,7 +57,32 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
                 
             }
         });
+        setupVetoableModel();
 
+    }
+    
+    private void setupVetoableModel() {
+        //From http://stackoverflow.com/questions/12389801/forbid-tab-change-in-a-jtabbedpane
+        VetoableSingleSelectionModel model = new VetoableSingleSelectionModel();
+        VetoableChangeListener validator = new VetoableChangeListener() {
+
+        @Override
+        public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
+            int oldSelection = (int) evt.getOldValue();
+            if ((oldSelection == -1) || isValidTab(oldSelection)) return;
+            throw new PropertyVetoException("change not valid", evt);
+        }
+
+        private boolean isValidTab(int oldSelection) {
+            // implement your validation logic here
+            return prepareToLeaveTab(oldSelection);
+        }
+        };
+        model.addVetoableChangeListener(validator);
+        tabbedPane.setModel(model);
+        tabbedPane.setSelectedIndex(0);
+        revalidate();
+        repaint();
     }
 
     private void finishUp() {
@@ -61,6 +90,17 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         this.dispose();
     }
 
+    private boolean prepareToLeaveTab(int which) {
+        if (which ==0) {
+            System.out.println("Preapring to leave addInputs");
+            return addInputsPanel1.prepareToAdvance();
+        } else if (which == 1) {
+            System.out.println("Preparing to leave trigger");
+            return configureTriggerPanel1.prepareToAdvance();
+        }
+        return true;
+    }
+    
     private void setGUIForWekiInputHelper() {
         this.setTitle(w.getProjectName());
         w.addPropertyChangeListener(new PropertyChangeListener() {
@@ -91,6 +131,8 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         jPanel1 = new javax.swing.JPanel();
         tabbedPane = new javax.swing.JTabbedPane();
         addInputsPanel1 = new wekiinputhelper.gui.AddInputsPanel();
+        configureTriggerPanel1 = new wekiinputhelper.gui.ConfigureTriggerPanel();
+        sendAndMonitorPanel1 = new wekiinputhelper.gui.SendAndMonitorPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -116,7 +158,19 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         tabbedPane.setBackground(new java.awt.Color(255, 255, 255));
-        tabbedPane.addTab("Configure Inputs", addInputsPanel1);
+        tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneStateChanged(evt);
+            }
+        });
+        tabbedPane.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                tabbedPaneVetoableChange(evt);
+            }
+        });
+        tabbedPane.addTab("What to send", addInputsPanel1);
+        tabbedPane.addTab("When to send", configureTriggerPanel1);
+        tabbedPane.addTab("Send and Monitor", sendAndMonitorPanel1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,6 +184,8 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
                 .addContainerGap()
                 .addComponent(tabbedPane))
         );
+
+        tabbedPane.getAccessibleContext().setAccessibleName("");
 
         menuFile.setMnemonic('F');
         menuFile.setText("File");
@@ -221,27 +277,30 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
 
     private void menuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveAsActionPerformed
         try {
-            if (tabbedPane.getSelectedIndex() == 0) {
-                boolean canSave = addInputsPanel1.prepareToSave();
-                if (! canSave) {
-                    return;
-                }
+            if (prepareToSave()) {
+                w.saveAs();
             }
-            w.saveAs();
+        
         } catch (IOException ex) {
             Util.showPrettyErrorPane(this, "Could not save file: " + ex.getMessage());
             Logger.getLogger(MainHelperGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_menuItemSaveAsActionPerformed
 
+    
+    private boolean prepareToSave() {
+       if (tabbedPane.getSelectedIndex() == 0) {
+            return addInputsPanel1.prepareToSave();
+        } else if (tabbedPane.getSelectedIndex() == 1) {
+            return configureTriggerPanel1.prepareToSave();
+        } 
+       return true;
+    }
+    
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
-        if (tabbedPane.getSelectedIndex() == 0) {
-                boolean canSave = addInputsPanel1.prepareToSave();
-                if (! canSave) {
-                    return;
-                }
+        if (prepareToSave()) {
+            w.save();
         }
-        w.save();
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -285,6 +344,16 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private void menuConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConsoleActionPerformed
         w.showConsole();
     }//GEN-LAST:event_menuConsoleActionPerformed
+
+    private void tabbedPaneVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_tabbedPaneVetoableChange
+    }//GEN-LAST:event_tabbedPaneVetoableChange
+
+    private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
+        JTabbedPane sourceTabbedPane = (JTabbedPane) evt.getSource();
+        int index = sourceTabbedPane.getSelectedIndex();
+        System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+      
+    }//GEN-LAST:event_tabbedPaneStateChanged
 
     public void showOutputTable() {
         if (outputMonitor == null) {
@@ -391,6 +460,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private wekiinputhelper.gui.AddInputsPanel addInputsPanel1;
+    private wekiinputhelper.gui.ConfigureTriggerPanel configureTriggerPanel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -402,6 +472,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JMenuItem menuItemSaveAs;
+    private wekiinputhelper.gui.SendAndMonitorPanel sendAndMonitorPanel1;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 

@@ -17,17 +17,21 @@ import java.util.concurrent.TimeUnit;
  * @author rebecca
  */
 public class TriggerOnTimes extends InputTriggerer {
-    private int numMs = 10;
-    private final Criterion c;
-    private boolean isRunning = false;
-    private double[] lastInputs;
+    private final int numMs;
+   // private final Criterion c;
+    private transient boolean isRunning = false;
+    private transient double[] lastInputs;
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    private ScheduledFuture scheduledFuture;
+    private final transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    private transient ScheduledFuture scheduledFuture;
     
     public TriggerOnTimes(int ms, Criterion c) {
         this.numMs = ms;
         this.c = c;
+    }
+    
+    public int getTime() {
+        return numMs;
     }
     
     @Override
@@ -53,9 +57,13 @@ public class TriggerOnTimes extends InputTriggerer {
                 }
             }
         }, numMs, numMs, TimeUnit.MILLISECONDS);
+        isRunning = true;
     }
     
     private void stopTimer() {
-        scheduledFuture.cancel(true);
+        if (isRunning) {
+            scheduledFuture.cancel(true);
+        } 
+        isRunning = false;
     }
 }

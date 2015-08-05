@@ -10,7 +10,7 @@ package wekiinputhelper;
  * @author rebecca
  */
 public class TriggerOnReceive extends InputTriggerer {
-    private final Criterion c;
+   // private final Criterion c;
     
     public TriggerOnReceive(Criterion c) {
         this.c = c;

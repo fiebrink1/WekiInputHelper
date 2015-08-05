@@ -5,15 +5,24 @@
  */
 package wekiinputhelper.gui;
 
+import java.awt.CardLayout;
 import java.util.logging.Logger;
+import wekiinputhelper.Criterion;
+import wekiinputhelper.Criterion.CriterionType;
+import wekiinputhelper.Criterion.HowLong;
 import wekiinputhelper.InputTriggerer;
+import wekiinputhelper.TriggerOnNth;
+import wekiinputhelper.TriggerOnReceive;
+import wekiinputhelper.TriggerOnTimes;
 import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.util.Util;
 
 /**
  *
  * @author rebecca
  */
 public class ConfigureTriggerPanel extends javax.swing.JPanel {
+
     private WekiInputHelper w;
     private static final Logger logger = Logger.getLogger(ConfigureTriggerPanel.class.getName());
 
@@ -23,10 +32,46 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
      */
     public ConfigureTriggerPanel() {
         initComponents();
+        populateTriggerTypes();
+    }
+
+    private void populateTriggerTypes() {
+        comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(Criterion.descriptors));
     }
 
     public void setWekiInputHelper(WekiInputHelper w) {
         this.w = w;
+        updateFormForCurrentTrigger();
+    }
+
+    private void updateFormForCurrentTrigger() {
+        InputTriggerer t = w.getInputTriggerer();
+        Criterion c = t.getCriterion();
+        if (t instanceof TriggerOnReceive) {
+            buttonGroupSendWhen.setSelected(radioInputArrives.getModel(), true);
+        } else if (t instanceof TriggerOnNth) {
+            buttonGroupSendWhen.setSelected(radioConstantRateMessages.getModel(), true);
+            textRateNumMessages.setText(Integer.toString(((TriggerOnNth) t).getN()));
+        } else {
+            buttonGroupSendWhen.setSelected(radioConstantRateMS.getModel(), true);
+            textRateNumMessages.setText(Integer.toString(((TriggerOnTimes)t).getTime()));
+        }
+        
+        if (c.getType() == CriterionType.NONE) {
+            checkConstraint.setSelected(false);
+            updateCriterion();
+        } else {
+            checkConstraint.setSelected(true);
+            updateCriterion();
+            int i = c.getInputIndex();
+            comboInput.setSelectedIndex(i);
+            int typeIndex = Criterion.getIndexForDescriptor(c.getType());
+            comboCriterion.setSelectedIndex(typeIndex);
+            updateCriterionCard();
+            if (c.getType() != CriterionType.CHANGE) {
+                textCriterionValue.setText(Double.toString(c.getCriterionValue()));
+            }
+        }
     }
 
     /**
@@ -42,68 +87,83 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         buttonGroupTriggerStop = new javax.swing.ButtonGroup();
         panelTop = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        radioInputArrives = new javax.swing.JRadioButton();
+        radioConstantRateMessages = new javax.swing.JRadioButton();
+        radioConstantRateMS = new javax.swing.JRadioButton();
         textRateNumMessages = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         textRateMS = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         comboInput = new javax.swing.JComboBox();
         comboCriterion = new javax.swing.JComboBox();
-        jPanel1 = new javax.swing.JPanel();
+        panelCriterionValueCardParent = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         textCriterionValue = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        radioSendOnce = new javax.swing.JRadioButton();
+        checkConstraint = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
-        jRadioButton6 = new javax.swing.JRadioButton();
+        radioKeepSending = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         panelTop.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
-        jLabel2.setText("Send values when:");
+        jLabel2.setText("Send values:");
 
-        buttonGroupSendWhen.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("When an input message arrives");
+        buttonGroupSendWhen.add(radioInputArrives);
+        radioInputArrives.setSelected(true);
+        radioInputArrives.setText("When an input message arrives");
 
-        buttonGroupSendWhen.add(jRadioButton2);
-        jRadioButton2.setText("At a constant rate of once per every ");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroupSendWhen.add(radioConstantRateMessages);
+        radioConstantRateMessages.setText("At a constant rate of once per every ");
+        radioConstantRateMessages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                radioConstantRateMessagesActionPerformed(evt);
             }
         });
 
-        buttonGroupSendWhen.add(jRadioButton3);
-        jRadioButton3.setText("At a constant rate of ");
+        buttonGroupSendWhen.add(radioConstantRateMS);
+        radioConstantRateMS.setText("At a constant rate of ");
 
         textRateNumMessages.setText("5");
+        textRateNumMessages.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textRateNumMessagesKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("ms");
 
         textRateMS.setText("100");
+        textRateMS.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textRateMSKeyTyped(evt);
+            }
+        });
 
         jLabel4.setText("messages received");
 
         comboInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "input-1", "input-2", "input-3" }));
 
-        comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "is greater than", "is less than", "is equal to", "is greater than or equal to", "is less than or equal to", "changes" }));
+        comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "is greater than or equal to", "is less than or equal to", "changes" }));
         comboCriterion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCriterionActionPerformed(evt);
             }
         });
 
-        jPanel1.setLayout(new java.awt.CardLayout());
+        panelCriterionValueCardParent.setLayout(new java.awt.CardLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         textCriterionValue.setText("1034.2");
+        textCriterionValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textCriterionValueKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -116,7 +176,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             .addComponent(textCriterionValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jPanel1.add(jPanel2, "cardCriterion");
+        panelCriterionValueCardParent.add(jPanel2, "cardCriterion");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -131,25 +191,31 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             .addGap(0, 28, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, "cardBlank");
+        panelCriterionValueCardParent.add(jPanel3, "cardBlank");
 
-        buttonGroupTriggerStop.add(jRadioButton5);
-        jRadioButton5.setText("Send just once when this condition is met");
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroupTriggerStop.add(radioSendOnce);
+        radioSendOnce.setSelected(true);
+        radioSendOnce.setText("Send just once when this condition is met");
+        radioSendOnce.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
+                radioSendOnceActionPerformed(evt);
             }
         });
 
-        jCheckBox2.setText("Optionally, also impose the following constraint:");
+        checkConstraint.setText("Optionally, also impose the following constraint:");
+        checkConstraint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkConstraintActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Only send when");
 
-        buttonGroupTriggerStop.add(jRadioButton6);
-        jRadioButton6.setText("Keep sending as long as this condition is true");
-        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroupTriggerStop.add(radioKeepSending);
+        radioKeepSending.setText("Keep sending as long as this condition is true");
+        radioKeepSending.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton6ActionPerformed(evt);
+                radioKeepSendingActionPerformed(evt);
             }
         });
 
@@ -162,11 +228,11 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                     .addGroup(panelTopLayout.createSequentialGroup()
                         .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTopLayout.createSequentialGroup()
-                                .addComponent(jRadioButton3)
+                                .addComponent(radioConstantRateMS)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(textRateMS))
-                            .addComponent(jRadioButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(radioInputArrives, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioConstantRateMessages, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -177,7 +243,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                     .addGroup(panelTopLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2))
-                    .addComponent(jCheckBox2)
+                    .addComponent(checkConstraint)
                     .addGroup(panelTopLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,12 +254,12 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(comboCriterion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(panelCriterionValueCardParent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelTopLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton6)
-                                    .addComponent(jRadioButton5))))))
+                                    .addComponent(radioKeepSending)
+                                    .addComponent(radioSendOnce))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTopLayout.setVerticalGroup(
@@ -202,30 +268,30 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
+                .addComponent(radioInputArrives)
                 .addGap(0, 0, 0)
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton3)
+                    .addComponent(radioConstantRateMS)
                     .addComponent(textRateMS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(0, 0, 0)
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton2)
+                    .addComponent(radioConstantRateMessages)
                     .addComponent(textRateNumMessages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(27, 27, 27)
-                .addComponent(jCheckBox2)
+                .addComponent(checkConstraint)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(comboInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(comboCriterion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelCriterionValueCardParent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton5)
+                .addComponent(radioSendOnce)
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jRadioButton6))
+                .addComponent(radioKeepSending))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -242,65 +308,194 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void radioConstantRateMessagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioConstantRateMessagesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_radioConstantRateMessagesActionPerformed
 
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+    private void radioSendOnceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSendOnceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
+    }//GEN-LAST:event_radioSendOnceActionPerformed
 
-    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+    private void radioKeepSendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioKeepSendingActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton6ActionPerformed
+    }//GEN-LAST:event_radioKeepSendingActionPerformed
 
     private void comboCriterionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCriterionActionPerformed
-        // TODO add your handling code here:
+        updateCriterionCard();
+        updateCriterion();
     }//GEN-LAST:event_comboCriterionActionPerformed
 
+    private void updateCriterionCard() {
+                int i = comboCriterion.getSelectedIndex();
+        if (Criterion.typesForDescriptors[i] == CriterionType.CHANGE) {
+            ((CardLayout)panelCriterionValueCardParent.getLayout()).show(panelCriterionValueCardParent, "cardBlank");
+        } else {
+            ((CardLayout)panelCriterionValueCardParent.getLayout()).show(panelCriterionValueCardParent, "cardCriterion");
+        }
+    }
+    
+    private void textRateMSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRateMSKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_textRateMSKeyTyped
+
+    private void textRateNumMessagesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRateNumMessagesKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_textRateNumMessagesKeyTyped
+
+    private void textCriterionValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCriterionValueKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter)) && !(enter == '.') && !(enter == '-')) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_textCriterionValueKeyTyped
+
+    private void checkConstraintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConstraintActionPerformed
+        updateCriterion();
+    }//GEN-LAST:event_checkConstraintActionPerformed
+
+    private void updateCriterion() {
+        boolean isConstraint = checkConstraint.isSelected();
+        if (! isConstraint) {
+            radioSendOnce.setEnabled(false);
+            radioKeepSending.setEnabled(false);
+            return;
+        }
+        
+        boolean isChange = (Criterion.typesForDescriptors[comboCriterion.getSelectedIndex()] == CriterionType.CHANGE);
+        radioSendOnce.setEnabled(!isChange);
+        radioKeepSending.setEnabled(!isChange); 
+    }
+
     private boolean validateForm() {
-        //TODO
-        System.out.println("DO THIS");
+        if (buttonGroupSendWhen.isSelected(radioConstantRateMS.getModel())) {
+            try {
+                int i = Integer.parseInt(textRateMS.getText());
+                if (i < 1) {
+                    Util.showPrettyErrorPane(this, "Rate must be at least 1 ms");
+                    return false;
+                }
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Rate must be at least 1 ms");
+                return false;
+            }
+        } else if (buttonGroupSendWhen.isSelected(radioConstantRateMessages.getModel())) {
+            try {
+                int i = Integer.parseInt(textRateNumMessages.getText());
+                if (i < 1) {
+                    Util.showPrettyErrorPane(this, "Rate must be at least 1 message");
+                    return false;
+                }
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Rate must be at least 1 message");
+                return false;
+            }
+        }
+        if (checkConstraint.isSelected()) {
+            int selected = comboCriterion.getSelectedIndex();
+            Criterion.CriterionType type = Criterion.typesForDescriptors[selected];
+            if (type != CriterionType.CHANGE) {
+                try {
+                    double val = Double.parseDouble(textCriterionValue.getText());
+                } catch (NumberFormatException ex) {
+                    Util.showPrettyErrorPane(this, "Send criterion must be a valid number; "
+                            + textCriterionValue.getText() + " is invalid");
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
-    private boolean prepareToSave() {
+    public boolean prepareToSave() {
         if (!validateForm()) {
             return false;
         }
         InputTriggerer trig = makeTriggererFromForm();
-        w.setInputTriggerer(trig); //XXX TODO make this something that's saved to wekinator file
+        w.setInputTriggerer(trig);
+        return true;
     }
 
- 
+    public boolean prepareToAdvance() {
+        return prepareToSave();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupSendWhen;
     private javax.swing.ButtonGroup buttonGroupTriggerStop;
+    private javax.swing.JCheckBox checkConstraint;
     private javax.swing.JComboBox comboCriterion;
     private javax.swing.JComboBox comboInput;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JPanel panelCriterionValueCardParent;
     private javax.swing.JPanel panelTop;
+    private javax.swing.JRadioButton radioConstantRateMS;
+    private javax.swing.JRadioButton radioConstantRateMessages;
+    private javax.swing.JRadioButton radioInputArrives;
+    private javax.swing.JRadioButton radioKeepSending;
+    private javax.swing.JRadioButton radioSendOnce;
     private javax.swing.JTextField textCriterionValue;
     private javax.swing.JTextField textRateMS;
     private javax.swing.JTextField textRateNumMessages;
     // End of variables declaration//GEN-END:variables
 
+    //Requires form to be validated first!
     private InputTriggerer makeTriggererFromForm() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        Criterion c;
+        if (checkConstraint.isSelected()) {
+            int inputIndex = comboInput.getSelectedIndex();
+            int typeIndex = comboCriterion.getSelectedIndex();
+            double val = 0.;
+            Criterion.CriterionType type = Criterion.typesForDescriptors[typeIndex];
+            if (type != CriterionType.CHANGE) {
+                try {
+                    val = Double.parseDouble(textCriterionValue.getText());
+                } catch (NumberFormatException ex) {
+                    Util.showPrettyErrorPane(this, "Invalid criterion value of "
+                            + textCriterionValue.getText() + " will not be used");
+                }
+            }
+            Criterion.HowLong howLong = HowLong.REPEAT;
+            if (buttonGroupTriggerStop.isSelected(radioSendOnce.getModel())) {
+                howLong = HowLong.ONCE;
+            }
 
+            c = new Criterion(type, howLong, inputIndex, val);
+        } else {
+            c = new Criterion();
+        }
+
+        if (buttonGroupSendWhen.isSelected(radioInputArrives.getModel())) {
+            return new TriggerOnReceive(c);
+        } else if (buttonGroupSendWhen.isSelected(radioConstantRateMS.getModel())) {
+            try {
+                int rate = Integer.parseInt(textRateMS.getText());
+                return new TriggerOnTimes(rate, c);
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Invalid rate selected; using 10ms instead");
+                return new TriggerOnTimes(10, c);
+            }
+        } else {
+            //send every nth message
+            try {
+                int rate = Integer.parseInt(textRateNumMessages.getText());
+                return new TriggerOnNth(rate, c);
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Invalid rate selected; using every 10th message instead");
+                return new TriggerOnNth(10, c);
+            }
+        }
+    }
 
 }

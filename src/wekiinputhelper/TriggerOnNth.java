@@ -10,14 +10,17 @@ package wekiinputhelper;
  * @author rebecca
  */
 public class TriggerOnNth extends InputTriggerer {
-    private int currentCount = 0;
-    private int n = 1;
-    private final Criterion c;
+    private transient int currentCount = 0;
+    private final int n;
 
     
     public TriggerOnNth(int n, Criterion c) {
         this.n =n;
         this.c = c;
+    }
+    
+    public int getN() {
+        return n;
     }
     
     @Override

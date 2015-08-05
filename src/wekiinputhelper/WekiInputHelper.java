@@ -44,6 +44,11 @@ public class WekiInputHelper {
     private final OSCControlReceiver controlReceiver;
     private final WekiInputHelperController wekiInputHelperController;
     private Console myConsole = null;
+
+    private InputTriggerer inputTriggerer = new TriggerOnReceive(new Criterion());
+
+    public static final String PROP_INPUTTRIGGERER = "inputTriggerer";
+
     
     private String projectName = "New Project";
 
@@ -346,5 +351,27 @@ public class WekiInputHelper {
             saveAs(projectName, f);
         }
     }
+    
+    /**
+     * Get the value of inputTriggerer
+     *
+     * @return the value of inputTriggerer
+     */
+    public InputTriggerer getInputTriggerer() {
+        return inputTriggerer;
+    }
+
+    /**
+     * Set the value of inputTriggerer
+     *
+     * @param inputTriggerer new value of inputTriggerer
+     */
+    public void setInputTriggerer(InputTriggerer inputTriggerer) {
+        InputTriggerer oldInputTriggerer = this.inputTriggerer;
+        this.inputTriggerer = inputTriggerer;
+        propertyChangeSupport.firePropertyChange(PROP_INPUTTRIGGERER, oldInputTriggerer, inputTriggerer);
+    }
+
+    
 
 }

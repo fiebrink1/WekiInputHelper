@@ -27,7 +27,7 @@ public class WekiInputHelperFileData {
     private String projectName = "";
     private OSCInputGroup inputs;
     private OSCModifiedInputGroup outputs;
-    //TODO: Also store triggering information
+    private InputTriggerer inputTriggerer;
     private static final Logger logger = Logger.getLogger(WekiInputHelperFileData.class.getName());
     
     public static final String FILENAME_EXTENSION = "inputproj";
@@ -56,6 +56,7 @@ public class WekiInputHelperFileData {
         this.sendHostname = w.getOSCSender().getHostname().getHostName();
         this.sendOscMessage = w.getOSCSender().getOscMessage();
         this.oscSendPort = w.getOSCSender().getPort();
+        this.inputTriggerer = w.getInputTriggerer();
     }
     
     public void applySettings(WekiInputHelper w) throws SocketException, UnknownHostException {
@@ -64,6 +65,7 @@ public class WekiInputHelperFileData {
         w.getInputManager().setOSCInputGroup(inputs);
         w.getOutputManager().setOutputGroup(outputs);
         w.getOSCSender().setOscMessage(sendOscMessage);
+        w.setInputTriggerer(inputTriggerer);
 
         try {
             w.getOSCSender().setHostnameAndPort(InetAddress.getByName(sendHostname), oscSendPort);

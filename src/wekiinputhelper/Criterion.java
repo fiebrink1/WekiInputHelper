@@ -15,37 +15,74 @@ import static wekiinputhelper.Criterion.HowLong.*;
  * @author rebecca
  */
 public class Criterion {
-    
-    public static enum CriterionType {NONE, LESS_THAN, GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, CHANGE};
-    public static enum HowLong {ONCE, REPEAT};
+
+    public static enum CriterionType {
+
+        NONE, LESS_THAN, GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, CHANGE
+    };
+
+    public static enum HowLong {
+
+        ONCE, REPEAT
+    };
     private final CriterionType type;
     private final HowLong howLong;
     private final int index;
-    private boolean isCurrentlySatisfied;
+    private transient boolean isCurrentlySatisfied;
     private final double val;
-    private double lastValue = Double.NaN;
+    private transient double lastValue = Double.NaN;
     private static final Logger logger = Logger.getLogger(Criterion.class.getName());
+    public static String[] descriptors = {
+        "is greater than",
+        "is less than",
+        "is greater than or equal to",
+        "is less than or equal to",
+        "is equal to",
+        "changes"
+    };
+    public static CriterionType[] typesForDescriptors = {
+        CriterionType.GREATER_THAN,
+        CriterionType.LESS_THAN,
+        CriterionType.GREATER_OR_EQUAL,
+        CriterionType.LESS_OR_EQUAL,
+        CriterionType.EQUAL,
+        CriterionType.CHANGE
+    };
+
+    public Criterion() {
+        this.type = CriterionType.NONE;
+        this.index = 0;
+        this.howLong = HowLong.ONCE;
+        this.val = 0;
+        this.isCurrentlySatisfied = true;
+    }
     
     public Criterion(CriterionType type, HowLong howLong, int index, double val) {
         this.type = type;
         this.index = index;
-        this.howLong = howLong;
+        if (type == NONE || type == CHANGE) {
+            this.howLong = REPEAT;
+        } else {
+            this.howLong = howLong;
+        }
+        
+            
         this.isCurrentlySatisfied = false;
         this.val = val;
     }
-    
+
     public boolean shouldTrigger(double[] inputs) {
         boolean t;
         if (type == NONE) {
             return true;
         }
-        
+
         if (howLong == REPEAT) {
             t = isCurrentlySatisfied(inputs);
         } else { //Just trigger first time
             boolean wasPreviouslySatisfied = isCurrentlySatisfied;
             isCurrentlySatisfied = isCurrentlySatisfied(inputs);
-            t= (!wasPreviouslySatisfied && isCurrentlySatisfied);
+            t = (!wasPreviouslySatisfied && isCurrentlySatisfied);
         }
         if (type == CHANGE) {
             lastValue = inputs[index];
@@ -53,6 +90,22 @@ public class Criterion {
         return t;
     }
     
+    public CriterionType getType() {
+        return type;
+    }
+    
+    public HowLong getHowLong() {
+        return howLong;
+    }
+    
+    public int getInputIndex() {
+        return index;
+    }
+
+    public double getCriterionValue() {
+        return val;
+    }
+
     //Assess independent of stop condition
     private boolean isCurrentlySatisfied(double[] inputs) {
         if (type == LESS_THAN) {
@@ -73,4 +126,15 @@ public class Criterion {
         }
     }
     
+    
+    public static int getIndexForDescriptor(CriterionType type) {
+        for (int i = 0; i < typesForDescriptors.length; i++) {
+            if (type == typesForDescriptors[i])
+                return i;
+        }
+        logger.log(Level.SEVERE, "Criterion type {0} not found in typesForDescriptors array", type);
+        throw new IllegalArgumentException("Criterion type " + type + " not found");
+    }
+
+
 }

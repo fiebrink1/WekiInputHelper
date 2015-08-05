@@ -79,6 +79,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         labelNumValues = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
         buttomPanel = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         scrollModifiers = new javax.swing.JScrollPane();
@@ -112,6 +113,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         jLabel29.setText("Port:");
 
         textPort.setText("6449");
+        textPort.setMinimumSize(new java.awt.Dimension(62, 28));
         textPort.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 textPortKeyTyped(evt);
@@ -133,7 +135,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         });
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
-        jLabel2.setText("Add new inputs:");
+        jLabel2.setText("Configure new inputs below:");
 
         labelNumValues.setText("Based on the settings below, 17 values will be sent in total");
 
@@ -141,41 +143,41 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         panelTop.setLayout(panelTopLayout);
         panelTopLayout.setHorizontalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTopLayout.createSequentialGroup()
-                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTopLayout.createSequentialGroup()
-                        .addComponent(buttonSendExample)
+            .addGroup(panelTopLayout.createSequentialGroup()
+                .addComponent(buttonSendExample)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(buttonSendNames)
+                .addContainerGap())
+            .addGroup(panelTopLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelNumValues, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelTopLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonSendNames)
+                        .addComponent(textOSCMessage))
+                    .addComponent(checkIncludeOriginals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelTopLayout.createSequentialGroup()
+                        .addComponent(jLabel28)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textHost)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel29)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textPort, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelTopLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelTopLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(labelNumValues, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTopLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textOSCMessage))
-                            .addComponent(checkIncludeOriginals, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTopLayout.createSequentialGroup()
-                                .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelTopLayout.createSequentialGroup()
-                                        .addComponent(jLabel28)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(textHost, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel29)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(textPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel2))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
+                        .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1)
+                            .addComponent(jSeparator2))
+                        .addContainerGap())))
         );
         panelTopLayout.setVerticalGroup(
             panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTopLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textOSCMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -191,13 +193,14 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonSendExample)
                     .addComponent(buttonSendNames))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(checkIncludeOriginals)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap())
+                .addComponent(jLabel2))
         );
 
         buttomPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -241,7 +244,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollModifiers, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addComponent(scrollModifiers, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -327,7 +330,44 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
     }//GEN-LAST:event_buttonSendExampleActionPerformed
 
+    private boolean validateOscSettings() {
+        return checkOscMessageValid() && checkOutputHostValid() && checkOutputPortValid();
+    }
+    
+    private boolean checkOscMessageValid() {
+        boolean notBlank = Util.checkNotBlank(textOSCMessage, "OSC message", this);
+        if (notBlank) {
+            return Util.checkNoSpace(textOSCMessage, "OSC message", this);
+        } else {
+            return false;
+        }        
+    }
+
+    private boolean checkOutputHostValid() {
+        boolean isNotBlank = Util.checkNotBlank(textHost, "host name", this);
+        if (!isNotBlank) {
+            return false;
+        }
+
+        String hostname = textHost.getText().trim();
+        try {
+            InetAddress address = InetAddress.getByName(hostname);
+        } catch (UnknownHostException ex) {
+            Util.showPrettyErrorPane(this, "Invalid OSC hostname");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkOutputPortValid() {
+        return Util.checkIsPositiveNumber(textPort, "OSC port", this);
+    }
+    
     private boolean validateForm() {
+        if (!validateOscSettings()) {
+            return false;
+        }
+        
         if (outputPanels.size() == 0 && !checkIncludeOriginals.isSelected()) {
             Util.showPrettyErrorPane(this, "You must choose at least one existing or new input value to send out");
             return false;
@@ -459,6 +499,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel labelNumValues;
     private javax.swing.JPanel panelOutputsContainer;
     private javax.swing.JPanel panelTop;
@@ -573,8 +614,8 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         return true;
     }
     
-    public void prepareToAdvance() {
-        prepareToSave();
+    public boolean prepareToAdvance() {
+        return prepareToSave();
     }
     
     private void configureOutputManagerFromForm() {

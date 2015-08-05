@@ -16,6 +16,12 @@ import java.util.List;
  */
 public abstract class InputTriggerer {
     public abstract void updateAllValues(double[] vals);
+    protected Criterion c;
+    
+    public Criterion getCriterion() {
+        return c;
+    }
+
     
     public void attachRunningListener(WekiInputHelper w) {
         w.getRunningManager().addPropertyChangeListener(new PropertyChangeListener() {
@@ -31,7 +37,7 @@ public abstract class InputTriggerer {
     
     protected abstract void runningStateChanged(RunningManager.RunningState newState);
     
-    protected final List<Triggerable> listenerList = new LinkedList<>();
+    protected final transient List<Triggerable> listenerList = new LinkedList<>();
     
     public void addSendEventListener(Triggerable t) {
         listenerList.add(t);
