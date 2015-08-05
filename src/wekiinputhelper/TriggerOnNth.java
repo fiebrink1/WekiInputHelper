@@ -5,6 +5,8 @@
  */
 package wekiinputhelper;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author rebecca
@@ -36,6 +38,12 @@ public class TriggerOnNth extends InputTriggerer {
 
     @Override
     protected void runningStateChanged(RunningManager.RunningState newState) {
+    }
+    
+    private Object readResolve() {
+        System.out.println("HIIII");
+        listenerList = new LinkedList<>();
+        return this;
     }
     
 }

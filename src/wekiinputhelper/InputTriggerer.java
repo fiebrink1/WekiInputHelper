@@ -37,7 +37,7 @@ public abstract class InputTriggerer {
     
     protected abstract void runningStateChanged(RunningManager.RunningState newState);
     
-    protected final transient List<Triggerable> listenerList = new LinkedList<>();
+    protected transient List<Triggerable> listenerList = new LinkedList<>();
     
     public void addSendEventListener(Triggerable t) {
         listenerList.add(t);

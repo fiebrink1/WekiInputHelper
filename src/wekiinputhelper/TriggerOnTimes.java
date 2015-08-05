@@ -5,6 +5,7 @@
  */
 package wekiinputhelper;
 
+import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -68,5 +69,10 @@ public class TriggerOnTimes extends InputTriggerer {
             scheduledFuture.cancel(true);
         } 
         isRunning = false;
+    }
+    
+    private Object readResolve() {
+        listenerList = new LinkedList<>();
+        return this;
     }
 }
