@@ -6,6 +6,8 @@
 package wekiinputhelper.Modifiers;
 
 import wekiinputhelper.UsesOnlyOriginalInputs;
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.InputModifierBuilderPanel;
 
 /**
  *
@@ -22,6 +24,15 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
     public static String makeName(String originalName, String shortName, int windowSize) {
         return originalName + "_" + shortName + Integer.toString(windowSize);
     }
+
+    public Operation getOp() {
+        return op;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+    
     
     public WindowedOperation(String originalName, Operation op, int index, int windowSize) {
         name =  makeName(originalName, op.shortName(), windowSize);       
@@ -86,6 +97,11 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
             double d = bi.getValue();
             System.out.println(d);
         }
+    }
+
+    @Override
+    public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
+        return new WindowedOperationEditor(w, this);
     }
     
     public interface Operation {

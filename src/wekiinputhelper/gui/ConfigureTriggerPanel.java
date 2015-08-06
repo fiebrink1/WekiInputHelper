@@ -8,6 +8,7 @@ package wekiinputhelper.gui;
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import wekiinputhelper.Criterion;
@@ -64,6 +65,11 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
     }
     
     private void updateComboInput() {
+        //maintain name if possible
+        int lastSelected = comboInput.getSelectedIndex();
+        String lastName = (String)comboInput.getModel().getSelectedItem();
+        
+        
         String[] inputNames = w.getInputManager().getInputNames();
         String[] outputNames;
         if (w.getOutputManager().hasValidOutputGroup()) {
@@ -76,7 +82,25 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         System.arraycopy(outputNames, 0, allNames, inputNames.length, outputNames.length);
         DefaultComboBoxModel model = new DefaultComboBoxModel(allNames);
         comboInput.setModel(model);
+        
+        if (allNames.length == 0 || lastSelected == -1) {
+            return;
+        }
+        if (allNames[lastSelected].equals(lastName)) {
+            comboInput.setSelectedIndex(lastSelected);
+        } else {
+            tryToSelectInputName(lastName);
+        }
     }
+    
+    private void tryToSelectInputName(String name) {
+        int index = ((DefaultComboBoxModel)comboInput.getModel()).getIndexOf(name);
+        if (index != -1) {
+            comboInput.setSelectedIndex(index);
+        }
+
+    }
+    
 
     private void updateFormForCurrentTrigger() {
         InputTriggerer t = w.getInputTriggerer();
@@ -104,7 +128,6 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                 comboInput.setSelectedIndex(w.getInputManager().getNumInputs() +i);
             }
             
-            comboInput.setSelectedIndex(i);
             int typeIndex = Criterion.getIndexForDescriptor(c.getType());
             comboCriterion.setSelectedIndex(typeIndex);
             updateCriterionCard();
@@ -198,7 +221,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        textCriterionValue.setText("1034.2");
+        textCriterionValue.setText("0");
         textCriterionValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 textCriterionValueKeyTyped(evt);
@@ -290,7 +313,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                             .addGroup(panelTopLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboInput, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboInput, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(comboCriterion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -543,6 +566,53 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                 return new TriggerOnNth(10, c);
             }
         }
+    }
+
+    void initializeFromExisting() {
+        InputTriggerer t = w.getInputTriggerer();
+        if (t == null) {
+            logger.log(Level.INFO, "Null triggerer");
+            return;
+        }
+        updateComboInput();
+        if (t instanceof TriggerOnReceive) {
+            radioInputArrives.setSelected(true);
+        } else if (t instanceof TriggerOnNth) {
+            radioConstantRateMessages.setSelected(true);
+            textRateNumMessages.setText(Integer.toString(((TriggerOnNth)t).getN()));
+        } else {
+            radioConstantRateMS.setSelected(true);
+            textRateMS.setText(Integer.toString(((TriggerOnTimes)t).getTime()));
+        }
+        Criterion c = t.getCriterion();
+        if (c.getType() == CriterionType.NONE) {
+            checkConstraint.setSelected(false);
+        } else {
+            checkConstraint.setSelected(true);
+            int i = c.getInputIndex();
+            if (c.getAppliesTo() == AppliesTo.INPUT) {
+                comboInput.setSelectedIndex(i);
+            } else {
+                int tmp = w.getInputManager().getNumInputs() + i;
+                System.out.println("Tmp = " + tmp);
+                comboInput.setSelectedIndex(w.getInputManager().getNumInputs() + i);
+            }
+            if (c.getType() != CriterionType.CHANGE) {
+                textCriterionValue.setText(Double.toString(c.getCriterionValue()));
+            }
+            int whichIndex = Criterion.getIndexForDescriptor(c.getType());
+            comboCriterion.setSelectedIndex(whichIndex);  
+            
+            if (c.getHowLong() ==  HowLong.ONCE) {
+                radioSendOnce.setSelected(true);
+            } else {
+                radioKeepSending.setSelected(true);
+            }
+            
+        }
+        updateCriterion();
+        updateCriterionCard();
+
     }
 
 }

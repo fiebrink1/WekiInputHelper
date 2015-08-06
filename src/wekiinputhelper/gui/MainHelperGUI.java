@@ -51,7 +51,6 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
             public void windowClosing(WindowEvent e) {
                 //int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit?", JOptionPane.YES_NO_OPTION);
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to close this project?", "Close project?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, WekiInputHelperRunner.getIcon());
-
                 if (option == JOptionPane.YES_OPTION) {
                     finishUp();
                 }
@@ -372,6 +371,25 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     public void initializeForInputs() {
         addInputsPanel1.initializeForInputs();
     }
+    
+    public void initializeForOutputs() {
+        addInputsPanel1.initializeForOutputs();
+    }
+    
+    public void initializeForExisting() {
+        initializeForInputs();
+        initializeForOutputs();
+        configureTriggerPanel1.initializeFromExisting();
+    }
+    
+    //Do this only when loading from file and outputs are already set up
+    /*public void initializeFromExistingHelper() {
+        addInputsPanel1.initializeFromExisting();
+        configureTriggerPanel1.initializeFromExisting();
+        sendAndMonitorPanel1.initializeFromExisting();
+    } */
+    
+
 
     public void showOSCReceiverWindow() {
         if (oscInputStatusFrame == null) {

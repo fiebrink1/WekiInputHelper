@@ -40,7 +40,23 @@ public class WindowedOperationEditor extends InputModifierBuilderPanel {
         setDimensionality(1);
 
     }
+    
+    public WindowedOperationEditor(WekiInputHelper w, WindowedOperation in) {
+        initComponents();
+        this.w = w;
+        this.op = in.getOp();
+        initForWeki(w);
+        setDimensionality(1);
+        initForExisting(in);
+    }
 
+    private void initForExisting(WindowedOperation in) {
+        comboFeatureNames.setSelectedIndex(in.getIndex());
+        textWinSize.setText(Integer.toString(in.getWindowSize()));
+        updateName();
+    }
+    
+    
     private void initForWeki(WekiInputHelper w) {
         String[] inputNames = w.getInputManager().getInputNames();
         comboFeatureNames.setModel(new DefaultComboBoxModel(inputNames));

@@ -27,8 +27,6 @@ import wekiinputhelper.OutputManager;
 public class OSCSender {
     private String oscMessage = null;
     private OSCPortOut sender = null;
-    private InetAddress hostname = null;
-    private int port = -1;
     private final int DEFAULT_SEND_PORT = 6453;
     private boolean isValidState = false;
 
@@ -39,7 +37,60 @@ public class OSCSender {
         private boolean sendInputs = true;
 
     public static final String PROP_SENDINPUTS = "sendInputs";
+    public static final String PROP_OSCMESSAGE = "oscMessage";
 
+    
+    private InetAddress hostname = null;
+
+    public static final String PROP_HOSTNAME = "hostname";
+
+    
+    private int port = -1;
+
+    public static final String PROP_PORT = "port";
+
+    /**
+     * Get the value of port
+     *
+     * @return the value of port
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * Set the value of port
+     *
+     * @param port new value of port
+     */
+    private void setPort(int port) {
+        int oldPort = this.port;
+        this.port = port;
+        propertyChangeSupport.firePropertyChange(PROP_PORT, oldPort, port);
+    }
+
+    
+    /**
+     * Get the value of hostname
+     *
+     * @return the value of hostname
+     */
+    public InetAddress getHostname() {
+        return hostname;
+    }
+
+    /**
+     * Set the value of hostname
+     *
+     * @param hostname1 new value of hostname
+     */
+    private void setHostname(InetAddress hostname) {
+        InetAddress oldHostname1 = this.hostname;
+        this.hostname = hostname;
+        propertyChangeSupport.firePropertyChange(PROP_HOSTNAME, oldHostname1, hostname);
+    }
+
+    
     /**
      * Get the value of sendInputs
      *
@@ -93,19 +144,11 @@ public class OSCSender {
         setHostnameAndPort(InetAddress.getByName("localhost"), DEFAULT_SEND_PORT);
     }
 
-    public InetAddress getHostname() {
-        return hostname;
-    }
-
     public void setHostnameAndPort(InetAddress hostname, int port) throws SocketException {
         sender = new OSCPortOut(hostname, port);
-        this.port = port;
-        this.hostname = hostname;
+        setPort(port);
+        setHostname(hostname);
         isValidState = true;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public String getOscMessage() {
@@ -113,7 +156,9 @@ public class OSCSender {
     }
 
     public void setOscMessage(String oscMessage) {
+        String oldMessage = this.oscMessage;
         this.oscMessage = oscMessage;
+        propertyChangeSupport.firePropertyChange(PROP_OSCMESSAGE, oldMessage, oscMessage);
     }
     
     

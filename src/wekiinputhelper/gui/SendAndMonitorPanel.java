@@ -673,4 +673,8 @@ public class SendAndMonitorPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollOutputs;
     // End of variables declaration//GEN-END:variables
 
+    void initializeFromExisting() {
+        //XXX
+    }
+
 }

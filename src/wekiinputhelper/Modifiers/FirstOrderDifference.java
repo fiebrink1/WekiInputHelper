@@ -6,6 +6,8 @@
 package wekiinputhelper.Modifiers;
 
 import wekiinputhelper.UsesOnlyOriginalInputs;
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.InputModifierBuilderPanel;
 
 /**
  *
@@ -21,6 +23,11 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     public static String makeName(String originalName) {
         return originalName + "_1stOrderDiff";
     }
+
+    public int getIndex() {
+        return index;
+    }
+    
     
     public FirstOrderDifference(String originalName, int index) {
         this.name = makeName(originalName);
@@ -47,6 +54,11 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     @Override
     public double getValue() {
         return y_n;
+    }
+
+    @Override
+    public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
+        return new FirstOrderDifferenceEditor(this, w);
     }
     
 }

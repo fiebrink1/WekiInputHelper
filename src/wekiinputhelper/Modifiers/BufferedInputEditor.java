@@ -33,7 +33,21 @@ public class BufferedInputEditor extends InputModifierBuilderPanel {
         setDimensionality(10);
         updateNames();
     }
+    
+    public BufferedInputEditor(WekiInputHelper w, BufferedInput in) {
+        initComponents();
+        this.w = w;
+        initForWeki(w);
+        initForExisting(in);
+    }
 
+    private void initForExisting(BufferedInput in) {
+        comboFeatureNames.setSelectedIndex(in.getIndex());
+        textWinSize.setText(Integer.toString(in.getSize()));
+        setDimensionality(in.getSize());
+        updateNames();
+    }
+    
     private void initForWeki(WekiInputHelper w) {
         String[] inputNames = w.getInputManager().getInputNames();
         comboFeatureNames.setModel(new DefaultComboBoxModel(inputNames));

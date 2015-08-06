@@ -8,8 +8,12 @@ package wekiinputhelper.gui;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wekiinputhelper.Modifiers.AverageWindowOperation;
+import wekiinputhelper.Modifiers.BufferedInput;
 import wekiinputhelper.Modifiers.BufferedInputEditor;
+import wekiinputhelper.Modifiers.FirstOrderDifference;
 import wekiinputhelper.Modifiers.FirstOrderDifferenceEditor;
 import wekiinputhelper.Modifiers.MinWindowOperation;
 import wekiinputhelper.Modifiers.Min1stWindowOperation;
@@ -18,8 +22,11 @@ import wekiinputhelper.Modifiers.Max1stWindowOperation;
 import wekiinputhelper.Modifiers.Max2ndWindowOperation;
 import wekiinputhelper.Modifiers.MaxWindowOperation;
 import wekiinputhelper.Modifiers.ModifiedInput;
+import wekiinputhelper.Modifiers.SecondOrderDifference;
 import wekiinputhelper.Modifiers.SecondOrderDifferenceEditor;
 import wekiinputhelper.Modifiers.StdDevWindowOperation;
+import wekiinputhelper.Modifiers.WindowedOperation;
+import wekiinputhelper.Modifiers.WindowedOperation.Operation;
 import wekiinputhelper.Modifiers.WindowedOperationEditor;
 import wekiinputhelper.WekiInputHelper;
 
@@ -32,6 +39,19 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
     /**
      * Creates new form ModifierConfigRow
      */
+    public static int BUFFERED_INDEX = 0;
+    public static int FIRST_ORDER_INDEX = 1;
+    public static int SECOND_ORDER_INDEX = 2;
+    public static int AVERAGE_INDEX = 3;
+    public static int STDEV_INDEX = 4;
+    public static int MIN_INDEX = 5;
+    public static int MAX_INDEX = 6;
+    public static int MIN_FIRST_INDEX = 7;
+    public static int MAX_FIRST_INDEX = 8;
+    public static int MIN_SECOND_INDEX = 9;
+    public static int MAX_SECOND_INDEX = 10;
+    private static final Logger logger = Logger.getLogger(ModifierConfigRow.class.getName());
+    
     public ModifierConfigRow() {
         initComponents();
          w = null;
@@ -41,6 +61,48 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         initComponents();
         this.w = w;
         chooseFirstCard();
+    }
+    
+    public ModifierConfigRow(WekiInputHelper w, ModifiedInput o) {
+        initComponents();
+        this.w = w;
+        initFromExisting(o);
+    }
+    
+    private void initFromExisting(ModifiedInput o) {
+
+        if (o instanceof BufferedInput) {
+            comboModifierType.setSelectedIndex(BUFFERED_INDEX);
+        } else if (o instanceof FirstOrderDifference) {
+            comboModifierType.setSelectedIndex(FIRST_ORDER_INDEX);
+        } else if (o instanceof SecondOrderDifference) {
+            comboModifierType.setSelectedIndex(SECOND_ORDER_INDEX);
+        } else if (o instanceof WindowedOperation) {
+            Operation op = ((WindowedOperation)o).getOp();
+            if (op instanceof AverageWindowOperation) {
+                comboModifierType.setSelectedIndex(AVERAGE_INDEX);
+            } else if (op instanceof StdDevWindowOperation) {
+                comboModifierType.setSelectedIndex(STDEV_INDEX);
+            } else if (op instanceof MinWindowOperation) {
+                comboModifierType.setSelectedIndex(MIN_INDEX);
+            } else if (op instanceof MaxWindowOperation) {
+                comboModifierType.setSelectedIndex(MAX_INDEX);
+            } else if (op instanceof Min1stWindowOperation) {
+                comboModifierType.setSelectedIndex(MIN_FIRST_INDEX);
+            } else if (op instanceof Max1stWindowOperation) {
+                comboModifierType.setSelectedIndex(MAX_FIRST_INDEX);
+            } else if (op instanceof Min2ndWindowOperation) {
+                comboModifierType.setSelectedIndex(MIN_SECOND_INDEX);
+            }else if (op instanceof Max2ndWindowOperation) {
+                comboModifierType.setSelectedIndex(MAX_SECOND_INDEX);
+            } else {
+                logger.log(Level.WARNING, "Unknown op type {0}", op.shortName());
+            }
+        } else {
+            logger.log(Level.WARNING, "Unknown modifier type {0}", o.getClass());
+        }
+        InputModifierBuilderPanel b = o.getBuildPanel(w);
+        setInnerPanel(b);
     }
 
     private void chooseFirstCard() {
@@ -125,32 +187,31 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         */
         InputModifierBuilderPanel p;
         int i = comboModifierType.getSelectedIndex();
-        if (i == 0) {
+        if (i == BUFFERED_INDEX) {
             p = new BufferedInputEditor(w);
-        } else if (i == 1) {
+        } else if (i == FIRST_ORDER_INDEX) {
             p = new FirstOrderDifferenceEditor(w);
-        } else if (i == 2) {
+        } else if (i == SECOND_ORDER_INDEX) {
             p = new SecondOrderDifferenceEditor(w);
-        } else if (i == 3) {
+        } else if (i == AVERAGE_INDEX) {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
-        } else if (i == 4) {
+        } else if (i == STDEV_INDEX) {
             p = new WindowedOperationEditor(w, new StdDevWindowOperation());
-        } else if (i == 5) {
+        } else if (i == MIN_INDEX) {
             p = new WindowedOperationEditor(w, new MinWindowOperation());
-        } else if (i == 6) {
+        } else if (i == MAX_INDEX) {
             p = new WindowedOperationEditor(w, new MaxWindowOperation());
-        } else if (i == 7) {
+        } else if (i == MIN_FIRST_INDEX) {
             p = new WindowedOperationEditor(w, new Min1stWindowOperation());
-        } else if (i == 8) {
+        } else if (i == MAX_FIRST_INDEX) {
             p = new WindowedOperationEditor(w, new Max1stWindowOperation());
-        } else if (i == 9) {
+        } else if (i == MIN_SECOND_INDEX) {
             p = new WindowedOperationEditor(w, new Min2ndWindowOperation());
-        } else if (i == 10) {
+        } else if (i == MAX_SECOND_INDEX) {
             p = new WindowedOperationEditor(w, new Max2ndWindowOperation());
         } else {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
-                        System.out.println("TODO FIX THIS");
-
+            logger.log(Level.WARNING, "Unknown modifier index "+ i);
         }
         setInnerPanel(p);
         /*panelInputEditor.removeAll();

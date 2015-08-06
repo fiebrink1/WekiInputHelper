@@ -6,6 +6,8 @@
 package wekiinputhelper.Modifiers;
 
 import wekiinputhelper.UsesOnlyOriginalInputs;
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.InputModifierBuilderPanel;
 
 /**
  *
@@ -18,6 +20,10 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
     private transient final double[] history;
     private transient int startPointer;
     private transient double[] returnValues;
+
+    public int getIndex() {
+        return index;
+    }
     
     public BufferedInput(String originalName, int index, int bufferSize) {
         names = new String[bufferSize];
@@ -76,5 +82,10 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
             }
             System.out.println("");
         }
+    }
+
+    @Override
+    public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
+        return new BufferedInputEditor(w, this);
     }
 }

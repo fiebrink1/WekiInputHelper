@@ -32,9 +32,21 @@ public class FirstOrderDifferenceEditor extends InputModifierBuilderPanel {
         initForWeki(w);
         updateName();
         setDimensionality(1);
-
+    }
+    
+    public FirstOrderDifferenceEditor(FirstOrderDifference f, WekiInputHelper w) {
+        initComponents();
+        this.w = w;
+        initForWeki(w);
+        setDimensionality(1);
+        initForExisting(f);
     }
 
+    private void initForExisting(FirstOrderDifference in) {
+        comboFeatureNames.setSelectedIndex(in.getIndex());
+        updateName();
+    }
+    
     private void initForWeki(WekiInputHelper w) {
         String[] inputNames = w.getInputManager().getInputNames();
         comboFeatureNames.setModel(new DefaultComboBoxModel(inputNames));

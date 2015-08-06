@@ -21,14 +21,17 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JSeparator;
+import wekiinputhelper.InputManager;
 import wekiinputhelper.Modifiers.InputCopier;
 import wekiinputhelper.Modifiers.ModifiedInput;
 import wekiinputhelper.Modifiers.ModifiedInputSingle;
 import wekiinputhelper.Modifiers.ModifiedInputVector;
+import wekiinputhelper.OutputManager;
 import wekiinputhelper.WekiInputHelper;
 import wekiinputhelper.gui.UpDownDeleteGUI.UpDownDeleteNotifiable;
 import wekiinputhelper.osc.OSCControlReceiver;
 import wekiinputhelper.osc.OSCModifiedInputGroup;
+import wekiinputhelper.osc.OSCSender;
 import wekiinputhelper.util.Util;
 
 /**
@@ -56,6 +59,89 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     public void setWekiInputHelper(WekiInputHelper w) {
         this.w = w;
         updateLengthLabel(computeNumTotalOutputs());
+        updateSendInputs(w.getOSCSender().isSendInputs());
+        w.getInputManager().addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(InputManager.PROP_INPUTGROUP)) {
+                    inputGroupChanged();
+                }
+            }
+
+        });
+        /*w.getOutputManager().addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(OutputManager.PROP_OUTPUTGROUP)) {
+                    outputGroupChanged();
+                }
+            }
+        }); */
+
+        w.getOSCSender().addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(OSCSender.PROP_PORT)) {
+                    updateSendPort((Integer) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(OSCSender.PROP_HOSTNAME)) {
+                    updateHostname((String) ((InetAddress) evt.getNewValue()).getHostName());
+                } else if (evt.getPropertyName().equals(OSCSender.PROP_OSCMESSAGE)) {
+                    updateOscMessage((String) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(OSCSender.PROP_SENDINPUTS)) {
+                    updateSendInputs((Boolean) evt.getNewValue());
+                }
+            }
+
+        });
+        /*w.addPropertyChangeListener(new PropertyChangeListener() {
+
+         @Override
+         public void propertyChange(PropertyChangeEvent evt) {
+         if (evt.getPropertyName().equals(WekiInputHelper.PROP_INPUTTRIGGERER))
+         triggerChanged();
+         }
+         }); */
+    }
+
+    private void updateSendInputs(boolean sendInputs) {
+        checkIncludeOriginals.setSelected(sendInputs);
+    }
+
+    private void inputGroupChanged() {
+        updateLengthLabel(computeNumTotalOutputs());
+
+    }
+
+    public void initializeForOutputs() {
+        updateFormForOutputs();
+        updateLengthLabel(computeNumTotalOutputs());
+    }
+
+    private void updateSendPort(int p) {
+        textPort.setText(Integer.toString(p));
+    }
+
+    private void updateHostname(String name) {
+        textHost.setText(name);
+    }
+
+    private void updateOscMessage(String msg) {
+        textOSCMessage.setText(msg);
+    }
+
+    private void updateFormForOutputs() {
+        OSCModifiedInputGroup mig = w.getOutputManager().getOutputGroup();
+        panelOutputsContainer.removeAll();
+        outputPanels.clear();
+        upDownDeletePanels.clear();
+        if (mig != null) {
+            for (int i = 0; i < mig.getNumOutputTypes(); i++) {
+                addInputPanelForExisting(mig.getOutput(i));
+            }
+        }
     }
 
     /**
@@ -334,14 +420,14 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private boolean validateOscSettings() {
         return checkOscMessageValid() && checkOutputHostValid() && checkOutputPortValid();
     }
-    
+
     private boolean checkOscMessageValid() {
         boolean notBlank = Util.checkNotBlank(textOSCMessage, "OSC message", this);
         if (notBlank) {
             return Util.checkNoSpace(textOSCMessage, "OSC message", this);
         } else {
             return false;
-        }        
+        }
     }
 
     private boolean checkOutputHostValid() {
@@ -363,12 +449,12 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private boolean checkOutputPortValid() {
         return Util.checkIsPositiveNumber(textPort, "OSC port", this);
     }
-    
+
     private boolean validateForm() {
         if (!validateOscSettings()) {
             return false;
         }
-        
+
         if (outputPanels.size() == 0 && !checkIncludeOriginals.isSelected()) {
             Util.showPrettyErrorPane(this, "You must choose at least one existing or new input value to send out");
             return false;
@@ -395,19 +481,19 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         }
 
         for (ModifierConfigRow r : outputPanels) {
-           /* ModifiedInput i = r.getModifiedInput();
-            if (i != null) {
-                s += i.getSize();
-            } else {
-                logger.log(Level.WARNING, "input row is null unexpectedly");
+            /* ModifiedInput i = r.getModifiedInput();
+             if (i != null) {
+             s += i.getSize();
+             } else {
+             logger.log(Level.WARNING, "input row is null unexpectedly");
 
-            } */
+             } */
             s += r.getDimensionality();
         }
         return s;
     }
 
-    private void addInputPanel() {
+    private void addInputPanelForExisting(ModifiedInput o) {
         numNewPanels++;
         JPanel p;
         p = new JPanel();
@@ -419,7 +505,12 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         p.add(upDown);
         upDownDeletePanels.add(upDown);
 
-        ModifierConfigRow newEditorPanel = new ModifierConfigRow(w);
+        ModifierConfigRow newEditorPanel;
+        if (o == null) {
+            newEditorPanel = new ModifierConfigRow(w);
+        } else {
+            newEditorPanel = new ModifierConfigRow(w, o);
+        }
 
         p.add(newEditorPanel);
         outputPanels.add(newEditorPanel);
@@ -457,6 +548,10 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
     }
 
+    private void addInputPanel() {
+        addInputPanelForExisting(null);
+    }
+
     private void dimensionalityChanged(final int whichOutput, final Integer newDim) {
         updateLengthLabel(computeNumTotalOutputs());
     }
@@ -464,7 +559,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private void updateLengthLabel(int len) {
         labelNumValues.setText("Based on the settings below, " + len + " values will be sent in total");
     }
-    
+
     private void resetButtonEnabledStates() {
         if (numNewPanels == 0) {
             return;
@@ -606,7 +701,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     public void initializeForInputs() {
         updateLengthLabel(computeNumTotalOutputs());
     }
-    
+
     public boolean prepareToSave() {
         if (!validateForm()) {
             return false;
@@ -616,12 +711,12 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         configureOutputManagerFromForm();
         return true;
     }
-    
+
     private void configureOscSenderFromForm() {
         int port = Integer.parseInt(textPort.getText().trim());
         String message = textOSCMessage.getText().trim();
         String host = textHost.getText().trim();
-        
+
         try {
             w.getOSCSender().setHostnameAndPort(InetAddress.getByName(host), port);
         } catch (UnknownHostException ex) {
@@ -629,34 +724,32 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         } catch (SocketException ex) {
             Util.showPrettyErrorPane(this, "Could not send to " + host + " at port " + port);
         }
-        w.getOSCSender().setOscMessage(message);        
+        w.getOSCSender().setOscMessage(message);
     }
-    
+
     public boolean prepareToAdvance() {
         return prepareToSave();
     }
-    
+
     private void configureOutputManagerFromForm() {
         if (!validateForm()) {
             return;
         }
         List<ModifiedInput> newInputs = new LinkedList<ModifiedInput>();
         boolean includeOriginals = checkIncludeOriginals.isSelected();
-        
+
         /*if (checkIncludeOriginals.isSelected()) {
-            for (int i = 0; i < w.getInputManager().getNumInputs(); i++) {
-                ModifiedInput m = new InputCopier(w.getInputManager().getInputNames()[i], i);
-                newInputs.add(m);
-            }
-        } */
-        
-        for (ModifierConfigRow p: outputPanels) {
+         for (int i = 0; i < w.getInputManager().getNumInputs(); i++) {
+         ModifiedInput m = new InputCopier(w.getInputManager().getInputNames()[i], i);
+         newInputs.add(m);
+         }
+         } */
+        for (ModifierConfigRow p : outputPanels) {
             ModifiedInput m = p.getModifiedInput();
-            newInputs.add(m); 
+            newInputs.add(m);
         }
         OSCModifiedInputGroup g = new OSCModifiedInputGroup(newInputs);
         w.getOSCSender().setSendInputs(includeOriginals);
         w.getOutputManager().setOutputGroup(g);
     }
-
 }

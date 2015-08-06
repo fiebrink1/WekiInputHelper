@@ -6,6 +6,8 @@
 package wekiinputhelper.Modifiers;
 
 import wekiinputhelper.UsesOnlyOriginalInputs;
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.InputModifierBuilderPanel;
 
 /**
  *
@@ -39,6 +41,11 @@ public class InputCopier implements ModifiedInputSingle, UsesOnlyOriginalInputs{
     @Override
     public double getValue() {
         return value;
+    }
+
+    @Override
+    public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

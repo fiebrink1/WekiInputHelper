@@ -5,10 +5,14 @@
  */
 package wekiinputhelper.Modifiers;
 
+import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.InputModifierBuilderPanel;
+
 /**
  *
  * @author rebecca
  */
 public interface ModifiedInput {
     public int getSize();
+    public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w);
 }
