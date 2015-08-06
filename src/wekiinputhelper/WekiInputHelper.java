@@ -323,7 +323,7 @@ public class WekiInputHelper {
 
         } catch (IOException ex) {
             Util.showPrettyWarningPromptPane(null, "Error encountered in saving file: " + ex.getLocalizedMessage());
-            logger.log(Level.SEVERE, "Could not save Wekinator file:{0}", ex.getMessage());
+            logger.log(Level.SEVERE, "Could not save Wekinator Input Helper file:{0}", ex.getMessage());
         }
     }
     

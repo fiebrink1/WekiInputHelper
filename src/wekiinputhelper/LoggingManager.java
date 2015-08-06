@@ -101,7 +101,7 @@ public class LoggingManager {
         consoleHandler.setLevel(LoggingManager.USER_INFO);
         handlers = new LinkedList<>();
         logFileLocation = getPrimaryLoggingFilename();
-        backupLogLocation = "%h" + File.separator + "wekinator" + "%g.log"; //home dir / WekinatorN.log
+        backupLogLocation = "%h" + File.separator + "wekihelper" + "%g.log"; //home dir / WekinatorN.log
     }
     
     public void startLoggingToFile() throws IOException {
@@ -191,7 +191,7 @@ public class LoggingManager {
             System.setOut(teeStdOut);
             System.setErr(teeStdErr);
             
-            System.out.println("RUNNING WEKINATOR VERSION " + versionString);
+            System.out.println("RUNNING WEKINATOR INPUT HELPER VERSION " + versionString);
             logger.log(Level.INFO, "Universal log file at {0}", s);
         } catch (FileNotFoundException ex) {
             logger.log(Level.SEVERE, "Could not set up universal logs");

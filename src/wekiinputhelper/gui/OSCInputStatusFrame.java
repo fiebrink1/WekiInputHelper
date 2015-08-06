@@ -103,7 +103,7 @@ public class OSCInputStatusFrame extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Wekinator listening for inputs and control on port:");
+        jLabel1.setText("Input Helper listening for inputs and control on port:");
 
         fieldOscPort.setText("6448");
         fieldOscPort.addActionListener(new java.awt.event.ActionListener() {

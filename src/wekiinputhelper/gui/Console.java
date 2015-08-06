@@ -100,7 +100,7 @@ public class Console extends javax.swing.JFrame {
         buttonClear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Wekinator Console");
+        setTitle("Wekinator Input Helper Console");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

@@ -31,7 +31,7 @@ public class Preferences extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
-        setTitle("About Wekinator");
+        setTitle("Wekinator Input Helper Preferences");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

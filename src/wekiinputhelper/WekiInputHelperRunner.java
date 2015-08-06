@@ -149,7 +149,7 @@ public final class WekiInputHelperRunner {
 
                         @Override
                         public void stateChanged(ChangeEvent e) {
-                            logger.log(Level.INFO, "Wekinator project closed");
+                            logger.log(Level.INFO, "Wekinator Input Helper project closed");
                             if (wekinatorCurrentMainFrames.size() == 1) {
                                 //It's our last great hope
                                 handleClosingLast();
@@ -195,7 +195,7 @@ public final class WekiInputHelperRunner {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                logger.log(Level.INFO, "Wekinator project closed");
+                logger.log(Level.INFO, "Wekinator Input Helper project closed");
                 if (wekinatorCurrentMainFrames.size() == 1) {
                     //It's our last great hope
                     handleClosingLast();
@@ -247,7 +247,7 @@ public final class WekiInputHelperRunner {
     // General quit handler; fed to the OSXAdapter as the method to call when a system quit event occurs
     // A quit event is triggered by Cmd-Q, selecting Quit from the application or Dock menu, or logging out
     public boolean quitNicely() {
-        int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit Wekinator?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, myIcon);
+        int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit Wekinator Input Helper?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, myIcon);
         if (option == JOptionPane.YES_OPTION) {
             quitWithoutPrompt();
         }

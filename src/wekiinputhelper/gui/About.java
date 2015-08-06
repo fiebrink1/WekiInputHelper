@@ -36,7 +36,7 @@ public class About extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         labelVersion = new javax.swing.JLabel();
 
-        setTitle("About Wekinator");
+        setTitle("About Wekinator Input Helper");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
