@@ -70,7 +70,7 @@ public class GuiIONameCustomise extends javax.swing.JFrame {
             if (currentNames != null && currentNames.length > i) {
                 thisName = currentNames[i];
             } else {
-                thisName = baseName + "-" + (i+1);
+                thisName = baseName + "_" + (i+1);
             }
             IONameRow r = new IONameRow((i+1), thisName);
             rows.add(r);
@@ -190,7 +190,7 @@ public class GuiIONameCustomise extends javax.swing.JFrame {
 
     private void buttonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResetActionPerformed
         for (int i = 0; i < numNames; i++) {
-            rows.get(i).setIOName(baseName + "-" + (i+1));
+            rows.get(i).setIOName(baseName + "_" + (i+1));
         }
     }//GEN-LAST:event_buttonResetActionPerformed
 

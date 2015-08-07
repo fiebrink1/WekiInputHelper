@@ -530,7 +530,7 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
                 System.arraycopy(currentInputNames, 0, newNames, 0, currentInputNames.length);
                 String baseName = setBaseNameFromOscField(fieldInputOSCMessage, "Input");
                 for (int i = currentInputNames.length; i < numInputs; i++) {
-                    newNames[i] = baseName + "-" + (i + 1);
+                    newNames[i] = baseName + "_" + (i + 1);
                 }
                 currentInputNames = newNames;
             }

@@ -23,20 +23,21 @@ public class WekiInputHelperSaver {
         return w;
     }
 
-    public static void createNewProject(String name, File projectDir, WekiInputHelper w) throws IOException {
-        createProjectFiles(projectDir);
-        saveWekiInputHelperFile(name, projectDir, w);
+    public static void createNewProject(File projectFile, WekiInputHelper w) throws IOException {
+        //createProjectFiles(projectDir);
+        saveWekiInputHelperFile(projectFile, w);
     }
 
-    private static void saveWekiInputHelperFile(String name, File projectDir, WekiInputHelper w) throws IOException {
+    private static void saveWekiInputHelperFile(File projectFile, WekiInputHelper w) throws IOException {
         WekiInputHelperFileData wfd;
         if (w == null) {
-            wfd = new WekiInputHelperFileData(name);
+            //wfd = new WekiInputHelperFileData("InputHelper");
+            wfd = new WekiInputHelperFileData();
         } else {
             wfd = new WekiInputHelperFileData(w);
         }
-        String filename = projectDir + File.separator + name + "." + WekiInputHelperFileData.FILENAME_EXTENSION;
-        wfd.writeToFile(filename);
+        //String filename = projectDir + File.separator + name + "." + WekiInputHelperFileData.FILENAME_EXTENSION;
+        wfd.writeToFile(projectFile.getAbsolutePath());
     }
 
     private static void createProjectFiles(File f) throws SecurityException {
@@ -44,9 +45,9 @@ public class WekiInputHelperSaver {
     }
 
     static void saveExistingProject(WekiInputHelper w) throws IOException {
-        String name = w.getProjectName();
+       // String name = w.getProjectName();
         File projectDir = new File(w.getProjectLocation());
-        saveWekiInputHelperFile(name, projectDir, w);
+        saveWekiInputHelperFile(projectDir, w);
     }
 
     private static WekiInputHelper instantiateWekiInputHelper(WekiInputHelperFileData wfd, String projectFile) throws IOException {

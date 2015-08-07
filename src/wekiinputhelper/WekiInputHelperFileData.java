@@ -24,7 +24,7 @@ public class WekiInputHelperFileData {
     private int oscSendPort = 6449;
     private String sendHostname;
     private String sendOscMessage;
-    private String projectName = "";
+    //private String projectName = "";
     private OSCInputGroup inputs;
     private OSCModifiedInputGroup outputs;
     private InputTriggerer inputTriggerer;
@@ -40,17 +40,17 @@ public class WekiInputHelperFileData {
         this.oscReceivePort = oscReceivePort;
     }
 
-    public String getProjectName() {
+   /* public String getProjectName() {
         return projectName;
     }
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
+    } */
         
     public WekiInputHelperFileData(WekiInputHelper w) {
         this.oscReceivePort = w.getOSCReceiver().getReceivePort();
-        this.projectName = w.getProjectName();
+        //this.projectName = w.getProjectName();
         this.inputs = w.getInputManager().getOSCInputGroup();
         this.outputs = w.getOutputManager().getOutputGroup();
         this.sendHostname = w.getOSCSender().getHostname().getHostName();
@@ -61,7 +61,7 @@ public class WekiInputHelperFileData {
     
     public void applySettings(WekiInputHelper w) throws SocketException, UnknownHostException {
         w.getOSCReceiver().setReceivePort(oscReceivePort);
-        w.setProjectName(projectName);
+       // w.setProjectName(projectName);
         w.getInputManager().setOSCInputGroup(inputs);
         w.getOutputManager().setOutputGroup(outputs);
         w.getOSCSender().setOscMessage(sendOscMessage);
@@ -77,9 +77,13 @@ public class WekiInputHelperFileData {
         }
     }
     
-    public WekiInputHelperFileData(String projectName) {
-        this.projectName = projectName;
+    public WekiInputHelperFileData() {
+    
     }
+    
+    /*public WekiInputHelperFileData(String projectName) {
+        this.projectName = projectName;
+    } */
     
     @Override
     public String toString() {

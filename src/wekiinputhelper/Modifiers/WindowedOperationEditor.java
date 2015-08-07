@@ -5,7 +5,7 @@
  */
 package wekiinputhelper.Modifiers;
 
-import Util1.Util;
+import wekiinputhelper.util.Util;
 import javax.swing.DefaultComboBoxModel;
 import wekiinputhelper.Modifiers.WindowedOperation.Operation;
 import wekiinputhelper.WekiInputHelper;

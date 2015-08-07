@@ -42,7 +42,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
     }
 
     private void populateTriggerTypes() {
-        comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(Criterion.descriptors));
+        comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(Criterion.triggerDescriptors));
     }
 
     public void setWekiInputHelper(WekiInputHelper w) {
@@ -390,7 +390,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
 
     private void updateCriterionCard() {
                 int i = comboCriterion.getSelectedIndex();
-        if (Criterion.typesForDescriptors[i] == CriterionType.CHANGE) {
+        if (Criterion.typesForTriggerDescriptors[i] == CriterionType.CHANGE) {
             ((CardLayout)panelCriterionValueCardParent.getLayout()).show(panelCriterionValueCardParent, "cardBlank");
         } else {
             ((CardLayout)panelCriterionValueCardParent.getLayout()).show(panelCriterionValueCardParent, "cardCriterion");
@@ -430,7 +430,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             return;
         }
         
-        boolean isChange = (Criterion.typesForDescriptors[comboCriterion.getSelectedIndex()] == CriterionType.CHANGE);
+        boolean isChange = (Criterion.typesForTriggerDescriptors[comboCriterion.getSelectedIndex()] == CriterionType.CHANGE);
         radioSendOnce.setEnabled(!isChange);
         radioKeepSending.setEnabled(!isChange); 
     }
@@ -461,7 +461,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         }
         if (checkConstraint.isSelected()) {
             int selected = comboCriterion.getSelectedIndex();
-            Criterion.CriterionType type = Criterion.typesForDescriptors[selected];
+            Criterion.CriterionType type = Criterion.typesForTriggerDescriptors[selected];
             if (type != CriterionType.CHANGE) {
                 try {
                     double val = Double.parseDouble(textCriterionValue.getText());
@@ -525,7 +525,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             }
             
             double val = 0.;
-            Criterion.CriterionType type = Criterion.typesForDescriptors[typeIndex];
+            Criterion.CriterionType type = Criterion.typesForTriggerDescriptors[typeIndex];
             if (type != CriterionType.CHANGE) {
                 try {
                     val = Double.parseDouble(textCriterionValue.getText());

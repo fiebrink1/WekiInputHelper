@@ -50,9 +50,9 @@ public class WekiInputHelper {
     public static final String PROP_INPUTTRIGGERER = "inputTriggerer";
 
     
-    private String projectName = "New Project";
+    /*private String projectName = "New Project";
 
-    public static final String PROP_PROJECT_NAME = "projectName";
+    public static final String PROP_PROJECT_NAME = "projectName"; */
 
     private String projectLocation = "";
 
@@ -249,20 +249,20 @@ public class WekiInputHelper {
      *
      * @return the value of projectName
      */
-    public String getProjectName() {
+    /*public String getProjectName() {
         return projectName;
-    }
+    }*/
 
     /**
      * Set the value of projectName
      *
      * @param projectName new value of projectName
      */
-    public void setProjectName(String projectName) {
+    /*public void setProjectName(String projectName) {
         String oldProjectName = this.projectName;
         this.projectName = projectName;
         propertyChangeSupport.firePropertyChange(PROP_PROJECT_NAME, oldProjectName, projectName);
-    }
+    }  */
     
         /**
      * Get the value of projectLocation
@@ -300,15 +300,15 @@ public class WekiInputHelper {
         propertyChangeSupport.firePropertyChange(PROP_HAS_SAVE_LOCATION, oldHasSaveLocation, hasSaveLocation);
     }
 
-    public void saveAs(String name, File projectDir) throws IOException {
-        String oldName = getProjectName();
+    public void saveAs(File projectFile) throws IOException {
+       // String oldName = getProjectName();
         String oldLocation = getProjectLocation();
         try {
-            setProjectName(name);
-            setProjectLocation(projectDir.getAbsolutePath());
-            WekiInputHelperSaver.createNewProject(name, projectDir, this);
+            //setProjectName(name);
+            setProjectLocation(projectFile.getAbsolutePath());
+            WekiInputHelperSaver.createNewProject(projectFile, this);
         } catch (IOException ex) {
-            setProjectName(oldName);
+            //setProjectName(oldName);
             setProjectLocation(oldLocation);
             throw ex;
         }
@@ -349,10 +349,11 @@ public class WekiInputHelper {
     }
 
     public void saveAs() throws IOException {
-        File f = Util.findSaveFile(WekiInputHelperFileData.FILENAME_EXTENSION, "Project1", "Wekinator Input Helper save file", mainGUI);
+        File f = Util.findSaveFile(WekiInputHelperFileData.FILENAME_EXTENSION, "InputHelper", "Input Helper save file", mainGUI);
         if (f != null) {
-            setProjectName(f.getName());
-            saveAs(projectName, f);
+            //setProjectName(f.getName());
+            //setProjectLocation(projectLocation);
+            saveAs(f);
         }
     }
     

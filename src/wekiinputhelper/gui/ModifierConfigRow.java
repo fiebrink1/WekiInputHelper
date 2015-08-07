@@ -13,6 +13,10 @@ import java.util.logging.Logger;
 import wekiinputhelper.Modifiers.AverageWindowOperation;
 import wekiinputhelper.Modifiers.BufferedInput;
 import wekiinputhelper.Modifiers.BufferedInputEditor;
+import wekiinputhelper.Modifiers.ConditionalBufferInputEditor;
+import wekiinputhelper.Modifiers.ConditionalBufferedInput;
+import wekiinputhelper.Modifiers.ExpressionInput;
+import wekiinputhelper.Modifiers.ExpressionInputEditor;
 import wekiinputhelper.Modifiers.FirstOrderDifference;
 import wekiinputhelper.Modifiers.FirstOrderDifferenceEditor;
 import wekiinputhelper.Modifiers.MinWindowOperation;
@@ -50,6 +54,8 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
     public static int MAX_FIRST_INDEX = 8;
     public static int MIN_SECOND_INDEX = 9;
     public static int MAX_SECOND_INDEX = 10;
+    public static int BUFFERED_CONDITION_INDEX= 11;
+    public static int EXPRESSION_INDEX = 12;
     private static final Logger logger = Logger.getLogger(ModifierConfigRow.class.getName());
     
     public ModifierConfigRow() {
@@ -77,6 +83,10 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             comboModifierType.setSelectedIndex(FIRST_ORDER_INDEX);
         } else if (o instanceof SecondOrderDifference) {
             comboModifierType.setSelectedIndex(SECOND_ORDER_INDEX);
+        } else if (o instanceof ConditionalBufferedInput) {
+                comboModifierType.setSelectedIndex(BUFFERED_CONDITION_INDEX);
+        }  else if (o instanceof ExpressionInput) {
+                comboModifierType.setSelectedIndex(EXPRESSION_INDEX);
         } else if (o instanceof WindowedOperation) {
             Operation op = ((WindowedOperation)o).getOp();
             if (op instanceof AverageWindowOperation) {
@@ -148,7 +158,7 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        comboModifierType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Buffer of past values", "First-order difference (\"velocity\")", "Second-order difference (\"acceleration\")", "Average over time window", "Standard deviation over window", "Minimum over window", "Maximum over window", "Minimum first-order (\"velocity\") over  window", "Maximum first-order (\"velocity\") over  window", "Minimum second-order (\"acceleration\") over window", "Maximum second-order (\"acceleration\") over window" }));
+        comboModifierType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Buffer of past values", "First-order difference (\"velocity\")", "Second-order difference (\"acceleration\")", "Average over time window", "Standard deviation over window", "Minimum over window", "Maximum over window", "Minimum first-order (\"velocity\") over  window", "Maximum first-order (\"velocity\") over  window", "Minimum second-order (\"acceleration\") over window", "Maximum second-order (\"acceleration\") over window", "Buffer of past values satisfying conditions", "Mathematical expression" }));
         comboModifierType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboModifierTypeActionPerformed(evt);
@@ -209,6 +219,10 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             p = new WindowedOperationEditor(w, new Min2ndWindowOperation());
         } else if (i == MAX_SECOND_INDEX) {
             p = new WindowedOperationEditor(w, new Max2ndWindowOperation());
+        } else if (i == BUFFERED_CONDITION_INDEX) {
+            p = new ConditionalBufferInputEditor(w);
+        } else if (i == EXPRESSION_INDEX) {
+            p = new ExpressionInputEditor(w);
         } else {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
             logger.log(Level.WARNING, "Unknown modifier index "+ i);

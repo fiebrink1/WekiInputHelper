@@ -5,7 +5,6 @@
  */
 package wekiinputhelper.gui;
 
-import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
@@ -104,7 +103,7 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     }
     
     private void setGUIForWekiInputHelper() {
-        this.setTitle(w.getProjectName());
+        this.setTitle(w.getProjectLocation());
         w.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -114,8 +113,9 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
     }
 
     private void wekiInputHelperPropertyChanged(PropertyChangeEvent evt) {
-        if (evt.getPropertyName() == WekiInputHelper.PROP_PROJECT_NAME) {
-            this.setTitle(w.getProjectName());
+
+        if (evt.getPropertyName() == WekiInputHelper.PROP_PROJECT_LOCATION) {
+            this.setTitle(w.getProjectLocation());
         } else if (evt.getPropertyName() == WekiInputHelper.PROP_HAS_SAVE_LOCATION) {
             menuItemSave.setEnabled(w.hasSaveLocation());
         }

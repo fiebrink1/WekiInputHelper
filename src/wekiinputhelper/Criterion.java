@@ -32,7 +32,7 @@ public class Criterion {
     private final double val;
     private transient double lastValue = Double.NaN;
     private static final Logger logger = Logger.getLogger(Criterion.class.getName());
-    public static String[] descriptors = {
+    public static String[] triggerDescriptors = {
         "is greater than",
         "is less than",
         "is greater than or equal to",
@@ -40,7 +40,7 @@ public class Criterion {
         "is equal to",
         "changes"
     };
-    public static CriterionType[] typesForDescriptors = {
+    public static CriterionType[] typesForTriggerDescriptors = {
         CriterionType.GREATER_THAN,
         CriterionType.LESS_THAN,
         CriterionType.GREATER_OR_EQUAL,
@@ -146,8 +146,8 @@ public class Criterion {
     
     
     public static int getIndexForDescriptor(CriterionType type) {
-        for (int i = 0; i < typesForDescriptors.length; i++) {
-            if (type == typesForDescriptors[i])
+        for (int i = 0; i < typesForTriggerDescriptors.length; i++) {
+            if (type == typesForTriggerDescriptors[i])
                 return i;
         }
         logger.log(Level.SEVERE, "Criterion type {0} not found in typesForDescriptors array", type);

@@ -5,7 +5,6 @@
  */
 package wekiinputhelper.gui;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -15,21 +14,17 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JSeparator;
 import wekiinputhelper.InputManager;
-import wekiinputhelper.Modifiers.InputCopier;
 import wekiinputhelper.Modifiers.ModifiedInput;
 import wekiinputhelper.Modifiers.ModifiedInputSingle;
 import wekiinputhelper.Modifiers.ModifiedInputVector;
-import wekiinputhelper.OutputManager;
 import wekiinputhelper.WekiInputHelper;
 import wekiinputhelper.gui.UpDownDeleteGUI.UpDownDeleteNotifiable;
-import wekiinputhelper.osc.OSCControlReceiver;
 import wekiinputhelper.osc.OSCModifiedInputGroup;
 import wekiinputhelper.osc.OSCSender;
 import wekiinputhelper.util.Util;

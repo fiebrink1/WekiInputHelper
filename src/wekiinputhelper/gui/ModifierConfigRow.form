@@ -46,7 +46,7 @@
     <Component class="javax.swing.JComboBox" name="comboModifierType">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="11">
+          <StringArray count="13">
             <StringItem index="0" value="Buffer of past values"/>
             <StringItem index="1" value="First-order difference (&quot;velocity&quot;)"/>
             <StringItem index="2" value="Second-order difference (&quot;acceleration&quot;)"/>
@@ -58,6 +58,8 @@
             <StringItem index="8" value="Maximum first-order (&quot;velocity&quot;) over  window"/>
             <StringItem index="9" value="Minimum second-order (&quot;acceleration&quot;) over window"/>
             <StringItem index="10" value="Maximum second-order (&quot;acceleration&quot;) over window"/>
+            <StringItem index="11" value="Buffer of past values satisfying conditions"/>
+            <StringItem index="12" value="Mathematical expression"/>
           </StringArray>
         </Property>
       </Properties>

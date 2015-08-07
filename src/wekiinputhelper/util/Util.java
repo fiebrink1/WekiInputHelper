@@ -25,8 +25,10 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.JTextComponent;
 
 /**
  *
@@ -63,6 +65,10 @@ public class Util {
                 JOptionPane.OK_CANCEL_OPTION, 
                 JOptionPane.WARNING_MESSAGE,
                 null, options, options[0]);
+    }
+    
+    public static void showPrettyInfoPane(Component caller, String msg, String title) {
+        JOptionPane.showMessageDialog(caller, msg, title, JOptionPane.INFORMATION_MESSAGE);
     }
     
     public static final int OK_OPTION = 0;
@@ -155,7 +161,7 @@ public class Util {
         return true;
     }
 
-    public static boolean checkNotBlank(JTextField textField, String name, Component caller) {
+    public static boolean checkNotBlank(JTextComponent textField, String name, Component caller) {
         if (textField.getText().trim().length() == 0) {
             Util.showPrettyErrorPane(caller, name + " cannot be blank");
             return false;
