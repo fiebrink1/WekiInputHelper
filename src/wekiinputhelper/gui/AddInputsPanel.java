@@ -181,7 +181,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
         jLabel1.setText("Sending OSC messsage:");
 
-        textOSCMessage.setText("/wek/inputs2");
+        textOSCMessage.setText("/wek/inputs");
         textOSCMessage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textOSCMessageActionPerformed(evt);

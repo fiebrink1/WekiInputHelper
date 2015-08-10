@@ -54,7 +54,7 @@ public class WekiInputHelper {
 
     public static final String PROP_PROJECT_NAME = "projectName"; */
 
-    private String projectLocation = "";
+    private String projectLocation = "New Input Helper Project";
 
     public static final String PROP_PROJECT_LOCATION = "projectLocation";
 
