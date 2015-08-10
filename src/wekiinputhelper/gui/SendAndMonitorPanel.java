@@ -320,7 +320,10 @@ public class SendAndMonitorPanel extends javax.swing.JPanel {
         }
 
         int numOutputs = w.getOutputManager().getDimensionality();
-        double[] outputValues = w.getOutputManager().getOutputGroup().getCurrentOutputs();
+        double[] outputValues = new double[0];
+        if (numOutputs != 0) {
+            outputValues = w.getOutputManager().getOutputGroup().getCurrentOutputs();
+        }
         for (int i = 0; i < numOutputs; i++) {
             NameValueRow r = new NameValueRow((index + 1) + ". " + w.getOutputManager().getOutputNames()[i]);
             index++;
