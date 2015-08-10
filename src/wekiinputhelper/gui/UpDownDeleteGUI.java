@@ -72,6 +72,7 @@ public class UpDownDeleteGUI extends javax.swing.JPanel {
         buttonDelete = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setMaximumSize(new java.awt.Dimension(39, 105));
 
         buttonUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wekiinputhelper/icons/upArrow1.png"))); // NOI18N
         buttonUp.setMaximumSize(new java.awt.Dimension(27, 27));

@@ -171,6 +171,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
         panelTop.setBackground(new java.awt.Color(255, 255, 255));
 
+        checkIncludeOriginals.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         checkIncludeOriginals.setSelected(true);
         checkIncludeOriginals.setText("Include original inputs in sent message");
         checkIncludeOriginals.addActionListener(new java.awt.event.ActionListener() {
@@ -179,8 +180,10 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         jLabel1.setText("Sending OSC messsage:");
 
+        textOSCMessage.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         textOSCMessage.setText("/wek/inputs");
         textOSCMessage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,12 +191,15 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         });
 
+        jLabel28.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         jLabel28.setText("Sending to host (IP address or name):");
 
+        textHost.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         textHost.setText("localhost");
 
         jLabel29.setText("Port:");
 
+        textPort.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         textPort.setText("6449");
         textPort.setMinimumSize(new java.awt.Dimension(62, 28));
         textPort.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -202,6 +208,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         });
 
+        buttonSendExample.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         buttonSendExample.setText("Send example OSC message");
         buttonSendExample.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,6 +216,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         });
 
+        buttonSendNames.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         buttonSendNames.setText("Send new input names via OSC");
         buttonSendNames.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,9 +224,10 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 11)); // NOI18N
         jLabel2.setText("Configure new inputs below:");
 
+        labelNumValues.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         labelNumValues.setText("Based on the settings below, 17 values will be sent in total");
 
         javax.swing.GroupLayout panelTopLayout = new javax.swing.GroupLayout(panelTop);
@@ -228,8 +237,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             .addGroup(panelTopLayout.createSequentialGroup()
                 .addComponent(buttonSendExample)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonSendNames)
-                .addContainerGap())
+                .addComponent(buttonSendNames, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(panelTopLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,7 +250,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
                     .addGroup(panelTopLayout.createSequentialGroup()
                         .addComponent(jLabel28)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textHost)
+                        .addComponent(textHost, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel29)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -287,6 +295,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
         buttomPanel.setBackground(new java.awt.Color(255, 255, 255));
 
+        jButton3.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         jButton3.setText("Add new");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,7 +335,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollModifiers, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addComponent(scrollModifiers, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );

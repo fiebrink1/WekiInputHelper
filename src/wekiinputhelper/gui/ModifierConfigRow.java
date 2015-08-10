@@ -158,6 +158,7 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
+        comboModifierType.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         comboModifierType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Buffer of past values", "First-order difference (\"velocity\")", "Second-order difference (\"acceleration\")", "Average over time window", "Standard deviation over window", "Minimum over window", "Maximum over window", "Minimum first-order (\"velocity\") over  window", "Maximum first-order (\"velocity\") over  window", "Minimum second-order (\"acceleration\") over window", "Maximum second-order (\"acceleration\") over window", "Buffer of past values satisfying conditions", "Mathematical expression" }));
         comboModifierType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,12 +175,10 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(comboModifierType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelInputEditor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelInputEditor, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(comboModifierType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

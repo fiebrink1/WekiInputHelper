@@ -31,7 +31,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="panelTop" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="scrollModifiers" pref="132" max="32767" attributes="0"/>
+              <Component id="scrollModifiers" pref="196" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="buttomPanel" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -52,8 +52,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="buttonSendExample" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="buttonSendNames" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="buttonSendNames" min="-2" pref="213" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
@@ -68,7 +67,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="textHost" max="32767" attributes="0"/>
+                          <Component id="textHost" pref="167" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -126,6 +125,9 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="checkIncludeOriginals">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Include original inputs in sent message"/>
           </Properties>
@@ -135,11 +137,17 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Sending OSC messsage:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textOSCMessage">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="/wek/inputs"/>
           </Properties>
           <Events>
@@ -148,11 +156,17 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel28">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Sending to host (IP address or name):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textHost">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="localhost"/>
           </Properties>
         </Component>
@@ -163,6 +177,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="textPort">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="6449"/>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[62, 28]"/>
@@ -174,6 +191,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="buttonSendExample">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Send example OSC message"/>
           </Properties>
           <Events>
@@ -182,6 +202,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="buttonSendNames">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Send new input names via OSC"/>
           </Properties>
           <Events>
@@ -193,13 +216,16 @@
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Lucida Grande" size="13" style="1"/>
+              <Font name="Lucida Grande" size="11" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Configure new inputs below:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="labelNumValues">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Based on the settings below, 17 values will be sent in total"/>
           </Properties>
         </Component>
@@ -235,6 +261,9 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButton3">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="11" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Add new"/>
           </Properties>
           <Events>
