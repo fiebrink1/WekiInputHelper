@@ -68,8 +68,8 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
         }
 
         for (int id = 0; id < w.getInputManager().getNumInputs(); id++) {
-            if (maxDelayLengthsForInputs.containsKey(i)) {
-                buffersForInputs[id] = new CircularBuffer(maxDelayLengthsForInputs.get(id)+1);
+            if (maxDelayLengthsForInputs.containsKey(id)) { // was i
+                buffersForInputs[id] = new CircularBuffer(maxDelayLengthsForInputs.get(id) + 1);
             } else {
                 buffersForInputs[id] = new CircularBuffer(1);
             }
@@ -97,7 +97,7 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
 
         for (String v : vars) {
             variables[i] = Variable.make(v);
-           // indexes[i] = findIndex(v, inputNames);
+            // indexes[i] = findIndex(v, inputNames);
             if (isIndexed(v)) {
                 indexedVariables[i] = new IndexedVar(v);
                 indexes[i] = findIndex(indexedVariables[i].unindexedName, inputNames);
@@ -121,7 +121,7 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
 
         for (int id = 0; id < inputNames.length; id++) {
             if (maxDelayLengthsForInputs.containsKey(id)) {
-                buffersForInputs[id] = new CircularBuffer(maxDelayLengthsForInputs.get(id)+1);
+                buffersForInputs[id] = new CircularBuffer(maxDelayLengthsForInputs.get(id) + 1);
             } else {
                 buffersForInputs[id] = new CircularBuffer(1);
             }
@@ -148,13 +148,15 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
         for (String var : vars) {
             boolean isIndexed = isIndexed(var);
             IndexedVar v;
-            try {
-                v = new IndexedVar(var);
-            } catch (IllegalArgumentException ex) {
-                Util.showPrettyErrorPane(null, "Improperly formatted indexed variable: Must be in form such as inputName[n-3]");
-                return false;
-            }
+
             if (isIndexed) {
+                try {
+                    v = new IndexedVar(var);
+                } catch (IllegalArgumentException ex) {
+                    Util.showPrettyErrorPane(null, "Improperly formatted indexed variable: Must be in form such as inputName[n-3]");
+                    return false;
+                }
+
                 if (findIndex(v.unindexedName, inputNames) == -1) {
                     Util.showPrettyErrorPane(null, "Variable " + var + " is not a valid input name");
                     return false;
@@ -203,11 +205,11 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
     @Override
     public double getValue() {
         for (int i = 0; i < variables.length; i++) {
-           // variables[i].setValue(lastInputs[indexes[i]]);
+            // variables[i].setValue(lastInputs[indexes[i]]);
             int delay = indexedVariables[i].delay;
             int x = indexes[i];
             System.out.println("X=" + x);
-            double val = buffersForInputs[x].getDelayedSample(delay);
+            double val = buffersForInputs[x].getDelayedSample(delay); //ERROR HERE
             variables[i].setValue(val);
         }
         return expression.value();
@@ -215,19 +217,19 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
 
     public static void main(String[] args) {
         try {
-            Expr exp = Parser.parse("a[n] + a[n-1]");
-            String[] s = new String[]{"a", "b", "c"};
+            Expr exp = Parser.parse("a_1[n] + a_1[n-1] - a_1[n-2]");
+            String[] s = new String[]{"a_1", "b", "c"};
             ExpressionInput in = new ExpressionInput(exp, "newname", "tmp", s);
 
             in.updateForInputs(new double[]{5, 1, 5});
             double d = in.getValue();
             System.out.println("val is " + d);
-            
+
             in.updateForInputs(new double[]{10, 1, 5});
 
-             d = in.getValue();
+            d = in.getValue();
             System.out.println("val is " + d);
-            
+
             in.updateForInputs(new double[]{15, 1, 5});
 
             d = in.getValue();
