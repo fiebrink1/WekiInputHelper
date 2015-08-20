@@ -5,7 +5,6 @@ package wekiinputhelper.Modifiers;
 
 import expr.Expr;
 import expr.Parser;
-import expr.SyntaxException;
 import expr.Variable;
 import java.util.HashMap;
 import java.util.HashSet;

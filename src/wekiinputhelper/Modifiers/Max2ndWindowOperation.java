@@ -18,9 +18,9 @@ public class Max2ndWindowOperation implements Operation {
         double[] fods = compute2ndDifferences(vals);
         
         double max = Double.MIN_VALUE;
-        for (int i = 0; i < vals.length; i++) {
-            if (vals[i] > max) {
-                max = vals[i];
+        for (int i = 0; i < fods.length; i++) {
+            if (fods[i] > max) {
+                max = fods[i];
             }
         }
         return max;
