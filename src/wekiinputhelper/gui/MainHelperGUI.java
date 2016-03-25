@@ -91,10 +91,8 @@ public class MainHelperGUI extends javax.swing.JFrame implements Closeable {
 
     private boolean prepareToLeaveTab(int which) {
         if (which ==0) {
-            System.out.println("Preapring to leave addInputs");
             return addInputsPanel1.prepareToAdvance();
         } else if (which == 1) {
-            System.out.println("Preparing to leave trigger");
             return configureTriggerPanel1.prepareToAdvance();
         } else if (which == 2) {
             return sendAndMonitorPanel1.prepareToAdvance();
