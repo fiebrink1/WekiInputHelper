@@ -86,7 +86,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         if (allNames.length == 0 || lastSelected == -1) {
             return;
         }
-        if (allNames[lastSelected].equals(lastName)) {
+        if (allNames.length > lastSelected && allNames[lastSelected].equals(lastName)) {
             comboInput.setSelectedIndex(lastSelected);
         } else {
             tryToSelectInputName(lastName);
@@ -209,6 +209,11 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         jLabel4.setText("messages received");
 
         comboInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "input-1", "input-2", "input-3" }));
+        comboInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboInputActionPerformed(evt);
+            }
+        });
 
         comboCriterion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "is greater than or equal to", "is less than or equal to", "changes" }));
         comboCriterion.addActionListener(new java.awt.event.ActionListener() {
@@ -418,6 +423,10 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
     private void checkConstraintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConstraintActionPerformed
         updateCriterion();
     }//GEN-LAST:event_checkConstraintActionPerformed
+
+    private void comboInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboInputActionPerformed
 
     private void updateCriterion() {
         boolean isConstraint = checkConstraint.isSelected();
