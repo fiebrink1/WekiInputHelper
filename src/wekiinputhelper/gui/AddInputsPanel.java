@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,8 +23,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JSeparator;
 import wekiinputhelper.InputManager;
 import wekiinputhelper.Modifiers.ModifiedInput;
-import wekiinputhelper.Modifiers.ModifiedInputSingle;
-import wekiinputhelper.Modifiers.ModifiedInputVector;
 import wekiinputhelper.WekiInputHelper;
 import wekiinputhelper.gui.UpDownDeleteGUI.UpDownDeleteNotifiable;
 import wekiinputhelper.osc.OSCModifiedInputGroup;
@@ -374,7 +373,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         try {
             boolean v = validateForm();
             if (v) {
-                String[] names = getAllOutputNames();
+                String[] names = fixDuplicateNamesAndGetUniqueNames();
                 w.getOSCSender().sendNamesMessage(address, port, names);
             }
         } catch (IOException ex) {
@@ -472,7 +471,11 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
                 return false;
             }
         }
-        String[] names = getAllOutputNames();
+        if (! checkNoDuplicateExpressionNames()) {
+            return false;
+        }
+        
+        String[] names = fixDuplicateNamesAndGetUniqueNames();
         return Util.checkAllUniqueWithErrorPane(names, "Names");
     }
     
@@ -697,8 +700,42 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
         repaint();
     }
+    
+    private boolean checkNoDuplicateExpressionNames() {
+        String[] allNames = new String[computeNumTotalOutputs()];
+        int currentIndex = 0;
+        
+        HashSet<String> usedNames = new HashSet<>();
+        LinkedList<String> expressionNames = new LinkedList<>();
+        
+        if (checkIncludeOriginals.isSelected()) {
+            String[] inputNames = w.getInputManager().getInputNames();
+            System.arraycopy(inputNames, 0, allNames, 0, inputNames.length);
+            currentIndex += inputNames.length;
+            for (String inputName : inputNames) {
+                usedNames.add(inputName);
+            }
+        }
+        for (ModifierConfigRow r : outputPanels) {
+            if (r.isUserDefinedExpression()) {
+                expressionNames.add(r.getNames()[0]);
+            } else {
+                usedNames.addAll(Arrays.asList(r.getNames()));
+            }
+        }
+        for (String exp : expressionNames) {
+            if (usedNames.contains(exp)) {
+                Util.showPrettyErrorPane(this, "The name \"" + exp + "\" is already being used; please choose a different name for this expression.");
+                return false;
+            } else {
+                usedNames.add(exp);
+            }
+        }
+        return true;  
+    }
 
-    private String[] getAllOutputNames() {
+    
+    private String[] fixDuplicateNamesAndGetUniqueNames() {
         String[] allNames = new String[computeNumTotalOutputs()];
         int currentIndex = 0;
         

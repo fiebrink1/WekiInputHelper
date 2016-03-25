@@ -264,6 +264,10 @@ public class ModifierConfigRow extends javax.swing.JPanel {
 
     }//GEN-LAST:event_comboModifierTypeActionPerformed
 
+    public boolean isUserDefinedExpression() {
+        Component p = panelInputEditor.getComponent(0);
+        return (p != null && p instanceof ExpressionInputEditor);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox comboModifierType;
