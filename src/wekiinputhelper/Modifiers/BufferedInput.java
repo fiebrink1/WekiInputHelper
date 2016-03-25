@@ -5,6 +5,8 @@
  */
 package wekiinputhelper.Modifiers;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import wekiinputhelper.UsesOnlyOriginalInputs;
 import wekiinputhelper.WekiInputHelper;
 import wekiinputhelper.gui.InputModifierBuilderPanel;
@@ -17,7 +19,7 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
     private final String[] names;
     private final int index;
     private final int bufferSize;
-    private transient final double[] history;
+    private transient double[] history;
     private transient int startPointer;
     private transient double[] returnValues;
 
@@ -87,5 +89,12 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
     @Override
     public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
         return new BufferedInputEditor(w, this);
+    }
+    
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        history = new double[bufferSize];
+        returnValues = new double[bufferSize];
+        startPointer = 0;
     }
 }

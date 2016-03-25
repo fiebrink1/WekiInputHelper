@@ -5,14 +5,17 @@
  */
 package wekiinputhelper.Modifiers;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 /**
  *
  * @author rebecca
  */
 public class CircularBuffer {
     private final int length;
-    private final double[] vals;
-    private int currentIndex = 0;
+    private transient double[] vals;
+    private transient int currentIndex = 0;
     
     public CircularBuffer(int len) {
         length = len;
@@ -32,6 +35,12 @@ public class CircularBuffer {
             delayIndex += length;
         }
         return vals[delayIndex];
+    }
+    
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        vals = new double[length];
+        currentIndex = 0;
     }
    
 }
