@@ -373,6 +373,12 @@ public class WekiInputHelper {
      */
     public void setInputTriggerer(InputTriggerer inputTriggerer) {
         InputTriggerer oldInputTriggerer = this.inputTriggerer;
+        
+        //Remove old triggerer
+        if (oldInputTriggerer != null) {
+            oldInputTriggerer.removeListeners(this);
+        }
+        
         this.inputTriggerer = inputTriggerer;
         propertyChangeSupport.firePropertyChange(PROP_INPUTTRIGGERER, oldInputTriggerer, inputTriggerer);
     }

@@ -207,7 +207,7 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
             // variables[i].setValue(lastInputs[indexes[i]]);
             int delay = indexedVariables[i].delay;
             int x = indexes[i];
-            System.out.println("X=" + x);
+           // System.out.println("X=" + x);
             double val = buffersForInputs[x].getDelayedSample(delay); //ERROR HERE
             variables[i].setValue(val);
         }

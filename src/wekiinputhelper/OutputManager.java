@@ -107,6 +107,9 @@ public class OutputManager {
         //This way, we assume outputs have already been computed:
         double[] vals = outputGroup.getCurrentOutputs();
         double[] inputs = outputGroup.getLastInputs();
+        if (inputs == null) { //No inputs have been received yet, ever
+            inputs = w.getInputManager().getInputValues();
+        }
         notifyOutputGroupComputedListeners(inputs, vals);
     }
 

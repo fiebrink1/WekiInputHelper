@@ -12,11 +12,9 @@ import java.util.LinkedList;
  * @author rebecca
  */
 public class TriggerOnReceive extends InputTriggerer {
-   // private final Criterion c;
     
     public TriggerOnReceive(Criterion c) {
         this.c = c;
-      //  listenerList = new LinkedList<>();
     }
     
     @Override

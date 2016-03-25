@@ -91,7 +91,7 @@ public class OSCModifiedInputGroup {
     }
     
     public double[] getLastInputs() {
-        return lastInputs;
+        return lastInputs; //is returning null when nothing is computed yet...
     }
     
     public int getOutputDimensionality() {

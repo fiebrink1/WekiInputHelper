@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class InputTriggerer {
     public abstract void updateAllValues(double[] inputs, double[] outputs);
     protected Criterion c;
+    protected PropertyChangeListener runningListener = null;
     
     public Criterion getCriterion() {
         return c;
@@ -24,15 +25,15 @@ public abstract class InputTriggerer {
 
     
     public void attachRunningListener(WekiInputHelper w) {
-        w.getRunningManager().addPropertyChangeListener(new PropertyChangeListener() {
-
+        runningListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(RunningManager.PROP_RUNNINGSTATE)) {
                     runningStateChanged((RunningManager.RunningState)(evt.getNewValue()));
                 }
             }
-        });
+        };
+        w.getRunningManager().addPropertyChangeListener(runningListener);
     }
     
     protected abstract void runningStateChanged(RunningManager.RunningState newState);
@@ -48,9 +49,14 @@ public abstract class InputTriggerer {
     }
 
     protected void triggerSend() {
-        for (Triggerable t : listenerList) {
+        for (Triggerable t : listenerList) { //empty...
             t.triggerNow();
         }
+    }
+
+    void removeListeners(WekiInputHelper w) {
+        listenerList.clear();
+        w.getRunningManager().removePropertyChangeListener(runningListener);
     }
    
     public interface Triggerable {

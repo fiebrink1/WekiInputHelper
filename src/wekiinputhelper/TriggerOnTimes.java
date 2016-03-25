@@ -30,7 +30,7 @@ public class TriggerOnTimes extends InputTriggerer {
     public TriggerOnTimes(WekiInputHelper w, int ms, Criterion c) {
         this.numMs = ms;
         this.c = c;
-        attachRunningListener(w);
+        attachRunningListener(w); //in order to start & stop timer according to whether running
     }
     
     public int getTime() {

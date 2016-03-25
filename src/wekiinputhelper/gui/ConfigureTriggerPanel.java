@@ -477,7 +477,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             return false;
         }
         InputTriggerer trig = makeTriggererFromForm();
-        w.setInputTriggerer(trig);
+        w.setInputTriggerer(trig); //this takes care of removing old triggerer now.
         return true;
     }
 
