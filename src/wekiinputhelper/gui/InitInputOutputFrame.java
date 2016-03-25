@@ -537,26 +537,52 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
         }
     }
 
-  
+
     private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
         //TODO: have to do more if configuringOSC on next screen...
-        if (checkOSCReady() && checkInputReady() && checkNamesUnique()) {
+        if (checkInputReady() && checkNamesUnique()) {
             //System.out.println("READY TO GO");
 
-                //configureOSCSenderFromForm();
+            //configureOSCSenderFromForm();
             OSCInputGroup inputGroup = getInputGroupFromForm();
 
             w.getInputManager().setOSCInputGroup(inputGroup);
-            w.getMainHelperGUI().initializeForInputs();
-            w.getMainHelperGUI().setVisible(true);
-            WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
-            removeListeners();
-            this.dispose();
+            if (w.getOSCReceiver().getConnectionState() != OSCReceiver.ConnectionState.CONNECTED) {
+                tryToStartListening();
+            } 
+            
+            if (w.getOSCReceiver().getConnectionState() == OSCReceiver.ConnectionState.CONNECTED) {
+                w.getMainHelperGUI().initializeForInputs();
+                w.getMainHelperGUI().setVisible(true);
+                WekiInputHelperRunner.getInstance().transferControl(w, this, w.getMainHelperGUI());
+                removeListeners();
+                this.dispose();
+            }
 
         } else {
             logger.log(Level.INFO, "Error encountered in setting up inputs/outputs");
         }
     }//GEN-LAST:event_buttonNextActionPerformed
+
+    private void tryToStartListening() {
+        if (w.getOSCReceiver().getConnectionState() == OSCReceiver.ConnectionState.CONNECTED) {
+            w.getOSCReceiver().stopListening();
+        } else {
+            int port = 0;
+            try {
+                port = Integer.parseInt(fieldOscPort.getText());
+            } catch (NumberFormatException ex) {
+                Util.showPrettyErrorPane(this, "Port must be a valid integer greater than 0");
+            }
+            if (port <= 0) {
+                Util.showPrettyErrorPane(this, "Port must be a valid integer greater than 0");
+            }
+
+            w.getOSCReceiver().setReceivePort(port);
+            w.getOSCReceiver().startListening();
+        }
+    }
+
 
     private void menuCustomiseInputNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCustomiseInputNamesActionPerformed
         customiseInputNames();
@@ -651,7 +677,6 @@ public class InitInputOutputFrame extends javax.swing.JFrame implements Closeabl
 
         });
     }
-
 
     private boolean checkInputNumberValid() {
         return Util.checkIsPositiveNumber(fieldNumInputs, "Number of inputs", this);
