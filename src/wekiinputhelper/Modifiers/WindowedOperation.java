@@ -68,7 +68,7 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
 
     @Override
     public double getValue() {
-        return op.doOperation(history);
+        return op.doOperation(history, startPointer);
     }
     
     public static void main(String[] args) {
@@ -76,7 +76,7 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
         Operation avg = new Operation() {
 
             @Override
-            public double doOperation(double[] vals) {
+            public double doOperation(double[] vals, int startPtr) {
                 double sum = 0;
                 for (int i = 0; i < vals.length; i++) {
                     sum += vals[i];
@@ -105,7 +105,7 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
     }
     
     public interface Operation {
-        public double doOperation(double[] vals);
+        public double doOperation(double[] vals, int startPointer);
         public String shortName();
     }
 }

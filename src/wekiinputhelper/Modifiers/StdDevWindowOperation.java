@@ -14,7 +14,7 @@ import wekiinputhelper.Modifiers.WindowedOperation.Operation;
 public class StdDevWindowOperation implements Operation {
 
     @Override
-    public double doOperation(double[] vals) {
+    public double doOperation(double[] vals, int startPtr) {
         double sum = 0;
         for (int i = 0; i < vals.length; i++) {
             sum += vals[i];

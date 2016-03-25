@@ -14,7 +14,7 @@ import wekiinputhelper.Modifiers.WindowedOperation.Operation;
 public class MinWindowOperation implements Operation {
 
     @Override
-    public double doOperation(double[] vals) {
+    public double doOperation(double[] vals, int startPtr) {
         double min = Double.MAX_VALUE;
         for (int i = 0; i < vals.length; i++) {
             if (vals[i] < min) {

@@ -14,8 +14,8 @@ import wekiinputhelper.Modifiers.WindowedOperation.Operation;
 public class Min2ndWindowOperation implements Operation {
     
     @Override
-    public double doOperation(double[] vals) {
-        double[] fods = compute2ndDifferences(vals);
+    public double doOperation(double[] vals, int startPtr) {
+        double[] fods = compute2ndDifferences(vals, startPtr);
         
         double min = Double.MAX_VALUE;
         for (int i = 0; i < fods.length; i++) {
@@ -26,10 +26,30 @@ public class Min2ndWindowOperation implements Operation {
         return min;
     }
     
-    private double[] compute2ndDifferences(double[] vals) {
+    private double[] compute2ndDifferences(double[] vals, int startPtr) {
         double[] diffs = new double[vals.length-2];
-        for (int i = 2; i < vals.length; i++) {
+        /* for (int i = 2; i < vals.length; i++) {
             diffs[i-2] = vals[i] - 2 *vals[i-1] + vals[i-2];
+        } */
+        int j = 0;
+        for (int i = startPtr+2; i < vals.length; i++) {
+            diffs[j] = vals[i] - 2 *vals[i-1] + vals[i-2];
+            j++;
+        }
+        int startIndex = 0;
+        if (startPtr == vals.length - 1) {
+            startIndex = 1;
+        }
+        for (int i = startIndex; i < startPtr; i++) {
+            if (i >= 2) {
+                diffs[j] = vals[i] - 2 *vals[i-1] + vals[i-2];
+            } else if (i == 1) {
+                diffs[j] = vals[i] - 2 *vals[0] + vals[vals.length-1];
+            } else {
+                //i == 0
+                diffs[j] = vals[0] - 2 *vals[vals.length-1] + vals[vals.length-2];
+            }
+            j++;
         }
         return diffs;
     }
