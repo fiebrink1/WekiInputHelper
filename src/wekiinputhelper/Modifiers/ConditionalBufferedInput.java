@@ -17,7 +17,8 @@ import wekiinputhelper.gui.InputModifierBuilderPanel;
  *
  * @author rebecca
  */
-public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOriginalInputs{
+public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOriginalInputs {
+
     private final String[] names;
     private final int index;
     private final int bufferSize;
@@ -38,14 +39,22 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
     public int getIndex() {
         return index;
     }
-    
-    public ConditionalBufferedInput(String originalName, int index, int bufferSize, Criterion c1, Criterion c2) {
+
+    public ConditionalBufferedInput(String originalName, int index, int bufferSize, Criterion c1, Criterion c2, int increment) {
         names = new String[bufferSize];
-        names[bufferSize-1] = originalName + "[n]";
-        for (int i = 2; i <= bufferSize; i++) {
-            names[bufferSize - i] = originalName + "[n-" + (i-1) + "]";
+
+        if (increment == 1) {
+            names[bufferSize - 1] = originalName + "[n]";
+            for (int i = 2; i <= bufferSize; i++) {
+                names[bufferSize - i] = originalName + "[n-" + (i - 1) + "]";
+            }
+        } else {
+            names[bufferSize - 1] = originalName + "[n](" + increment + ")";
+            for (int i = 2; i <= bufferSize; i++) {
+                names[bufferSize - i] = originalName + "[n-" + (i - 1) + "](" + increment + ")";
+            }
         }
-        
+
         this.index = index;
         this.bufferSize = bufferSize;
         history = new ArrayList<>();
@@ -53,7 +62,7 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
         this.startCriterion = c1;
         this.stopCriterion = c2;
     }
-    
+
     @Override
     public String[] getNames() {
         return names;
@@ -66,28 +75,28 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
             if (done) {
                 updateOutputBuffer();
                 isRecording = false;
-                System.out.println("Stopped recording for" +  inputs[0]);
+                System.out.println("Stopped recording for" + inputs[0]);
 
             } else {
                 history.add(inputs[index]);
-            } 
+            }
         } else {
             isRecording = checkIfStart(inputs);
             if (isRecording) {
                 history.add(inputs[index]);
-                System.out.println("Started recording for" +  inputs[0]);
+                System.out.println("Started recording for" + inputs[0]);
             }
         }
     }
-    
+
     private boolean checkIfStop(double[] inputs) {
         return stopCriterion.shouldTrigger(inputs, null);
     }
-    
+
     private boolean checkIfStart(double[] inputs) {
         return startCriterion.shouldTrigger(inputs, null);
     }
-    
+
     private void updateOutputBuffer() {
         //need to put list into array of size bufferSize
         if (history.size() == bufferSize) {
@@ -97,22 +106,22 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
             }
         } else if (history.size() > bufferSize) {
             //VERY hacky way: not even smoothing!
-            int hopSize = (int)(history.size()/bufferSize);
+            int hopSize = (int) (history.size() / bufferSize);
             for (int i = 0; i < bufferSize; i++) {
-                returnValues[i] = history.get(i*hopSize);
+                returnValues[i] = history.get(i * hopSize);
             }
         } else {
             //VERY Hacky
-            int numRepeats = (int)(bufferSize/history.size());
+            int numRepeats = (int) (bufferSize / history.size());
             for (int i = 0; i < bufferSize; i++) {
-                if (i/numRepeats < history.size()) {
+                if (i / numRepeats < history.size()) {
                     returnValues[i] = history.get(i / numRepeats);
                 } else {
-                    returnValues[i] = history.get(history.size() -1);
+                    returnValues[i] = history.get(history.size() - 1);
                 }
             }
         }
-            
+
         history.clear();
     }
 
@@ -125,16 +134,16 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
     public double[] getValues() {
         return returnValues;
     }
-    
+
     public static void main(String[] args) {
         Criterion start = new Criterion(CriterionType.GREATER_THAN, Criterion.HowLong.REPEAT, 0, Criterion.AppliesTo.INPUT, 0);
         Criterion stop = new Criterion(CriterionType.LESS_OR_EQUAL, Criterion.HowLong.REPEAT, 0, Criterion.AppliesTo.INPUT, 0);
 
-        ConditionalBufferedInput bi = new ConditionalBufferedInput("f1", 0, 2, start, stop);
-            
+        ConditionalBufferedInput bi = new ConditionalBufferedInput("f1", 0, 2, start, stop, 1);
+
         for (int i = -5; i < 2; i++) {
             System.out.print(i + ": ");
-            bi.updateForInputs(new double[] {i});
+            bi.updateForInputs(new double[]{i});
             double[] d = bi.getValues();
             for (int j = 0; j < bi.getSize(); j++) {
                 System.out.print(d[j] + " ");
@@ -143,7 +152,7 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
         }
         for (int i = 5; i > -4; i--) {
             System.out.print(i + ": ");
-            bi.updateForInputs(new double[] {i});
+            bi.updateForInputs(new double[]{i});
             double[] d = bi.getValues();
             for (int j = 0; j < bi.getSize(); j++) {
                 System.out.print(d[j] + " ");

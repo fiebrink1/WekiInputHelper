@@ -17,6 +17,13 @@ import wekiinputhelper.Modifiers.ModifiedInput;
 public abstract class InputModifierBuilderPanel extends JPanel {
     public abstract boolean validateForm();
     public abstract ModifiedInput getModifiedInput();
+    public int increment = 1;
+    
+    public void incrementName() {
+        increment++;
+    }
+    
+    public abstract String[] getNames();
     
     private int dimensionality = 0;
 

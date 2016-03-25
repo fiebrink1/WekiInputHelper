@@ -116,7 +116,7 @@ public class SecondOrderDifferenceEditor extends InputModifierBuilderPanel {
     }//GEN-LAST:event_comboFeatureNamesActionPerformed
 
     private void updateName() {
-        labelName.setText("Name: " + SecondOrderDifference.makeName(w.getInputManager().getInputNames()[comboFeatureNames.getSelectedIndex()]));
+        labelName.setText("Name: " + SecondOrderDifference.makeName(w.getInputManager().getInputNames()[comboFeatureNames.getSelectedIndex()], increment));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -133,6 +133,14 @@ public class SecondOrderDifferenceEditor extends InputModifierBuilderPanel {
     @Override
     public ModifiedInput getModifiedInput() {
         int i = comboFeatureNames.getSelectedIndex();
-        return new SecondOrderDifference(w.getInputManager().getInputNames()[i], i);
+        return new SecondOrderDifference(w.getInputManager().getInputNames()[i], i, increment);
+    }
+
+    @Override
+    public String[] getNames() {
+        int i = comboFeatureNames.getSelectedIndex();
+        SecondOrderDifference sod = new SecondOrderDifference(w.getInputManager().getInputNames()[i], i, increment);
+        String[] ss = {sod.getName()};
+        return ss;
     }
 }

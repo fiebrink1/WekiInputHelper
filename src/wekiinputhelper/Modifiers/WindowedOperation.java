@@ -21,8 +21,12 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
     private transient int startPointer;
     private final Operation op;
     
-    public static String makeName(String originalName, String shortName, int windowSize) {
-        return originalName + "_" + shortName + Integer.toString(windowSize);
+    public static String makeName(String originalName, String shortName, int windowSize, int nameIncrement) {
+        if (nameIncrement == 1) {
+            return originalName + "_" + shortName + Integer.toString(windowSize);
+        } else {
+            return originalName + "_" + shortName + Integer.toString(windowSize) + "(" + nameIncrement + ")";
+        }
     }
 
     public Operation getOp() {
@@ -34,8 +38,8 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
     }
     
     
-    public WindowedOperation(String originalName, Operation op, int index, int windowSize) {
-        name =  makeName(originalName, op.shortName(), windowSize);       
+    public WindowedOperation(String originalName, Operation op, int index, int windowSize, int nameIncrement) {
+        name = makeName(originalName, op.shortName(), windowSize, nameIncrement);       
         this.index = index;
         this.windowSize = windowSize;
         this.op = op;
@@ -89,7 +93,7 @@ public class WindowedOperation implements ModifiedInputSingle, UsesOnlyOriginalI
                 return "Avg";
             }
         };
-        WindowedOperation bi = new WindowedOperation("feat1", avg, 0, 3);
+        WindowedOperation bi = new WindowedOperation("feat1", avg, 0, 3, 1);
    
         for (int i = 0; i < 10; i++) {
             System.out.print(i + ": ");

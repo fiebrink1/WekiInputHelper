@@ -403,7 +403,7 @@ public class ConditionalBufferInputEditor extends InputModifierBuilderPanel {
         int s = Integer.parseInt(textBufferSize.getText());
         Criterion start = getStartFromForm();
         Criterion stop = getStopFromForm();
-        return new ConditionalBufferedInput(w.getInputManager().getInputNames()[i],i, s, start, stop);
+        return new ConditionalBufferedInput(w.getInputManager().getInputNames()[i],i, s, start, stop, increment);
     }
     
     private Criterion getStartFromForm() {
@@ -432,4 +432,14 @@ public class ConditionalBufferInputEditor extends InputModifierBuilderPanel {
         usedNames.add(s);
         return s;
     } */
+
+    @Override
+    public String[] getNames() {
+        int i = comboFeatureNames.getSelectedIndex();
+        int s = Integer.parseInt(textBufferSize.getText());
+        Criterion start = getStartFromForm();
+        Criterion stop = getStopFromForm();
+        ConditionalBufferedInput cbi = new ConditionalBufferedInput(w.getInputManager().getInputNames()[i],i, s, start, stop, increment);
+        return cbi.getNames();
+    }
 }

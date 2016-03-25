@@ -8,6 +8,7 @@ package wekiinputhelper.gui;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import wekiinputhelper.Modifiers.AverageWindowOperation;
@@ -38,7 +39,8 @@ import wekiinputhelper.WekiInputHelper;
  *
  * @author rebecca
  */
-public class ModifierConfigRow extends InputModifierBuilderPanel {
+public class ModifierConfigRow extends javax.swing.JPanel {
+
     private final WekiInputHelper w;
     /**
      * Creates new form ModifierConfigRow
@@ -54,27 +56,54 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
     public static int MAX_FIRST_INDEX = 8;
     public static int MIN_SECOND_INDEX = 9;
     public static int MAX_SECOND_INDEX = 10;
-    public static int BUFFERED_CONDITION_INDEX= 11;
+    public static int BUFFERED_CONDITION_INDEX = 11;
     public static int EXPRESSION_INDEX = 12;
     private static final Logger logger = Logger.getLogger(ModifierConfigRow.class.getName());
-    
+
     public ModifierConfigRow() {
         initComponents();
-         w = null;
+        w = null;
     }
-    
+
     public ModifierConfigRow(WekiInputHelper w) {
         initComponents();
         this.w = w;
         chooseFirstCard();
     }
-    
+
     public ModifierConfigRow(WekiInputHelper w, ModifiedInput o) {
         initComponents();
         this.w = w;
         initFromExisting(o);
     }
     
+    private int dimensionality = 0;
+
+    public static final String PROP_DIMENSIONALITY = "dimensionality";
+
+    /**
+     * Get the value of dimensionality
+     *
+     * @return the value of dimensionality
+     */
+    public int getDimensionality() {
+        return dimensionality;
+    }
+
+    /**
+     * Set the value of dimensionality
+     *
+     * @param dimensionality new value of dimensionality
+     */
+    private void setDimensionality(int dimensionality) {
+        int oldDimensionality = this.dimensionality;
+        this.dimensionality = dimensionality;
+        propertyChangeSupport.firePropertyChange(PROP_DIMENSIONALITY, oldDimensionality, dimensionality);
+    }
+
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+
     private void initFromExisting(ModifiedInput o) {
 
         if (o instanceof BufferedInput) {
@@ -84,11 +113,11 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         } else if (o instanceof SecondOrderDifference) {
             comboModifierType.setSelectedIndex(SECOND_ORDER_INDEX);
         } else if (o instanceof ConditionalBufferedInput) {
-                comboModifierType.setSelectedIndex(BUFFERED_CONDITION_INDEX);
-        }  else if (o instanceof ExpressionInput) {
-                comboModifierType.setSelectedIndex(EXPRESSION_INDEX);
+            comboModifierType.setSelectedIndex(BUFFERED_CONDITION_INDEX);
+        } else if (o instanceof ExpressionInput) {
+            comboModifierType.setSelectedIndex(EXPRESSION_INDEX);
         } else if (o instanceof WindowedOperation) {
-            Operation op = ((WindowedOperation)o).getOp();
+            Operation op = ((WindowedOperation) o).getOp();
             if (op instanceof AverageWindowOperation) {
                 comboModifierType.setSelectedIndex(AVERAGE_INDEX);
             } else if (op instanceof StdDevWindowOperation) {
@@ -103,7 +132,7 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
                 comboModifierType.setSelectedIndex(MAX_FIRST_INDEX);
             } else if (op instanceof Min2ndWindowOperation) {
                 comboModifierType.setSelectedIndex(MIN_SECOND_INDEX);
-            }else if (op instanceof Max2ndWindowOperation) {
+            } else if (op instanceof Max2ndWindowOperation) {
                 comboModifierType.setSelectedIndex(MAX_SECOND_INDEX);
             } else {
                 logger.log(Level.WARNING, "Unknown op type {0}", op.shortName());
@@ -119,9 +148,9 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         //TODO: Improve this.
         BufferedInputEditor p = new BufferedInputEditor(w);
         setInnerPanel(p);
-        
+
     }
-    
+
     private void setInnerPanel(InputModifierBuilderPanel b) {
         panelInputEditor.removeAll();
         panelInputEditor.add(b);
@@ -131,18 +160,18 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(InputModifierBuilderPanel.PROP_DIMENSIONALITY)) {
-                    updateDim((Integer)evt.getNewValue());
+                    updateDim((Integer) evt.getNewValue());
                 }
             }
         });
         panelInputEditor.repaint();
         panelInputEditor.revalidate();
     }
-    
+
     private void updateDim(int newDim) {
         setDimensionality(newDim);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -193,7 +222,7 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
         //TODO: Update
        /* FirstOrderDifferenceEditor p = new FirstOrderDifferenceEditor(w);
          *
-        */
+         */
         InputModifierBuilderPanel p;
         int i = comboModifierType.getSelectedIndex();
         if (i == BUFFERED_INDEX) {
@@ -224,15 +253,15 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
             p = new ExpressionInputEditor(w);
         } else {
             p = new WindowedOperationEditor(w, new AverageWindowOperation());
-            logger.log(Level.WARNING, "Unknown modifier index "+ i);
+            logger.log(Level.WARNING, "Unknown modifier index " + i);
         }
         setInnerPanel(p);
         /*panelInputEditor.removeAll();
-        panelInputEditor.add(p);
-        panelInputEditor.repaint();
-        panelInputEditor.revalidate();
-        this.repaint(); */
-        
+         panelInputEditor.add(p);
+         panelInputEditor.repaint();
+         panelInputEditor.revalidate();
+         this.repaint(); */
+
     }//GEN-LAST:event_comboModifierTypeActionPerformed
 
 
@@ -242,23 +271,57 @@ public class ModifierConfigRow extends InputModifierBuilderPanel {
     private javax.swing.JPanel panelInputEditor;
     // End of variables declaration//GEN-END:variables
 
-    @Override
+  //  @Override
     public boolean validateForm() {
         Component p = panelInputEditor.getComponent(0);
         if (p == null) {
             return false;
         } else if (p instanceof InputModifierBuilderPanel) {
-            return ((InputModifierBuilderPanel)p).validateForm();
-        } else return false;
+            return ((InputModifierBuilderPanel) p).validateForm();
+        } else {
+            return false;
+        }
     }
 
-    @Override
+  //  @Override
     public ModifiedInput getModifiedInput() {
         Component p = panelInputEditor.getComponent(0);
         if (p == null) {
             return null;
         } else if (p instanceof InputModifierBuilderPanel) {
-            return ((InputModifierBuilderPanel)p).getModifiedInput();
-        } else return null;
+            return ((InputModifierBuilderPanel) p).getModifiedInput();
+        } else {
+            return null;
+        }
+    }
+    
+    /*public int getDimensionality() {
+         Component p = panelInputEditor.getComponent(0);
+        if (p == null) {
+            return null;
+        } else if (p instanceof InputModifierBuilderPanel) {
+            return ((InputModifierBuilderPanel) p).getModifiedInput();
+        } else {
+            return null;
+        }
+    } */
+
+//    @Override
+    public String[] getNames() {
+        Component p = panelInputEditor.getComponent(0);
+        if (p == null) {
+            return new String[0];
+        } else if (p instanceof InputModifierBuilderPanel) {
+            return ((InputModifierBuilderPanel) p).getNames();
+        } else {
+            return new String[0];
+        }
+    }
+
+    void incrementName() {
+    Component p = panelInputEditor.getComponent(0);
+       if (p instanceof InputModifierBuilderPanel) {
+            ((InputModifierBuilderPanel) p).incrementName();
+        } 
     }
 }

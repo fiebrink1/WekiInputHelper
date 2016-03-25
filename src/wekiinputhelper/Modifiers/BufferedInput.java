@@ -27,11 +27,18 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
         return index;
     }
     
-    public BufferedInput(String originalName, int index, int bufferSize) {
+    public BufferedInput(String originalName, int index, int bufferSize, int increment) {
         names = new String[bufferSize];
-        names[bufferSize-1] = originalName + "[n]";
-        for (int i = 2; i <= bufferSize; i++) {
-            names[bufferSize - i] = originalName + "[n-" + (i-1) + "]";
+        if (increment == 1) {
+            names[bufferSize-1] = originalName + "[n]";
+            for (int i = 2; i <= bufferSize; i++) {
+                names[bufferSize - i] = originalName + "[n-" + (i-1) + "]";
+            }
+        } else {
+            names[bufferSize-1] = originalName + "[n](" + increment + ")";
+            for (int i = 2; i <= bufferSize; i++) {
+                names[bufferSize - i] = originalName + "[n-" + (i-1) + "](" + increment + ")";
+            }
         }
         
         this.index = index;
@@ -68,7 +75,7 @@ public class BufferedInput implements ModifiedInputVector, UsesOnlyOriginalInput
     }
     
     public static void main(String[] args) {
-        BufferedInput bi = new BufferedInput("feat1", 0, 3);
+        BufferedInput bi = new BufferedInput("feat1", 0, 3, 1);
         String[] s = bi.getNames();
         for (int i= 0; i < s.length; i++) {
             System.out.print(s[i] + ",");

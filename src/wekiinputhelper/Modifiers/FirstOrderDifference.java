@@ -20,17 +20,20 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     private transient double x_n = 0;
     private transient double y_n = 0;
     
-    public static String makeName(String originalName) {
-        return originalName + "_1stOrderDiff";
+    public static String makeName(String originalName, int increment) {
+        if (increment == 0) {
+            return originalName + "_1stOrderDiff";
+        } else {
+            return originalName + "_1stOrderDiff(" + increment + ")";
+        }
     }
 
     public int getIndex() {
         return index;
     }
     
-    
-    public FirstOrderDifference(String originalName, int index) {
-        this.name = makeName(originalName);
+    public FirstOrderDifference(String originalName, int index, int increment) {
+        this.name = makeName(originalName, increment);
         this.index = index;
     }
     
@@ -60,5 +63,4 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
         return new FirstOrderDifferenceEditor(this, w);
     }
-    
 }

@@ -32,8 +32,13 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
     private final CircularBuffer[] buffersForInputs;
 
     //Requires isValid
-    public ExpressionInput(Expr expr, String name, String expressionString, WekiInputHelper w) {
-        this.name = name;
+    public ExpressionInput(Expr expr, String name, String expressionString, WekiInputHelper w, int increment) {
+        if (increment == 1) {
+            this.name = name;
+        } else {
+            this.name = name + "(" + increment + ")";
+        }
+        
         this.expression = expr;
         buffersForInputs = new CircularBuffer[w.getInputManager().getNumInputs()];
         HashSet<String> vars = expr.getVariablesUsed();
@@ -244,5 +249,4 @@ public class ExpressionInput implements ModifiedInputSingle, UsesOnlyOriginalInp
     public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
         return new ExpressionInputEditor(w, this);
     }
-
 }

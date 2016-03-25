@@ -18,6 +18,7 @@ import wekiinputhelper.gui.InputModifierBuilderPanel;
 public class WindowedOperationEditor extends InputModifierBuilderPanel {
     private final WekiInputHelper w;
     private final Operation op;
+   // private int nameIncrement = 1;
     
     /**
      * Creates new form FirstOrderDifferenceEditor
@@ -158,7 +159,7 @@ public class WindowedOperationEditor extends InputModifierBuilderPanel {
             int i= Integer.parseInt(textWinSize.getText());
             if (i > 0) {
                 String originalName = w.getInputManager().getInputNames()[comboFeatureNames.getSelectedIndex()];
-                String newName = WindowedOperation.makeName(originalName, op.shortName(), i);
+                String newName = WindowedOperation.makeName(originalName, op.shortName(), i, increment);
                 labelName.setText("Name: " + newName);
             } else {
                 labelName.setText("Name: ");
@@ -213,6 +214,16 @@ public class WindowedOperationEditor extends InputModifierBuilderPanel {
         int i = comboFeatureNames.getSelectedIndex();
         int s = Integer.parseInt(textWinSize.getText());
         String originalName = w.getInputManager().getInputNames()[i];
-        return new WindowedOperation(originalName, op, i, s);
+        return new WindowedOperation(originalName, op, i, s, increment);
+    }
+
+    @Override
+    public String[] getNames() {
+       int i = comboFeatureNames.getSelectedIndex();
+       int s = Integer.parseInt(textWinSize.getText());
+       String originalName = w.getInputManager().getInputNames()[i];
+       WindowedOperation w = new WindowedOperation(originalName, op, i, s, increment);
+       String[] ss = {w.getName()};
+       return ss;
     }
 }

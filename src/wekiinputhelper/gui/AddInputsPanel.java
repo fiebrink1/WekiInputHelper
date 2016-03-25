@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -472,11 +473,29 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             }
         }
         String[] names = getAllOutputNames();
-        if (!Util.checkAllUniqueWithErrorPane(names, "name")) {
-            return false;
-        }
-        return true;
+        return Util.checkAllUniqueWithErrorPane(names, "Names");
     }
+    
+    /*private String[] modifyNames(String[] names) {
+        String[] newNames = new String[names.length];
+        HashSet<String> usedNames = new HashSet<>();
+        for (int i= 0; i < names.length; i++) {
+            if (! usedNames.contains(names[i])) {
+                usedNames.add(names[i]);
+                newNames[i] = names[i];
+            } else {
+                int j = 2;
+                String tempName = names[i] + "_" + j;
+                while (usedNames.contains(tempName)) {
+                    j++;
+                    tempName = names[i] + "_" + j;
+                }
+                usedNames.add(tempName);
+                newNames[i] = tempName; 
+            }
+        }
+        return newNames; 
+    } */
 
     private int computeNumTotalOutputs() {
         int s = 0;
@@ -682,21 +701,40 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private String[] getAllOutputNames() {
         String[] allNames = new String[computeNumTotalOutputs()];
         int currentIndex = 0;
+        
+        HashSet<String> usedNames = new HashSet<>();
+        
         if (checkIncludeOriginals.isSelected()) {
             String[] inputNames = w.getInputManager().getInputNames();
             System.arraycopy(inputNames, 0, allNames, 0, inputNames.length);
             currentIndex += inputNames.length;
+            
+            for (int i = 0; i < inputNames.length; i++) {
+                usedNames.add(inputNames[i]);
+            }
         }
         for (int i = 0; i < outputPanels.size(); i++) {
             ModifierConfigRow r = outputPanels.get(i);
-            ModifiedInput in = r.getModifiedInput();
-            if (in instanceof ModifiedInputSingle) {
-                allNames[currentIndex] = ((ModifiedInputSingle) in).getName();
-                currentIndex++;
+            String[] names = r.getNames();
+            
+            //ModifiedInput in = r.getModifiedInput();
+            if (names.length == 1) {
+                String nextName = names[0];
+                while (usedNames.contains(nextName)) {
+                    r.incrementName();
+                    nextName = r.getNames()[0];
+                }
+                allNames[currentIndex++] = nextName;
+                usedNames.add(nextName);
             } else {
-                String[] theseNames = ((ModifiedInputVector) in).getNames();
-                System.arraycopy(theseNames, 0, allNames, currentIndex, theseNames.length);
-                currentIndex += theseNames.length;
+                while (hasOverlap(names, usedNames)) {
+                    r.incrementName();
+                    names = r.getNames();
+                }
+                for (int k= 0; k < names.length; k++) {
+                    usedNames.add(names[k]);
+                    allNames[currentIndex++] = names[k]; 
+                }
             }
         }
         return allNames;
@@ -711,7 +749,6 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             return false;
         }
         configureOscSenderFromForm();
-
         configureOutputManagerFromForm();
         return true;
     }
@@ -755,5 +792,14 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         OSCModifiedInputGroup g = new OSCModifiedInputGroup(newInputs);
         w.getOSCSender().setSendInputs(includeOriginals);
         w.getOutputManager().setOutputGroup(g);
+    }
+
+    private boolean hasOverlap(String[] nextNames, HashSet<String> usedNames) {
+        for (int i = 0; i < nextNames.length; i++) {
+            if (usedNames.contains(nextNames[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 }

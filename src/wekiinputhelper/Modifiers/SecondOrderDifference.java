@@ -21,16 +21,20 @@ public class SecondOrderDifference implements ModifiedInputSingle, UsesOnlyOrigi
     private transient double x_n = 0;
     private transient double y_n = 0;
     
-    public static String makeName(String originalName) {
-        return originalName + "_2ndOrderDiff";
+    public static String makeName(String originalName, int increment) {
+        if (increment == 1) {
+            return originalName + "_2ndOrderDiff";
+        } else {
+            return originalName + "_2ndOrderDiff(" + increment + ")";
+        }
     }
 
     public int getIndex() {
         return index;
     }
     
-    public SecondOrderDifference(String originalName, int index) {
-        this.name = makeName(originalName);
+    public SecondOrderDifference(String originalName, int index, int increment) {
+        this.name = makeName(originalName, increment);
         this.index = index;
     }
     
@@ -61,5 +65,4 @@ public class SecondOrderDifference implements ModifiedInputSingle, UsesOnlyOrigi
     public InputModifierBuilderPanel getBuildPanel(WekiInputHelper w) {
         return new SecondOrderDifferenceEditor(this, w);
     }
-    
 }

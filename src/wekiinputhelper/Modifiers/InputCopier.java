@@ -18,8 +18,12 @@ public class InputCopier implements ModifiedInputSingle, UsesOnlyOriginalInputs{
     private final int index;
     private transient double value = 0;
     
-    public InputCopier(String originalName, int index) {
-        this.name = originalName;
+    public InputCopier(String originalName, int index, int increment) {
+        if (increment == 1) {
+            this.name = originalName;
+        } else {
+            this.name = originalName + "(" + increment + ")";
+        }
         this.index = index;
     }
     

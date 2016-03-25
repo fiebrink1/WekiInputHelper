@@ -577,7 +577,7 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
             String name = textName.getText();
             String e = textExpression.getText();
             Expr exp = Parser.parse(e);
-            return new ExpressionInput(exp, name, e, w);
+            return new ExpressionInput(exp, name, e, w, increment);
         } catch (SyntaxException ex) {
             Logger.getLogger(ExpressionInputEditor.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -596,4 +596,20 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         frameNames.repaint();;
     }
 
+    @Override
+    //TODO: Pop up message in GUI to encourage user re-naming of expression
+    public String[] getNames() {
+        try {
+            String name = textName.getText();
+            String e = textExpression.getText();
+            Expr exp = Parser.parse(e);
+            ExpressionInput expr = new ExpressionInput(exp, name, e, w, increment);
+            String[] ss = new String[1];
+            ss[0] = expr.getName();
+            return ss;
+        } catch (SyntaxException ex) {
+            Logger.getLogger(ExpressionInputEditor.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }

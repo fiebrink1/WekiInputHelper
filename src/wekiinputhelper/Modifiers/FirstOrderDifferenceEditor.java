@@ -129,7 +129,7 @@ public class FirstOrderDifferenceEditor extends InputModifierBuilderPanel {
     }//GEN-LAST:event_comboFeatureNamesActionPerformed
 
     private void updateName() {
-        labelName.setText("Name: " + FirstOrderDifference.makeName(w.getInputManager().getInputNames()[comboFeatureNames.getSelectedIndex()]));
+        labelName.setText("Name: " + FirstOrderDifference.makeName(w.getInputManager().getInputNames()[comboFeatureNames.getSelectedIndex()], increment));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -147,6 +147,15 @@ public class FirstOrderDifferenceEditor extends InputModifierBuilderPanel {
     @Override
     public ModifiedInput getModifiedInput() {
         int i = comboFeatureNames.getSelectedIndex();
-        return new FirstOrderDifference(w.getInputManager().getInputNames()[i], i);
+        return new FirstOrderDifference(w.getInputManager().getInputNames()[i], i, increment);
+    }
+
+    @Override
+    public String[] getNames() {
+        int i = comboFeatureNames.getSelectedIndex();
+        FirstOrderDifference fod = new FirstOrderDifference(w.getInputManager().getInputNames()[i], i, increment);
+        String[] names = new String[0];
+        names[0] = fod.getName();
+        return names;
     }
 }

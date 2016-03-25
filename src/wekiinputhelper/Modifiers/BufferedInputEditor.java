@@ -246,6 +246,14 @@ public class BufferedInputEditor extends InputModifierBuilderPanel {
     public ModifiedInput getModifiedInput() {
         int i = comboFeatureNames.getSelectedIndex();
         int s = Integer.parseInt(textWinSize.getText());
-        return new BufferedInput(w.getInputManager().getInputNames()[i],i,  s);
+        return new BufferedInput(w.getInputManager().getInputNames()[i],i, s, increment);
+    }
+
+    @Override
+    public String[] getNames() {
+        int i = comboFeatureNames.getSelectedIndex();
+        int s = Integer.parseInt(textWinSize.getText());
+        BufferedInput bi = new BufferedInput(w.getInputManager().getInputNames()[i],i, s, increment);
+        return bi.getNames();
     }
 }
