@@ -467,7 +467,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
             ModifierConfigRow r = outputPanels.get(i);
             boolean b = r.validateForm();
             if (!b) {
-                Util.showPrettyErrorPane(r, "Input modifier row " + (i + 1) + " is not configured");
+                Util.showPrettyErrorPane(r, "Error in new input #" + (i + 1));
                 return false;
             }
         }

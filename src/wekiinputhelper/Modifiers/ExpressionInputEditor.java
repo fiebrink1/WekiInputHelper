@@ -20,9 +20,10 @@ import wekiinputhelper.gui.InputModifierBuilderPanel;
  * @author rebecca
  */
 public class ExpressionInputEditor extends InputModifierBuilderPanel {
+
     private final WekiInputHelper w;
     //private static final HashSet<String> usedNames = new HashSet<String>();
-    
+
     /**
      * Creates new form FirstOrderDifferenceEditor
      */
@@ -30,18 +31,18 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         initComponents();
         w = null;
     }
-    
+
     @Override
     public int getDimensionality() {
         return 1;
     }
-    
+
     public ExpressionInputEditor(WekiInputHelper w) {
         initComponents();
         this.w = w;
         initForWeki(w);
     }
-    
+
     public ExpressionInputEditor(WekiInputHelper w, ExpressionInput in) {
         initComponents();
         this.w = w;
@@ -425,7 +426,8 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         String e = textExpression.getText();
         try {
             Expr exp = Parser.parse(e);
-            boolean check =  (ExpressionInput.isValid(exp, w)); //shows error pane
+
+            boolean check = (ExpressionInput.isValid(exp, w)); //shows error pane
             if (check) {
                 if (showConfirm) {
                     Util.showPrettyInfoPane(this, "Expression has no errors", "Success");
@@ -437,14 +439,17 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         } catch (SyntaxException ex) {
             Util.showPrettyErrorPane(this, "Error in expression: " + ex.explain());
             return false;
+        } catch (Error er) {
+            Util.showPrettyErrorPane(this, "Error in expression: " + er.getMessage());
+            return false;
         }
     }
-    
-    
+
+
     private void textNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textNameKeyTyped
         char enter = evt.getKeyChar();
-        if (!(Character.isDigit(enter)) && !(Character.isAlphabetic(enter)) && 
-                !(enter == '_')) {
+        if (!(Character.isDigit(enter)) && !(Character.isAlphabetic(enter))
+                && !(enter == '_')) {
             evt.consume();
         }
     }//GEN-LAST:event_textNameKeyTyped
@@ -510,7 +515,7 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         if (!Util.checkNotBlank(textName, "Expression name", this)) {
             return false;
         }
-        if (!Util.checkNotBlank(textExpression, "Expression name", this)) {
+        if (!Util.checkNotBlank(textExpression, "Expression equation", this)) {
             return false;
         }
         return checkExpression(false);
@@ -536,7 +541,7 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
             JLabel l = new JLabel(names[i]);
             namesParent.add(l);
         }
-        
+
         scrollNames.revalidate();
         frameNames.repaint();;
     }

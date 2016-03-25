@@ -118,10 +118,6 @@ public class RunningManager {
         setAbleToRun(true);
     }
 
-    /*private double[] computeValues(double[] inputs) {
-     //TODO: Compute XXX
-     return new double[0];
-     } */
     public void newInputsReceived(double[] inputs) {
         if (runningState == RunningState.RUNNING) {
             double[] d = w.getOutputManager().getOutputGroup().computeAndGetValuesForNewInputs(inputs);

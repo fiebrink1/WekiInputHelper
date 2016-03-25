@@ -28,7 +28,7 @@ import wekiinputhelper.util.Util;
  * @author rebecca
  */
 public class WekiInputHelper {
-    public static final String version = "v1.0.0";
+    public static final String version = "v1.0.1";
 
     private final OSCReceiver oscReceiver;
     private final OSCSender oscSender;
