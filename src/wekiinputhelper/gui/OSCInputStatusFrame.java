@@ -210,6 +210,8 @@ public class OSCInputStatusFrame extends javax.swing.JFrame {
 
             w.getOSCReceiver().setReceivePort(port);
             w.getOSCReceiver().startListening();
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)); //Necessary to be handled correctly by main gui!
+
             this.dispose();
         }
     }//GEN-LAST:event_buttonOscListenActionPerformed

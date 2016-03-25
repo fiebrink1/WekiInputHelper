@@ -612,6 +612,7 @@ public class SendAndMonitorPanel extends javax.swing.JPanel {
 
     private void indicatorOscInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_indicatorOscInMouseClicked
         // w.getMainHelperGUI().showOSCReceiverWindow();
+         w.getMainHelperGUI().showOSCReceiverWindow();
     }//GEN-LAST:event_indicatorOscInMouseClicked
 
     private void indicatorOscOut1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_indicatorOscOut1MouseClicked
