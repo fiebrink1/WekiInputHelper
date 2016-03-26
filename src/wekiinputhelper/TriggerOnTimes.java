@@ -21,8 +21,8 @@ public class TriggerOnTimes extends InputTriggerer {
     private final int numMs;
    // private final Criterion c;
     private transient boolean isRunning = false;
-    private transient double[] lastInputs;
-    private transient double[] lastOutputs;
+    private static transient double[] lastInputs;
+    private static transient double[] lastOutputs;
 
     private final transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private transient ScheduledFuture scheduledFuture;

@@ -600,7 +600,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
                 comboInput.setSelectedIndex(i);
             } else {
                 int tmp = w.getInputManager().getNumInputs() + i;
-                System.out.println("Tmp = " + tmp);
+               // System.out.println("Tmp = " + tmp);
                 comboInput.setSelectedIndex(w.getInputManager().getNumInputs() + i);
             }
             if (c.getType() != CriterionType.CHANGE) {

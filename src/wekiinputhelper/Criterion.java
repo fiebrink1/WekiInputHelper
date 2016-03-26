@@ -127,6 +127,9 @@ public class Criterion {
         } else {
             vals = outputs;
         }
+        if (vals == null) {
+            return false;
+        }
         
         if (type == LESS_THAN) {
             return (vals[index] < val);
