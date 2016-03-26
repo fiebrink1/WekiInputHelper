@@ -41,6 +41,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
     private final ArrayList<UpDownDeleteGUI> upDownDeletePanels = new ArrayList<>();
     private final ArrayList<JPanel> outputParentPanels = new ArrayList<>();
     private WekiInputHelper w;
+    private static int expressionNum = 1;
     private static final Logger logger = Logger.getLogger(AddInputsPanel.class.getName());
 
     /**
@@ -839,4 +840,9 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
         }
         return false;
     }
+    
+    public static String getNextExpressionName() {
+        return "expression" + expressionNum++;
+    }
+    
 }

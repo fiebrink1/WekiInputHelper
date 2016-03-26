@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import wekiinputhelper.util.Util;
 import wekiinputhelper.WekiInputHelper;
+import wekiinputhelper.gui.AddInputsPanel;
 import wekiinputhelper.gui.InputModifierBuilderPanel;
 
 /**
@@ -593,7 +594,8 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
         }
 
         scrollNames.revalidate();
-        frameNames.repaint();;
+        frameNames.repaint();
+        textName.setText(AddInputsPanel.getNextExpressionName());
     }
 
     @Override
