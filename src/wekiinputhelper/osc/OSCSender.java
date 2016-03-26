@@ -280,4 +280,8 @@ public class OSCSender {
         });
     }
 
+    public boolean getSendInputs() {
+        return sendInputs;
+    }
+
 }
