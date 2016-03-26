@@ -7,6 +7,8 @@ package wekiinputhelper.Modifiers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wekiinputhelper.Criterion;
 import wekiinputhelper.Criterion.CriterionType;
 import wekiinputhelper.UsesOnlyOriginalInputs;
@@ -27,7 +29,9 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
     private final Criterion stopCriterion;
     private transient double[] returnValues;
     private transient boolean isRecording = false;
-
+    private final int MAX_BUFFER_LEN = 5000; //maximum size to keep in buffer.
+    private static final Logger logger = Logger.getLogger(ConditionalBufferedInput.class.getName());
+    
     public Criterion getStartCriterion() {
         return startCriterion;
     }
@@ -42,16 +46,17 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
 
     public ConditionalBufferedInput(String originalName, int index, int bufferSize, Criterion c1, Criterion c2, int increment) {
         names = new String[bufferSize];
-
+        String baseName = originalName + "_buf" + bufferSize;
+        
         if (increment == 1) {
-            names[bufferSize - 1] = originalName + "[n]";
+            names[bufferSize - 1] = baseName + "[n]";
             for (int i = 2; i <= bufferSize; i++) {
-                names[bufferSize - i] = originalName + "[n-" + (i - 1) + "]";
+                names[bufferSize - i] = baseName + "[n-" + (i - 1) + "]";
             }
         } else {
-            names[bufferSize - 1] = originalName + "[n](" + increment + ")";
+            names[bufferSize - 1] = baseName + "[n](" + increment + ")";
             for (int i = 2; i <= bufferSize; i++) {
-                names[bufferSize - i] = originalName + "[n-" + (i - 1) + "](" + increment + ")";
+                names[bufferSize - i] = baseName + "[n-" + (i - 1) + "](" + increment + ")";
             }
         }
 
@@ -75,16 +80,20 @@ public class ConditionalBufferedInput implements ModifiedInputVector, UsesOnlyOr
             if (done) {
                 updateOutputBuffer();
                 isRecording = false;
-                System.out.println("Stopped recording for" + inputs[0]);
+                //System.out.println("Stopped recording for" + inputs[0]);
 
             } else {
+                if (history.size() > MAX_BUFFER_LEN) {
+                    history.clear();
+                    logger.log(Level.SEVERE, "Maximum buffer length of {0} exceeded; clearing buffer", MAX_BUFFER_LEN);
+                }
                 history.add(inputs[index]);
             }
         } else {
             isRecording = checkIfStart(inputs);
             if (isRecording) {
                 history.add(inputs[index]);
-                System.out.println("Started recording for" + inputs[0]);
+                checkIfStop(inputs); //Hack: Necessary for updating knowledge of last value for trigger that is a change trigger
             }
         }
     }

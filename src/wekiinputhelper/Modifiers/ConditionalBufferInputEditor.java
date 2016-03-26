@@ -63,10 +63,14 @@ public class ConditionalBufferInputEditor extends InputModifierBuilderPanel {
         comboInput2.setSelectedIndex(stop.getInputIndex());
         
         comboCriterion1.setSelectedIndex(Criterion.getIndexForDescriptor(start.getType()));
+        
         comboCriterion2.setSelectedIndex(Criterion.getIndexForDescriptor(stop.getType()));
         
         textValue1.setText(Double.toString(start.getCriterionValue()));
         textValue2.setText(Double.toString(stop.getCriterionValue()));
+        textValue1.setVisible(comboCriterion1.getSelectedIndex() != Criterion.getIndexForDescriptor(Criterion.CriterionType.CHANGE));
+        textValue2.setVisible(comboCriterion2.getSelectedIndex() != Criterion.getIndexForDescriptor(Criterion.CriterionType.CHANGE));
+
         
         setDimensionality(in.getSize());
         updateNames();
@@ -294,7 +298,7 @@ public class ConditionalBufferInputEditor extends InputModifierBuilderPanel {
     }//GEN-LAST:event_textBufferSizeActionPerformed
 
     private void comboCriterion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCriterion1ActionPerformed
-
+        textValue1.setVisible(comboCriterion1.getSelectedIndex() != Criterion.getIndexForDescriptor(Criterion.CriterionType.CHANGE));
     }//GEN-LAST:event_comboCriterion1ActionPerformed
 
     private void textValue1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textValue1KeyTyped
@@ -305,7 +309,8 @@ public class ConditionalBufferInputEditor extends InputModifierBuilderPanel {
     }//GEN-LAST:event_textValue1KeyTyped
 
     private void comboCriterion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCriterion2ActionPerformed
-        // TODO add your handling code here:
+        textValue2.setVisible(comboCriterion2.getSelectedIndex() != Criterion.getIndexForDescriptor(Criterion.CriterionType.CHANGE));
+        
     }//GEN-LAST:event_comboCriterion2ActionPerformed
 
     private void textValue2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textValue2KeyTyped

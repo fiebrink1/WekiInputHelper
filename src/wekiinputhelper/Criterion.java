@@ -18,7 +18,7 @@ public class Criterion {
 
     public static enum CriterionType {
 
-        NONE, LESS_THAN, GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, CHANGE
+        NONE, LESS_THAN, GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, CHANGE, NOT_EQUAL
     };
 
     public static enum HowLong {
@@ -38,7 +38,8 @@ public class Criterion {
         "is greater than or equal to",
         "is less than or equal to",
         "is equal to",
-        "changes"
+        "changes",
+        "is not equal to"
     };
     public static CriterionType[] typesForTriggerDescriptors = {
         CriterionType.GREATER_THAN,
@@ -46,7 +47,8 @@ public class Criterion {
         CriterionType.GREATER_OR_EQUAL,
         CriterionType.LESS_OR_EQUAL,
         CriterionType.EQUAL,
-        CriterionType.CHANGE
+        CriterionType.CHANGE,
+        CriterionType.NOT_EQUAL
     };
 
     public static enum AppliesTo {INPUT, OUTPUT};
@@ -138,6 +140,8 @@ public class Criterion {
             return (vals[index] == val);
         } else if (type == CHANGE) {
             return vals[index] != lastValue;
+        } else if (type == NOT_EQUAL) {
+            return (vals[index] != val);
         } else {
             logger.log(Level.WARNING, "No condition found");
             return true;
