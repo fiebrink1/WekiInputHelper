@@ -21,7 +21,7 @@ public class FirstOrderDifference implements ModifiedInputSingle, UsesOnlyOrigin
     private transient double y_n = 0;
     
     public static String makeName(String originalName, int increment) {
-        if (increment == 0) {
+        if (increment == 1) {
             return originalName + "_1stOrderDiff";
         } else {
             return originalName + "_1stOrderDiff(" + increment + ")";

@@ -154,7 +154,7 @@ public class FirstOrderDifferenceEditor extends InputModifierBuilderPanel {
     public String[] getNames() {
         int i = comboFeatureNames.getSelectedIndex();
         FirstOrderDifference fod = new FirstOrderDifference(w.getInputManager().getInputNames()[i], i, increment);
-        String[] names = new String[0];
+        String[] names = new String[1];
         names[0] = fod.getName();
         return names;
     }
