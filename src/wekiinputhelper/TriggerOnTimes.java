@@ -24,7 +24,7 @@ public class TriggerOnTimes extends InputTriggerer {
     private static transient double[] lastInputs;
     private static transient double[] lastOutputs;
 
-    private final transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    private transient ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private transient ScheduledFuture scheduledFuture;
     
     public TriggerOnTimes(WekiInputHelper w, int ms, Criterion c) {
@@ -44,6 +44,7 @@ public class TriggerOnTimes extends InputTriggerer {
     }
 
     @Override
+    //This isn't getting triggered when second panel skipped...
     protected void runningStateChanged(RunningManager.RunningState newState) {
         if (newState == RunningManager.RunningState.RUNNING) {
             startTimer();
@@ -73,6 +74,8 @@ public class TriggerOnTimes extends InputTriggerer {
     
     private Object readResolve() {
         listenerList = new LinkedList<>();
+        scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        isRunning = false;
         return this;
     }
 }

@@ -68,6 +68,7 @@ public class WekiInputHelperFileData {
         w.getOutputManager().setOutputGroup(outputs);
         w.getOSCSender().setOscMessage(sendOscMessage);
         w.setInputTriggerer(inputTriggerer);
+        inputTriggerer.attachRunningListener(w);
         w.getOSCSender().setSendInputs(isSendingOriginalInputs);
 
         try {
