@@ -172,6 +172,7 @@ public class AddInputsPanel extends javax.swing.JPanel implements UpDownDeleteNo
 
         panelTop.setBackground(new java.awt.Color(255, 255, 255));
 
+        checkIncludeOriginals.setBackground(new java.awt.Color(255, 255, 255));
         checkIncludeOriginals.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         checkIncludeOriginals.setSelected(true);
         checkIncludeOriginals.setText("Include original inputs in sent message");

@@ -175,10 +175,12 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel2.setText("Send values:");
 
+        radioInputArrives.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupSendWhen.add(radioInputArrives);
         radioInputArrives.setSelected(true);
         radioInputArrives.setText("When an input message arrives");
 
+        radioConstantRateMessages.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupSendWhen.add(radioConstantRateMessages);
         radioConstantRateMessages.setText("At a constant rate of once per every ");
         radioConstantRateMessages.addActionListener(new java.awt.event.ActionListener() {
@@ -187,6 +189,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             }
         });
 
+        radioConstantRateMS.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupSendWhen.add(radioConstantRateMS);
         radioConstantRateMS.setText("At a constant rate of ");
 
@@ -263,6 +266,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
 
         panelCriterionValueCardParent.add(jPanel3, "cardBlank");
 
+        radioSendOnce.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupTriggerStop.add(radioSendOnce);
         radioSendOnce.setSelected(true);
         radioSendOnce.setText("Send just once when this condition is met");
@@ -272,6 +276,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
             }
         });
 
+        checkConstraint.setBackground(new java.awt.Color(255, 255, 255));
         checkConstraint.setText("Optionally, also impose the following constraint:");
         checkConstraint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,6 +286,7 @@ public class ConfigureTriggerPanel extends javax.swing.JPanel {
 
         jLabel5.setText("Only send when");
 
+        radioKeepSending.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroupTriggerStop.add(radioKeepSending);
         radioKeepSending.setText("Keep sending as long as this condition is true");
         radioKeepSending.addActionListener(new java.awt.event.ActionListener() {
