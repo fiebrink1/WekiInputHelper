@@ -208,11 +208,10 @@ public final class WekiInputHelperRunner {
 
     }
 
+    //Only call this if we're on mac
     public void registerForMacOSXEvents() {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Wekinator Input Helper");
-        //TODO: Do we want to use flag for this to protect Windows/Linux?
-        //if (MAC_OS_X) {
         try {
             // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
             // use as delegates for various com.apple.eawt.ApplicationListener methods
@@ -224,7 +223,6 @@ public final class WekiInputHelperRunner {
             logger.log(Level.WARNING, "Error while loading OSXAdapter: {0}", e.getMessage());
             e.printStackTrace();
         }
-        //}
     }
 
     // General info dialog; fed to the OSXAdapter as the method to call when

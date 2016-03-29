@@ -49,7 +49,7 @@ public class About extends javax.swing.JFrame {
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("<html><div align=\"center\">Created by Rebecca Fiebrink, 2015<br><a href=\"http://www.wekinator.org\">www.wekinator.org</a><br><br>Instructions: <a href=\"www.wekinator.org/instructions.html\">www.wekinator.org/instructions.html</a><br>Help: post to the wekinator-users list at <a href=\"https://groups.google.com/forum/#!forum/wekinator-users\">https://groups.google.com/forum/#!forum/wekinator-users</a></div></html>");
+        jLabel1.setText("<html><div align=\"center\">\nCreated by Rebecca Fiebrink, 2015<br><a href=\"http://www.wekinator.org\">www.wekinator.org</a><br><br>Instructions: <a href=\"www.wekinator.org/instructions.html\">www.wekinator.org/instructions.html</a>\n<br>Help: post to the forum at <a href = \"http://www.wekinator.org/forums/forum/help/\">http://www.wekinator.org/forums/forum/help/</a></div></html>");
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("<html><div align=\"center\"><b><h2>Wekinator Input Helper</h2></b></div></html>");

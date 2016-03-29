@@ -599,7 +599,6 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
     }
 
     @Override
-    //TODO: Pop up message in GUI to encourage user re-naming of expression
     public String[] getNames() {
         try {
             String name = textName.getText();
