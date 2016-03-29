@@ -24,3 +24,11 @@ It allows you to apply processing operations such as:
 5.  Once you're ready to send data, go to the "Send and monitor" pane. WekiInputHelper *will not send data unless you are in this pane.*
 
 6.  Enjoy!
+
+## Building from source
+This project has the following dependencies:
+* For math expression parsing: https://github.com/fiebrink1/expr
+* For OSC communication: http://www.illposed.com/software/javaosc.html
+* For XML file support: http://x-stream.github.io/, http://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar, http://www.extreme.indiana.edu/dist/java-repository/xpp3/jars/xpp3_min-1.1.4c.jar
+
+
