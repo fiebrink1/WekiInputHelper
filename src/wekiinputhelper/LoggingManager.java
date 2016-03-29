@@ -60,7 +60,7 @@ public class LoggingManager {
             }
         } else {
             //TODO: test on linux
-            return "%t" + File.separator + "wekihelper_main.log";
+           return System.getProperty("java.io.tmpdir") + File.separator + "wekinator_main.log";
         }
     }
     
@@ -79,7 +79,7 @@ public class LoggingManager {
             }
         } else {
             //TODO: test on linux
-            return "%t" + File.separator + "wekihelper%g.log"; //temp dir / wekinatorN.log
+            return System.getProperty("java.io.tmpdir") + File.separator + "wekihelper%g.log"; //temp dir / wekinatorN.log
         }
     }
     
