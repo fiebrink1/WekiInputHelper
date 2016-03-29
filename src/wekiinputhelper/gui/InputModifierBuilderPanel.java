@@ -57,9 +57,7 @@ public abstract class InputModifierBuilderPanel extends JPanel {
      * @param listener
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        
-        //TODO THIS IS WHA"TS CAUSING PROBLEMS
-       if (propertyChangeSupport != null) {
+        if (propertyChangeSupport != null) {
             propertyChangeSupport.addPropertyChangeListener(listener);
         }
     }
