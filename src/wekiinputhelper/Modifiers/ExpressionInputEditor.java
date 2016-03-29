@@ -118,9 +118,7 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
 
         infoFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         infoFrame.setTitle("Example expressions");
-        infoFrame.setMaximumSize(new java.awt.Dimension(473, 340));
-        infoFrame.setMinimumSize(new java.awt.Dimension(473, 340));
-        infoFrame.setPreferredSize(new java.awt.Dimension(473, 340));
+        infoFrame.setMinimumSize(new java.awt.Dimension(473, 368));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(473, 340));
@@ -168,7 +166,8 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
 
         jLabel33.setText("is the value of input1 3 samples ago");
 
-        jLabel34.setText("<html><a href=\"www.doc.gold.ac.uk/~mas01rf/WekinatorDownloads/user-doc.html\">www.doc.gold.ac.uk/~mas01rf/WekinatorDownloads/user-doc.html</a></html>");
+        jLabel34.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel34.setText("www.doc.gold.ac.uk/~mas01rf/WekinatorDownloads/user-doc.html");
         jLabel34.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel34MouseClicked(evt);
@@ -273,7 +272,7 @@ public class ExpressionInputEditor extends InputModifierBuilderPanel {
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout infoFrameLayout = new javax.swing.GroupLayout(infoFrame.getContentPane());
