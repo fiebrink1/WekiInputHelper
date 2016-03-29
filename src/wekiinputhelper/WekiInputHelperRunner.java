@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import wekiinputhelper.gui.About;
@@ -114,6 +115,12 @@ public final class WekiInputHelperRunner {
 
     public static void main(String[] args) {
         /* Create and display the form */
+         try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.put("Slider.paintValue", false);
+        } catch (Exception ex) {
+            Logger.getLogger(WekiInputHelperRunner.class.getName()).log(Level.WARNING, null, ex);
+        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 WekiInputHelperRunner.getInstance().runNewProject();
